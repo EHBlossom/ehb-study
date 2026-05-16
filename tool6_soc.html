@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社会 完全版 | EHB 学習ナビゲーター</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Noto Sans JP',sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#C8830A;color:#fff;padding:18px 20px;}
+.header h1{font-size:19px;font-weight:700;margin-bottom:3px;}
+.header p{font-size:12px;opacity:.85;}
+.back-btn{display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.2);color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.4);}
+.container{max-width:740px;margin:0 auto;padding:18px 16px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.grade-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.gtab{padding:8px 20px;border-radius:20px;border:1.5px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;font-weight:500;transition:all .12s;}
+.gtab.on{background:#C8830A;color:#fff;border-color:#C8830A;}
+.grade-section{display:none;}
+.grade-section.on{display:block;}
+.unit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.unit-btn{border:1.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;cursor:pointer;background:#f8f7f4;font-size:13px;text-align:left;transition:all .12s;line-height:1.4;color:#1a1a1a;}
+.unit-btn:hover{background:#FAEEDA;border-color:#C8830A;}
+.unit-btn.on{background:#C8830A;color:#fff;border-color:#C8830A;font-weight:600;}
+.learn-area{display:none;}
+.learn-area.on{display:block;}
+.learn-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ltab{padding:8px 16px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;}
+.ltab.on{background:#C8830A;color:#fff;border-color:#C8830A;}
+.learn-step{display:none;}
+.learn-step.on{display:block;}
+.yt-card{border:1.5px solid #e8e6e0;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;background:#f8f7f4;}
+.yt-thumb{width:44px;height:44px;border-radius:6px;background:#FF0000;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;}
+.yt-info{flex:1;}
+.yt-ch{font-size:11px;color:#666;margin-bottom:2px;}
+.yt-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+.yt-desc{font-size:12px;color:#888;}
+.yt-btn{display:inline-block;margin-top:6px;padding:5px 12px;border-radius:6px;background:#FF0000;color:#fff;font-size:11px;font-weight:600;text-decoration:none;}
+.q-box{background:#f8f7f4;border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.q-en{font-size:12px;color:#633806;font-weight:600;margin-bottom:3px;line-height:1.5;}
+.q-ja{font-size:14px;font-weight:700;margin-bottom:10px;line-height:1.5;}
+.opts{display:grid;gap:6px;}
+.opt-btn{padding:9px 12px;border-radius:8px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;text-align:left;}
+.opt-btn:hover:not(:disabled){border-color:#C8830A;background:#FAEEDA;}
+.opt-btn.correct{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600;}
+.opt-btn.wrong{background:#FAECE7;border-color:#E05A3A;color:#712B13;}
+.opt-btn:disabled{cursor:default;}
+.exp-box{background:#FAEEDA;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;color:#633806;line-height:1.7;display:none;}
+.exp-en{font-size:12px;color:#C8830A;margin-top:5px;font-style:italic;}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.score-n{font-size:20px;font-weight:700;color:#C8830A;}
+.prog-bar{flex:1;height:6px;background:#e8e6e0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:#C8830A;border-radius:3px;transition:width .4s;}
+.next-btn{padding:8px 18px;border-radius:8px;background:#C8830A;color:#fff;font-size:13px;border:none;cursor:pointer;margin-top:10px;}
+.think-q{background:#FEF6E8;border-left:3px solid #C8830A;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:10px;font-size:14px;line-height:1.65;}
+.think-en{font-size:12px;color:#BA7517;margin-top:4px;font-style:italic;}
+textarea{width:100%;padding:9px 12px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;resize:vertical;min-height:60px;font-family:inherit;margin-top:6px;}
+.world-box{background:#FAEEDA;border-radius:10px;padding:12px 16px;font-size:13px;color:#633806;line-height:1.75;margin-top:10px;}
+.unit-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.unit-title{font-size:15px;font-weight:700;flex:1;color:#C8830A;}
+.close-unit{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#127758; 社会 完全版</h1>
+  <p>中学1〜3年 全単元（地理・歴史・公民）| EHB 学習ナビゲーター</p>
+  <a href="tool6_study.html" class="back-btn">&#8592; 教科選択に戻る</a>
+</div>
+<div class="container">
+<div class="card">
+  <div class="grade-tabs">
+    <button class="gtab on" onclick="switchGrade('g1',this)">中1（地理）</button>
+    <button class="gtab" onclick="switchGrade('g2',this)">中2（歴史）</button>
+    <button class="gtab" onclick="switchGrade('g3',this)">中3（歴史・公民）</button>
+  </div>
+  <div class="grade-section on" id="g1"><div class="unit-list" id="ul1"></div></div>
+  <div class="grade-section" id="g2"><div class="unit-list" id="ul2"></div></div>
+  <div class="grade-section" id="g3"><div class="unit-list" id="ul3"></div></div>
+</div>
+<div class="learn-area" id="learn-area">
+  <div class="card" style="padding:12px 16px;margin-bottom:10px;">
+    <div class="unit-header">
+      <span class="unit-title" id="unit-title"></span>
+      <button class="close-unit" onclick="closeUnit()">&#10005; 閉じる</button>
+    </div>
+    <div class="learn-tabs">
+      <button class="ltab on" onclick="switchLearn('video',this)">&#9654; 動画</button>
+      <button class="ltab" onclick="switchLearn('quiz',this)">&#129504; クイズ</button>
+      <button class="ltab" onclick="switchLearn('deep',this)">&#127775; 深掘り</button>
+    </div>
+  </div>
+  <div class="learn-step on" id="ls-video"><div class="card"><p style="font-size:13px;font-weight:700;color:#C8830A;margin-bottom:10px;">&#9654; おすすめ動画で理解しよう</p><div id="video-list"></div></div></div>
+  <div class="learn-step" id="ls-quiz"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#129504; 確認クイズ</p><div class="score-row"><span class="score-n" id="score-disp">0/0</span><div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div></div><div id="quiz-area"></div></div></div>
+  <div class="learn-step" id="ls-deep"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#127775; 深掘り — なぜ？世界とのつながり</p><div id="deep-area"></div></div></div>
+</div>
+</div>
+<script>
+var units = {
+  "中1": [
+    {name:"世界の地理・気候帯",yt:[{ch:"とある男が授業をしてみた",title:"世界の気候帯",url:"https://www.youtube.com/results?search_query=葉一+世界+気候+地理+中学社会",desc:"6つの気候帯の特徴と分布"},{ch:"Try IT 中学社会",title:"世界の地形・気候まとめ",url:"https://www.youtube.com/results?search_query=TryIT+世界地理+中学社会",desc:"地形・気候・産業を体系的に"}],
+     quiz:[{q:"赤道付近の一年中高温多雨の気候帯は？",qe:"What climate zone near the equator is hot and rainy all year?",opts:["乾燥帯","温帯","熱帯","亜寒帯"],ans:2,exp:"熱帯はアマゾン・コンゴ盆地・東南アジアに分布。熱帯雨林が広がる。",expe:"Tropical zone: Amazon, Congo, Southeast Asia. Covered by tropical rainforests."},{q:"砂漠が多く降水量が少ない気候帯は？",qe:"Which climate zone has deserts and little rainfall?",opts:["熱帯","温帯","乾燥帯","寒帯"],ans:2,exp:"乾燥帯はサハラ砂漠・アラビア半島・中央アジア。年降水量500mm以下。",expe:"Dry zone: Sahara Desert, Arabian Peninsula, Central Asia. Under 500mm rain per year."},{q:"熊本が属する気候帯は？",qe:"Which climate zone does Kumamoto belong to?",opts:["熱帯","乾燥帯","温帯","亜寒帯"],ans:2,exp:"温帯（温暖湿潤気候）。四季があり夏は高温多湿、冬は温暖。農業に適した気候。",expe:"Temperate (humid subtropical). Four seasons, hot humid summers, mild winters — great for farming."}],
+     deep:{thinks:[{q:"気候帯の違いが食文化・建物・服装に与える影響を日本と熱帯の国で比較しよう。",qe:"Compare how climate zones affect food, buildings, and clothing between Japan and a tropical country."},{q:"熊本の近年の猛暑・大雨は世界の気候変動とどうつながっている？",qe:"How do Kumamoto's recent extreme heat and heavy rains connect to global climate change?"}],world:"気候帯は農業・文化・生活様式すべてに影響。SDG13（気候変動）で境界が変化しつつある。熊本の農産物（トマト・スイカ）も気候依存であり、気候変動は身近な問題。"}},
+
+    {name:"世界の国々・文化",yt:[{ch:"とある男が授業をしてみた",title:"世界の六大州・主要国",url:"https://www.youtube.com/results?search_query=葉一+世界+六大州+主要国+中学社会",desc:"各州の特色と代表的な国"},{ch:"Try IT 中学社会",title:"世界の宗教・文化",url:"https://www.youtube.com/results?search_query=TryIT+世界+宗教+文化+中学社会",desc:"三大宗教と地域文化を解説"}],
+     quiz:[{q:"イスラム教の聖地があるサウジアラビアの都市は？",qe:"Which city in Saudi Arabia is the holy city of Islam?",opts:["テヘラン","メッカ","カイロ","バグダッド"],ans:1,exp:"メッカはイスラム教最大の聖地。世界中のムスリムが向かってお祈りする方向でもある。",expe:"Mecca is Islam's holiest city. Muslims worldwide pray in its direction."},{q:"世界で最も多くの人口を持つ国は？（2023年現在）",qe:"Which country has the largest population as of 2023?",opts:["中国","インド","アメリカ","インドネシア"],ans:1,exp:"2023年にインドが中国を抜いて世界最大の人口国に。約14億4千万人。",expe:"India surpassed China in 2023 to become the world's most populous country at about 1.44 billion."},{q:"EUはどの地域の統合体か？",qe:"The EU is a union of countries in which region?",opts:["アジア","ヨーロッパ","北アメリカ","アフリカ"],ans:1,exp:"EU（ヨーロッパ連合）は27か国が加盟。共通通貨ユーロや共通市場を持つ。",expe:"The EU (European Union) has 27 member states, sharing a common currency (euro) and market."}],
+     deep:{thinks:[{q:"宗教の違いが国際関係に与える影響を具体的な例で考えよう。",qe:"Give specific examples of how religious differences affect international relations."},{q:"グローバル化が進む中、文化の多様性をどう守るべきか？",qe:"In an era of globalization, how should cultural diversity be protected?"}],world:"EUの統合はSDG16（平和と公正）の実践例。グローバル化で文化が均質化するリスクがある一方、多文化共生はSDG10（不平等をなくそう）の重要課題。"}},
+
+    {name:"日本の地理・地形",yt:[{ch:"とある男が授業をしてみた",title:"日本の地形・山地・川",url:"https://www.youtube.com/results?search_query=葉一+日本+地形+山地+川+中学社会",desc:"日本の主要な山・川・平野"},{ch:"Try IT 中学社会",title:"日本の気候と自然災害",url:"https://www.youtube.com/results?search_query=TryIT+日本+地形+気候+中学社会",desc:"地域別の気候特徴と防災"}],
+     quiz:[{q:"日本最長の川は？",qe:"Which is Japan's longest river?",opts:["利根川","信濃川","石狩川","木曽川"],ans:1,exp:"信濃川（367km）が日本最長。利根川は流域面積最大。熊本には球磨川・白川がある。",expe:"Shinano River (367km) is Japan's longest. Kumamoto has the Kuma and Shira rivers."},{q:"日本最高峰の山は？",qe:"What is Japan's highest mountain?",opts:["立山","槍ヶ岳","北岳","富士山"],ans:3,exp:"富士山（3776m）は日本最高峰で世界文化遺産。静岡・山梨にまたがる成層火山。",expe:"Mt. Fuji (3776m) is Japan's highest, a World Heritage Site, and a stratovolcano."},{q:"熊本県はどの地方か？",qe:"Which region of Japan does Kumamoto belong to?",opts:["中国地方","四国地方","九州地方","近畿地方"],ans:2,exp:"熊本は九州地方の中央。農業（トマト・スイカ）・阿蘇山・TSMC半導体で知られる。",expe:"Kumamoto is in central Kyushu, known for agriculture (tomatoes, watermelons), Mt. Aso, and TSMC."}],
+     deep:{thinks:[{q:"日本が地震・台風・洪水が多い理由を地理的観点から説明しよう。",qe:"Explain why Japan has many earthquakes, typhoons, and floods from a geographical perspective."},{q:"TSMC進出で菊陽町の人口が急増。急速な人口増加は地域にどんな影響を与える？",qe:"TSMC's arrival caused rapid population growth in Kikuyo-cho. What effects does rapid growth have on a community?"}],world:"菊陽町（EHBの地元）はTSMCで人口急増・国際化が進む。世界の半導体サプライチェーンと地元がつながる（SDG8・10）。"}},
+
+    {name:"日本の農業・工業・貿易",yt:[{ch:"とある男が授業をしてみた",title:"日本の農業・食料自給率",url:"https://www.youtube.com/results?search_query=葉一+日本+農業+食料自給率+中学社会",desc:"農業の特色と食料自給率の課題"},{ch:"Try IT 中学社会",title:"日本の工業・貿易",url:"https://www.youtube.com/results?search_query=TryIT+日本+工業+貿易+中学社会",desc:"工業地帯と輸出入品目を解説"}],
+     quiz:[{q:"日本の食料自給率（カロリーベース）は約何%？",qe:"What is Japan's food self-sufficiency rate (calorie basis)?",opts:["約30%","約38%","約60%","約75%"],ans:1,exp:"日本の食料自給率は約38%（2022年）。先進国の中で最低水準。",expe:"Japan's food self-sufficiency rate is about 38% (2022) — the lowest among developed nations."},{q:"日本の主要な輸出品は？",qe:"What are Japan's main exports?",opts:["石油・天然ガス","自動車・機械・半導体","農産物・水産物","衣類・繊維"],ans:1,exp:"自動車・機械・半導体・電子部品が主要輸出品。熊本のTSMCも半導体輸出に貢献。",expe:"Cars, machinery, and semiconductors are Japan's main exports. Kumamoto's TSMC contributes to semiconductor exports."},{q:"日本が最も多く輸入しているものは？",qe:"What does Japan import most?",opts:["食料","石油・エネルギー","機械","衣類"],ans:1,exp:"石油・LNGなどエネルギー資源が最大の輸入品。エネルギー自給率は約13%。",expe:"Oil and LNG are Japan's largest imports. Energy self-sufficiency is only about 13%."}],
+     deep:{thinks:[{q:"食料自給率38%は安全保障上どんなリスクがある？",qe:"What security risks does a 38% food self-sufficiency rate pose?"},{q:"熊本の農業（トマト・スイカ・阿蘇の畜産）を世界の食料問題（SDG2）とつなげて考えよう。",qe:"Connect Kumamoto's agriculture (tomatoes, watermelons, Aso livestock) to global food issues (SDG2)."}],world:"日本の食料自給率の低さは有事の際の安全保障リスク（SDG2）。熊本の農業は地産地消とフードマイレージ削減（SDG12）の観点からも重要。"}}
+  ],
+
+  "中2": [
+    {name:"歴史：古代（縄文〜奈良・平安）",yt:[{ch:"とある男が授業をしてみた",title:"縄文・弥生〜奈良・平安時代",url:"https://www.youtube.com/results?search_query=葉一+縄文+弥生+奈良+平安+中学歴史",desc:"日本古代史の流れを整理"},{ch:"Try IT 中学歴史",title:"飛鳥・奈良・平安時代",url:"https://www.youtube.com/results?search_query=TryIT+飛鳥+奈良+平安+中学歴史",desc:"律令国家から平安貴族文化まで"}],
+     quiz:[{q:"聖徳太子が制定した十七条の憲法はいつか？",qe:"When was Prince Shotoku's Seventeen-Article Constitution established?",opts:["604年","710年","794年","1192年"],ans:0,exp:"604年。「和をもって貴しとなす」など仏教・儒教の考えに基づく日本初の成文法。",expe:"604 AD. Japan's first written law, based on Buddhism and Confucianism: 'Harmony is most precious.'"},{q:"奈良時代に建てられた大仏は？",qe:"The Great Buddha built in the Nara period is in which temple?",opts:["法隆寺","東大寺","金閣寺","清水寺"],ans:1,exp:"東大寺の大仏（聖武天皇が741年に建立命令）。奈良の大仏として知られる。",expe:"The Great Buddha of Todaiji Temple (Emperor Shomu ordered it in 741). The famous 'Nara Daibutsu.'"},{q:"平安時代の貴族文化を代表する文学作品は？",qe:"Which literary work represents aristocratic culture of the Heian period?",opts:["万葉集","源氏物語","奥の細道","平家物語"],ans:1,exp:"紫式部が書いた源氏物語（11世紀初頭）。世界最古の長編小説ともいわれる。",expe:"The Tale of Genji by Murasaki Shikibu (early 11th century), often called the world's oldest novel."}],
+     deep:{thinks:[{q:"日本の古代は中国・朝鮮から積極的に学んだ。現代のグローバル化と比較しよう。",qe:"Ancient Japan actively learned from China and Korea. Compare this to modern globalization."},{q:"平安時代の「かな文字」発明はなぜ重要だったのか？",qe:"Why was the invention of 'kana' characters in the Heian period so significant?"}],world:"日本の古代は「開かれた国」だった。唐（中国）から制度・仏教・漢字を取り込んだ姿は、現代のTSMC進出（外から技術を取り込む）と歴史的につながる。"}},
+
+    {name:"歴史：中世（鎌倉・室町）",yt:[{ch:"とある男が授業をしてみた",title:"鎌倉幕府〜室町時代",url:"https://www.youtube.com/results?search_query=葉一+鎌倉+室町+中学歴史",desc:"武家政治の始まりと南北朝・室町"},{ch:"Try IT 中学歴史",title:"鎌倉文化・日明貿易",url:"https://www.youtube.com/results?search_query=TryIT+鎌倉+室町+中学歴史",desc:"武家文化と東アジア貿易を解説"}],
+     quiz:[{q:"鎌倉幕府を開いたのは誰か？",qe:"Who established the Kamakura Shogunate?",opts:["平清盛","源頼朝","足利尊氏","北条時政"],ans:1,exp:"源頼朝（1185年または1192年）。武士が政治の中心となる時代の始まり。",expe:"Minamoto no Yoritomo (1185 or 1192). The beginning of warrior-centered government."},{q:"室町幕府で金閣を建てた将軍は？",qe:"Which Muromachi Shogun built Kinkakuji?",opts:["足利尊氏","足利義満","足利義政","足利義輝"],ans:1,exp:"足利義満（1397年建立）。日明貿易（勘合貿易）を開き、文化と経済を発展させた。",expe:"Ashikaga Yoshimitsu (1397). He also opened trade with Ming China."},{q:"応仁の乱（1467年）後に始まった時代は？",qe:"What period began after the Onin War (1467)?",opts:["安土桃山時代","戦国時代","江戸時代","明治時代"],ans:1,exp:"戦国時代。諸国の大名が勢力争いをした約100年間の動乱期。",expe:"The Sengoku (Warring States) period. About 100 years of conflict among regional warlords."}],
+     deep:{thinks:[{q:"武士（サムライ）の文化・精神（武士道）は現代の日本にどう残っているか？",qe:"How does samurai culture and 'Bushido' remain in modern Japanese society?"},{q:"鎌倉幕府の「御恩と奉公」の関係は現代の労使関係とどう似ているか？",qe:"How is the Kamakura 'go-on and houko' (reward and service) system similar to modern employer-employee relations?"}],world:"武士道はグローバルに「日本文化」として認知される。礼儀・忠誠・勇気の概念は現代のビジネス文化にも影響を与えている。"}},
+
+    {name:"歴史：近世（戦国・安土桃山・江戸前期）",yt:[{ch:"とある男が授業をしてみた",title:"織田信長・豊臣秀吉・徳川家康",url:"https://www.youtube.com/results?search_query=葉一+戦国+織田信長+豊臣秀吉+中学歴史",desc:"天下統一の過程を整理"},{ch:"Try IT 中学歴史",title:"江戸幕府の成立・鎖国",url:"https://www.youtube.com/results?search_query=TryIT+江戸幕府+鎖国+中学歴史",desc:"幕藩体制と鎖国政策を解説"}],
+     quiz:[{q:"長篠の戦い（1575年）で鉄砲を効果的に使ったのは？",qe:"Who effectively used firearms at the Battle of Nagashino (1575)?",opts:["武田信玄","源頼朝","織田信長","徳川家康"],ans:2,exp:"織田信長が三段撃ちで武田騎馬隊を撃破。革新的な戦術で戦国時代を変えた。",expe:"Oda Nobunaga used rotating volleys to defeat the Takeda cavalry — a revolutionary tactic."},{q:"豊臣秀吉が行った全国の土地調査は？",qe:"What nationwide land survey did Toyotomi Hideyoshi conduct?",opts:["地租改正","太閤検地","班田収授法","墾田永年私財法"],ans:1,exp:"太閤検地（1582〜）で石高制確立・兵農分離が進んだ。",expe:"Taiko Kenchi (1582—) established rice yield assessments and separated farmers from warriors."},{q:"江戸幕府の鎖国で交易が認められたのは？",qe:"Which countries were allowed to trade with Japan during sakoku?",opts:["イギリスとフランス","中国（清）とオランダ","スペインとポルトガル","アメリカとロシア"],ans:1,exp:"長崎の出島でオランダ・中国（清）とのみ交易。1854年まで続いた。",expe:"Trade limited to Dutch and Chinese (Qing) at Nagasaki's Dejima until 1854."}],
+     deep:{thinks:[{q:"外来技術（鉄砲）が日本の戦い方を変えた。現代の外来技術（AI・半導体）と比較しよう。",qe:"Imported technology (firearms) changed Japanese warfare. Compare with modern imported tech (AI, semiconductors)."},{q:"鎖国から開国への転換と、今日の日本の国際化をどう比較できるか？",qe:"How can you compare Japan's shift from isolation to opening with today's internationalization?"}],world:"戦国〜江戸時代は外来技術と鎖国政策が交差する時代。菊陽町のTSMC進出も外からの技術・資本が地域を変える点で歴史と重なる。"}},
+
+    {name:"歴史：近代（明治維新〜日露戦争）",yt:[{ch:"とある男が授業をしてみた",title:"明治維新・富国強兵・条約改正",url:"https://www.youtube.com/results?search_query=葉一+明治維新+富国強兵+中学歴史",desc:"明治政府の近代化政策を整理"},{ch:"Try IT 中学歴史",title:"日清・日露戦争と国際関係",url:"https://www.youtube.com/results?search_query=TryIT+明治+日清+日露+中学歴史",desc:"明治時代の対外関係を解説"}],
+     quiz:[{q:"1868年に始まった近代国家建設は？",qe:"What modernization process began in 1868?",opts:["大化の改新","明治維新","大正デモクラシー","昭和恐慌"],ans:1,exp:"明治維新。廃藩置県・四民平等・欧米制度の導入で急速に近代化。",expe:"Meiji Restoration. Abolished feudal domains, established equality, adopted Western institutions rapidly."},{q:"1889年に発布された憲法は？",qe:"Which constitution was promulgated in 1889?",opts:["日本国憲法","大日本帝国憲法","十七条の憲法","御成敗式目"],ans:1,exp:"大日本帝国憲法（明治憲法）。天皇主権・議会設置・臣民の権利を定めた。",expe:"The Meiji Constitution. Established imperial sovereignty, a parliament, and rights for subjects."},{q:"1905年のポーツマス条約で終結した戦争は？",qe:"Which war ended with the Treaty of Portsmouth (1905)?",opts:["日清戦争","日露戦争","西南戦争","第一次世界大戦"],ans:1,exp:"日露戦争（1904〜1905年）。アジアの国がヨーロッパの大国に勝った歴史的事件。",expe:"The Russo-Japanese War (1904-1905). Historic event of an Asian nation defeating a European power."}],
+     deep:{thinks:[{q:"なぜ日本はアジアで最初に近代化に成功したのか？",qe:"Why was Japan the first Asian country to successfully modernize?"},{q:"明治維新を手本にした国が多い。現在の開発途上国の近代化と比較しよう。",qe:"Many countries modeled their modernization on the Meiji Restoration. Compare with developing countries today."}],world:"明治維新はアジア・アフリカの独立運動に影響を与えた。現代の開発途上国（SDG8・9）が直面する近代化の課題と歴史的につながる。"}
+    }
+  ],
+
+  "中3": [
+    {name:"歴史：大正〜昭和（戦争と平和）",yt:[{ch:"とある男が授業をしてみた",title:"大正デモクラシー・太平洋戦争",url:"https://www.youtube.com/results?search_query=葉一+大正デモクラシー+太平洋戦争+中学歴史",desc:"20世紀前半の日本史を整理"},{ch:"Try IT 中学歴史",title:"第二次世界大戦と戦後",url:"https://www.youtube.com/results?search_query=TryIT+昭和+戦争+戦後+中学歴史",desc:"戦争の原因・経過・戦後復興"}],
+     quiz:[{q:"1941年12月8日に日本軍が攻撃した場所は？",qe:"Where did Japan attack on December 8, 1941?",opts:["上海","真珠湾","マニラ","シンガポール"],ans:1,exp:"ハワイの真珠湾攻撃でアメリカが参戦し太平洋戦争が始まった。",expe:"The attack on Pearl Harbor, Hawaii brought the US into the war, starting the Pacific War."},{q:"1945年8月6日と9日に何が起きたか？",qe:"What happened on August 6 and 9, 1945?",opts:["終戦記念日","広島・長崎への原爆投下","沖縄戦終結","玉音放送"],ans:1,exp:"広島（8/6）・長崎（8/9）に原子爆弾投下。21万人以上が犠牲になった。",expe:"Atomic bombs dropped on Hiroshima (Aug 6) and Nagasaki (Aug 9). Over 210,000 died."},{q:"戦後日本の経済発展を何という？",qe:"What is Japan's postwar economic development called?",opts:["産業革命","高度経済成長","バブル経済","失われた10年"],ans:1,exp:"高度経済成長（1955〜1973年頃）。GDPが急増し「東洋の奇跡」と呼ばれた。",expe:"High economic growth (1955-1973). GDP skyrocketed, called the 'Asian Economic Miracle.'"}],
+     deep:{thinks:[{q:"広島・長崎の経験から日本は何を学んだか？核廃絶運動とどうつながっている？",qe:"What did Japan learn from Hiroshima and Nagasaki? How does this connect to nuclear abolition movements?"},{q:"高度経済成長は豊かさをもたらしたが公害問題も生んだ。経済成長と環境保護のバランスを考えよう。",qe:"High economic growth brought prosperity but also pollution. How should we balance economic growth and environmental protection?"}],world:"広島・長崎はSDG16（平和と公正）の原点。水俣病（熊本）は高度成長期の公害の象徴であり、SDG3（健康）・SDG14・15に関連する教訓。"}},
+
+    {name:"歴史：現代（冷戦〜現在）",yt:[{ch:"とある男が授業をしてみた",title:"冷戦・日米安保・バブル崩壊",url:"https://www.youtube.com/results?search_query=葉一+冷戦+日米安保+バブル+中学歴史",desc:"戦後の国際秩序と日本の変化"},{ch:"Try IT 中学歴史",title:"グローバル化と現代の課題",url:"https://www.youtube.com/results?search_query=TryIT+冷戦+グローバル化+現代+中学歴史",desc:"冷戦終結から現代まで"}],
+     quiz:[{q:"1989年に崩壊したものは？",qe:"What fell in 1989?",opts:["ソ連","ベルリンの壁","冷戦","国連"],ans:1,exp:"ベルリンの壁崩壊（1989年11月9日）。東西冷戦終結の象徴的出来事。",expe:"The Berlin Wall fell on November 9, 1989 — symbolic end of the Cold War."},{q:"1991年に解体した国は？",qe:"Which country dissolved in 1991?",opts:["ユーゴスラビア","東ドイツ","ソビエト連邦","チェコスロバキア"],ans:2,exp:"ソビエト連邦が解体し15の独立国家に。冷戦が終結した。",expe:"The Soviet Union dissolved into 15 independent states, ending the Cold War."},{q:"2001年9月11日に何が起きたか？",qe:"What happened on September 11, 2001?",opts:["湾岸戦争","アメリカ同時多発テロ","9.11地震","ベルリンの壁崩壊"],ans:1,exp:"アメリカ同時多発テロ事件。以後、対テロ戦争と国際安全保障が大きく変化した。",expe:"9/11 terrorist attacks in the US. Led to the War on Terror and major shifts in global security."}],
+     deep:{thinks:[{q:"冷戦終結後も世界の紛争は続いている。平和を実現するために必要なことは？",qe:"Conflicts continue even after the Cold War ended. What is needed to achieve peace?"},{q:"SNSとフェイクニュースが民主主義に与える影響を歴史的視点から考えよう。",qe:"Consider the impact of social media and fake news on democracy from a historical perspective."}],world:"冷戦終結後もSDG16（平和と公正）の課題は続く。デジタル化・AI・SNSが歴史的な「情報戦」の新章を開いている。"}},
+
+    {name:"公民：日本国憲法・三権分立",yt:[{ch:"とある男が授業をしてみた",title:"日本国憲法・三権分立",url:"https://www.youtube.com/results?search_query=葉一+日本国憲法+三権分立+公民",desc:"憲法三原則・立法・行政・司法"},{ch:"Try IT 中学公民",title:"基本的人権と人権問題",url:"https://www.youtube.com/results?search_query=TryIT+基本的人権+日本国憲法+公民",desc:"平等権・自由権・社会権を解説"}],
+     quiz:[{q:"日本国憲法の三大原則は？",qe:"What are the three core principles of Japan's constitution?",opts:["自由・平等・博愛","国民主権・基本的人権・平和主義","民主主義・資本主義・法治主義","独立・自由・正義"],ans:1,exp:"①国民主権②基本的人権の尊重③平和主義（戦争放棄）。1947年施行。",expe:"Three principles: ① Popular sovereignty ② Respect for human rights ③ Pacifism. Enacted 1947."},{q:"法律を作るのはどこか？",qe:"Which branch of government makes laws?",opts:["内閣（行政）","裁判所（司法）","国会（立法）","天皇"],ans:2,exp:"国会（立法府）が法律を制定。内閣が法律を実行し、裁判所が法律の適用を判断。",expe:"The Diet (legislature) makes laws. The Cabinet enforces them. Courts interpret and apply them."},{q:"選挙権が18歳以上になったのはいつ？",qe:"When did Japan lower the voting age to 18?",opts:["2010年","2013年","2016年","2019年"],ans:2,exp:"2016年参院選から18歳以上に選挙権拡大。若者の政治参加促進が目的。",expe:"Since the 2016 Upper House election, citizens 18 and older can vote in Japan."}],
+     deep:{thinks:[{q:"若者の投票率が低い理由と対策を考えよう。",qe:"Why is youth voter turnout low, and what can be done about it?"},{q:"SNSが選挙に与える良い面・悪い面を具体的に考えよう。",qe:"Consider the positive and negative effects of social media on elections with specific examples."}],world:"18歳選挙権は若者のSDG16（平和と公正）への参加を促進。世界では16歳から投票権のある国もある（オーストリアなど）。"}},
+
+    {name:"公民：経済・財政・社会保障",yt:[{ch:"とある男が授業をしてみた",title:"市場経済・需要と供給",url:"https://www.youtube.com/results?search_query=葉一+市場経済+需要+供給+公民",desc:"価格の決まり方と市場のしくみ"},{ch:"Try IT 中学公民",title:"財政・税金・社会保障",url:"https://www.youtube.com/results?search_query=TryIT+財政+税金+社会保障+公民",desc:"国の収支と社会保険を解説"}],
+     quiz:[{q:"需要が増えると価格はどうなる？",qe:"What happens to price when demand increases?",opts:["下がる","変わらない","上がる","なくなる"],ans:2,exp:"需要増→価格上昇。需要<供給なら価格低下。需要と供給のバランスで均衡価格が決まる。",expe:"More demand → higher price. Balance of supply and demand determines the equilibrium price."},{q:"消費税は何という税の分類か？",qe:"What type of tax is consumption tax?",opts:["直接税","間接税","累進課税","固定税"],ans:1,exp:"間接税は税を負担する人（消費者）と納める人（事業者）が異なる税。",expe:"Indirect tax: the person bearing the tax (consumer) differs from who pays it (businesses)."},{q:"日本の社会保障の4本柱は？",qe:"What are Japan's four pillars of social security?",opts:["年金・医療・介護・失業","社会保険・公的扶助・社会福祉・公衆衛生","税金・保険・補助金・給付","医療・教育・住宅・雇用"],ans:1,exp:"社会保険・公的扶助・社会福祉・公衆衛生の4つ。少子高齢化で財政課題が拡大中。",expe:"Social insurance, public assistance, social welfare, and public health. Aging population strains finances."}],
+     deep:{thinks:[{q:"少子高齢化が日本の経済・社会保障に与える影響を考えよう。",qe:"Consider the effects of Japan's aging population on the economy and social security."},{q:"菊陽町へのTSMC進出で地価・賃金・物価が上昇。誰が得をして誰が困るのか？",qe:"TSMC's arrival raised land prices, wages, and prices in Kikuyo-cho. Who benefits and who struggles?"}],world:"経済は「遠い話」ではなく地元の生活と直結。円安・物価上昇・少子化はSDG8（働きがい）・SDG10（不平等をなくそう）に直接関わる現代の課題。"},
+    },
+
+    {name:"公民：国際社会・SDGs",yt:[{ch:"とある男が授業をしてみた",title:"国際連合・国際社会のしくみ",url:"https://www.youtube.com/results?search_query=葉一+国際連合+国際社会+公民",desc:"国連の役割と国際問題"},{ch:"Try IT 中学公民",title:"SDGsと持続可能な社会",url:"https://www.youtube.com/results?search_query=TryIT+SDGs+持続可能+公民",desc:"17の目標と日本・世界の取り組み"}],
+     quiz:[{q:"国連（UN）の本部はどこか？",qe:"Where is the United Nations headquarters?",opts:["ロンドン","ジュネーブ","ニューヨーク","パリ"],ans:2,exp:"国連本部はニューヨーク（アメリカ）。193か国が加盟する最大の国際機関。",expe:"UN headquarters is in New York City. 193 countries are members — the world's largest international organization."},{q:"SDGsの目標数は？",qe:"How many goals does the SDGs have?",opts:["10","17","25","30"],ans:1,exp:"持続可能な開発目標（SDGs）は2015年採択の17の目標・169のターゲット。2030年が期限。",expe:"The SDGs (adopted 2015) have 17 goals and 169 targets, to be achieved by 2030."},{q:"「誰一人取り残さない」はどの宣言・目標のスローガンか？",qe:"'Leave No One Behind' is the slogan of which goals?",opts:["パリ協定","MDGs","SDGs","ジュネーブ条約"],ans:2,exp:"SDGsのスローガン「誰一人取り残さない（Leave No One Behind）」。",expe:"'Leave No One Behind' is the SDGs motto, emphasizing inclusion of the most vulnerable."}],
+     deep:{thinks:[{q:"熊本の生活（TSMC・農業・阿蘇）とSDGsの目標をいくつか結びつけて考えよう。",qe:"Connect life in Kumamoto (TSMC, agriculture, Mt. Aso) to specific SDGs."},{q:"日本が国際社会で果たすべき役割は何だと思う？",qe:"What role should Japan play in the international community?"}],world:"SDGsは2030年が期限。日本の達成度はジェンダー平等・気候変動・不平等で課題が大きい。菊陽町のグローバル化は身近なSDGsの現場。"}
+    }
+  ]
+};
+
+var curUnit = null;
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+
+function buildUnits(grade) {
+  var g = grade==="中1"?"g1":grade==="中2"?"g2":"g3";
+  var ul = document.getElementById("ul"+(g==="g1"?"1":g==="g2"?"2":"3"));
+  if (ul.children.length > 0) return;
+  units[grade].forEach(function(u) {
+    var btn = document.createElement("button");
+    btn.className = "unit-btn";
+    btn.textContent = u.name;
+    btn.onclick = function() {
+      document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+      btn.classList.add("on");
+      openUnit(u);
+    };
+    ul.appendChild(btn);
+  });
+}
+
+function switchGrade(id, btn) {
+  document.querySelectorAll(".grade-section").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".gtab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById(id).classList.add("on");
+  btn.classList.add("on");
+  var g = id==="g1"?"中1":id==="g2"?"中2":"中3";
+  buildUnits(g);
+  closeUnit();
+}
+
+function openUnit(u) {
+  curUnit = u;
+  document.getElementById("unit-title").textContent = u.name;
+  document.getElementById("learn-area").classList.add("on");
+  switchLearn("video", document.querySelectorAll(".ltab")[0]);
+  document.getElementById("learn-area").scrollIntoView({behavior:"smooth"});
+}
+
+function closeUnit() {
+  document.getElementById("learn-area").classList.remove("on");
+  document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+  curUnit = null;
+}
+
+function switchLearn(step, btn) {
+  document.querySelectorAll(".learn-step").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".ltab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById("ls-"+step).classList.add("on");
+  if(btn) btn.classList.add("on");
+  if(step==="video") renderVideos();
+  if(step==="quiz"){quizIdx=0;quizScore=0;renderQuiz();}
+  if(step==="deep") renderDeep();
+}
+
+function renderVideos() {
+  if(!curUnit) return;
+  var vl = document.getElementById("video-list");
+  vl.innerHTML = "";
+  curUnit.yt.forEach(function(v){
+    var d = document.createElement("div");
+    d.className = "yt-card";
+    d.innerHTML = "<div class=\"yt-thumb\">&#9654;</div><div class=\"yt-info\"><div class=\"yt-ch\">"+v.ch+"</div><div class=\"yt-title\">"+v.title+"</div><div class=\"yt-desc\">"+v.desc+"</div><a href=\""+v.url+"\" target=\"_blank\" class=\"yt-btn\">&#9654; YouTubeで見る</a></div>";
+    vl.appendChild(d);
+  });
+}
+
+function renderQuiz() {
+  if(!curUnit) return;
+  var qs = curUnit.quiz;
+  var qa = document.getElementById("quiz-area");
+  if(quizIdx >= qs.length){
+    var pct = Math.round(quizScore/qs.length*100);
+    qa.innerHTML = "<div style=\"text-align:center;padding:16px 0;\"><div style=\"font-size:32px;margin-bottom:8px;\">"+(pct>=80?"&#127881;":pct>=60?"&#128077;":"&#128170;")+"</div><div style=\"font-size:20px;font-weight:700;color:#C8830A;margin-bottom:6px;\">"+quizScore+" / "+qs.length+" 正解</div><button onclick=\"quizIdx=0;quizScore=0;renderQuiz()\" style=\"padding:8px 18px;border-radius:8px;background:#C8830A;color:#fff;font-size:13px;border:none;cursor:pointer;\">もう一度</button></div>";
+    return;
+  }
+  document.getElementById("score-disp").textContent = quizScore+"/"+qs.length;
+  document.getElementById("prog-fill").style.width = Math.round(quizScore/qs.length*100)+"%";
+  var q = qs[quizIdx];
+  var optsHTML = q.opts.map(function(o,i){"return <button class=\"opt-btn\" onclick=\"answerQ("+i+")\">"+o+"</button>";}).join("");
+  qa.innerHTML = "<div class=\"q-box\"><div class=\"q-en\">&#127468;&#127463; "+q.qe+"</div><div class=\"q-ja\">&#127471;&#127477; "+q.q+"</div><div class=\"opts\">"+q.opts.map(function(o,i){return "<button class=\"opt-btn\" onclick=\"answerQ("+i+")\">"+o+"</button>";}).join("")+"</div><div class=\"exp-box\" id=\"exp-box\"><strong>&#128218; 解説</strong><br>"+q.exp+"<div class=\"exp-en\">&#127468;&#127463; "+q.expe+"</div></div></div><button class=\"next-btn\" id=\"nxt-btn\" style=\"display:none;\" onclick=\"nextQ()\">"+(quizIdx<qs.length-1?"次の問題 &#8594;":"結果を見る &#127881;")+"</button>";
+  quizAnswered = false;
+}
+
+function answerQ(i) {
+  if(quizAnswered) return;
+  quizAnswered = true;
+  var q = curUnit.quiz[quizIdx];
+  document.querySelectorAll(".opt-btn").forEach(function(b,idx){
+    b.disabled = true;
+    if(idx===q.ans) b.classList.add("correct");
+    else if(idx===i&&i!==q.ans) b.classList.add("wrong");
+  });
+  if(i===q.ans) quizScore++;
+  document.getElementById("exp-box").style.display = "block";
+  document.getElementById("nxt-btn").style.display = "inline-block";
+  document.getElementById("score-disp").textContent = quizScore+"/"+curUnit.quiz.length;
+  document.getElementById("prog-fill").style.width = Math.round(quizScore/curUnit.quiz.length*100)+"%";
+}
+
+function nextQ(){quizIdx++;renderQuiz();}
+
+function renderDeep() {
+  if(!curUnit) return;
+  var d = curUnit.deep;
+  var da = document.getElementById("deep-area");
+  var html = "";
+  d.thinks.forEach(function(t){html+="<div class=\"think-q\">&#129504; "+t.q+"<div class=\"think-en\">&#127468;&#127463; "+t.qe+"</div></div>";});
+  html += "<textarea placeholder=\"考えたことを書こう / Write your thoughts...\"></textarea>";
+  html += "<div class=\"world-box\"><strong>&#127758; 世界・熊本とのつながり</strong><br>"+d.world+"</div>";
+  html += "<div style=\"margin-top:12px;\"><a href=\"tool6_study.html\" style=\"display:inline-block;padding:8px 14px;border-radius:8px;background:#C8830A;color:#fff;font-size:13px;font-weight:600;text-decoration:none;\">&#127891; 他の教科も学ぼう</a></div>";
+  da.innerHTML = html;
+}
+
+buildUnits("中1");
+</script>
+</body>
+</html>

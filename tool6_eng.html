@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語 完全版 | EHB 学習ナビゲーター</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Hiragino Sans","Noto Sans JP",sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#185FA5;color:#fff;padding:18px 20px;}
+.header h1{font-size:19px;font-weight:700;margin-bottom:3px;}
+.header p{font-size:12px;opacity:.85;}
+.back-btn{display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.2);color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.4);}
+.container{max-width:740px;margin:0 auto;padding:18px 16px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.grade-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.gtab{padding:8px 20px;border-radius:20px;border:1.5px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;font-weight:500;}
+.gtab.on{background:#185FA5;color:#fff;border-color:#185FA5;}
+.grade-section{display:none;}
+.grade-section.on{display:block;}
+.unit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.unit-btn{border:1.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;cursor:pointer;background:#f8f7f4;font-size:13px;text-align:left;line-height:1.4;color:#1a1a1a;}
+.unit-btn:hover{background:#E6F1FB;border-color:#185FA5;}
+.unit-btn.on{background:#185FA5;color:#fff;border-color:#185FA5;font-weight:600;}
+.learn-area{display:none;}
+.learn-area.on{display:block;}
+.learn-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ltab{padding:8px 16px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;}
+.ltab.on{background:#185FA5;color:#fff;border-color:#185FA5;}
+.learn-step{display:none;}
+.learn-step.on{display:block;}
+.yt-card{border:1.5px solid #e8e6e0;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;background:#f8f7f4;}
+.yt-thumb{width:44px;height:44px;border-radius:6px;background:#FF0000;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;}
+.yt-info{flex:1;}
+.yt-ch{font-size:11px;color:#666;margin-bottom:2px;}
+.yt-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+.yt-desc{font-size:12px;color:#888;}
+.yt-btn{display:inline-block;margin-top:6px;padding:5px 12px;border-radius:6px;background:#FF0000;color:#fff;font-size:11px;font-weight:600;text-decoration:none;}
+.q-box{background:#f8f7f4;border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.q-en{font-size:13px;color:#0C447C;font-weight:700;margin-bottom:4px;line-height:1.5;background:#E6F1FB;padding:8px 10px;border-radius:6px;}
+.q-ja{font-size:14px;font-weight:700;margin-bottom:10px;margin-top:6px;line-height:1.5;}
+.opts{display:grid;gap:6px;}
+.opt-btn{padding:9px 12px;border-radius:8px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;text-align:left;}
+.opt-btn:hover:not(:disabled){border-color:#185FA5;background:#E6F1FB;}
+.opt-btn.correct{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600;}
+.opt-btn.wrong{background:#FAECE7;border-color:#E05A3A;color:#712B13;}
+.opt-btn:disabled{cursor:default;}
+.exp-box{background:#E6F1FB;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;color:#0C447C;line-height:1.7;display:none;}
+.exp-en{font-size:12px;color:#185FA5;margin-top:5px;}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.score-n{font-size:20px;font-weight:700;color:#185FA5;}
+.prog-bar{flex:1;height:6px;background:#e8e6e0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:#185FA5;border-radius:3px;transition:width .4s;}
+.next-btn{padding:8px 18px;border-radius:8px;background:#185FA5;color:#fff;font-size:13px;border:none;cursor:pointer;margin-top:10px;}
+.think-q{background:#E6F1FB;border-left:3px solid #185FA5;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:10px;font-size:13px;line-height:1.65;color:#0C447C;}
+textarea{width:100%;padding:9px 12px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;resize:vertical;min-height:60px;font-family:inherit;margin-top:6px;}
+.world-box{background:#E6F1FB;border-radius:10px;padding:12px 16px;font-size:13px;color:#0C447C;line-height:1.75;margin-top:10px;}
+.unit-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.unit-title{font-size:15px;font-weight:700;flex:1;color:#185FA5;}
+.close-unit{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#128172; 英語 完全版</h1>
+  <p>中学1〜3年 全単元 | 日英バイリンガル対応 | EHB 学習ナビゲーター</p>
+  <a href="tool6_study.html" class="back-btn">&#8592; 教科選択に戻る</a>
+</div>
+<div class="container">
+<div class="card">
+  <div class="grade-tabs">
+    <button class="gtab on" onclick="switchGrade('g1',this)">中1</button>
+    <button class="gtab" onclick="switchGrade('g2',this)">中2</button>
+    <button class="gtab" onclick="switchGrade('g3',this)">中3</button>
+  </div>
+  <div class="grade-section on" id="g1"><div class="unit-list" id="ul1"></div></div>
+  <div class="grade-section" id="g2"><div class="unit-list" id="ul2"></div></div>
+  <div class="grade-section" id="g3"><div class="unit-list" id="ul3"></div></div>
+</div>
+<div class="learn-area" id="learn-area">
+  <div class="card" style="padding:12px 16px;margin-bottom:10px;">
+    <div class="unit-header">
+      <span class="unit-title" id="unit-title"></span>
+      <button class="close-unit" onclick="closeUnit()">&#10005; 閉じる</button>
+    </div>
+    <div class="learn-tabs">
+      <button class="ltab on" onclick="switchLearn('video',this)">&#9654; 動画</button>
+      <button class="ltab" onclick="switchLearn('quiz',this)">&#129504; クイズ</button>
+      <button class="ltab" onclick="switchLearn('deep',this)">&#127775; 深掘り</button>
+    </div>
+  </div>
+  <div class="learn-step on" id="ls-video"><div class="card"><p style="font-size:13px;font-weight:700;color:#185FA5;margin-bottom:10px;">&#9654; おすすめ動画で理解しよう</p><div id="video-list"></div></div></div>
+  <div class="learn-step" id="ls-quiz"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#129504; 確認クイズ</p><div class="score-row"><span class="score-n" id="score-disp">0/0</span><div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div></div><div id="quiz-area"></div></div></div>
+  <div class="learn-step" id="ls-deep"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#127775; 深掘り — 英語と世界</p><div id="deep-area"></div></div></div>
+</div>
+</div>
+<script>
+var units = {
+  "中1": [
+    {name:"be動詞・一般動詞",yt:[{ch:"とある男が授業をしてみた",title:"be動詞（am/is/are）",url:"https://www.youtube.com/results?search_query=葉一+be動詞+中学英語",desc:"肯定・否定・疑問文の作り方"},{ch:"Try IT 中学英語",title:"一般動詞の現在形・三単現",url:"https://www.youtube.com/results?search_query=TryIT+一般動詞+三単現+中学英語",desc:"doとdoesの使い分けを解説"}],
+     quiz:[
+       {q:"「彼女は学生です」を英語にすると？",qe:"Choose the correct English translation.",opts:["She student is.","She is a student.","She are a student.","Is she student."],ans:1,exp:"be動詞：I→am、You/複数→are、He/She/It→is。主語によって変わる。",expe:"Be verbs: I→am, You/plural→are, He/She/It→is. They change based on the subject."},
+       {q:"「私は犬を飼っていません」を英語にすると？",qe:"Choose the correct English translation.",opts:["I not have a dog.","I am not have a dog.","I don't have a dog.","I doesn't have a dog."],ans:2,exp:"一般動詞の否定：do not(don't)＋動詞原形。He/She/ItはdoesnotをつかいDoesn't。",expe:"Negation of regular verbs: do not(don't) + base verb. Use doesn't for He/She/It."},
+       {q:"「あなたは音楽が好きですか？」を英語にすると？",qe:"Choose the correct English question form.",opts:["You like music?","Are you like music?","Does you like music?","Do you like music?"],ans:3,exp:"一般動詞の疑問文：Do/DoesをSの前に置く。Do you like...? Yes, I do. / No, I don't.",expe:"Questions: Put Do/Does before the subject. Do you like...? Yes, I do. / No, I don't."}
+     ],
+     deep:{thinks:["英語にはなぜ「a/the」（冠詞）があるのに日本語にはないのか？言語の違いを考えよう。","日本語（SOV語順）と英語（SVO語順）の違いは思考パターンに影響する？"],world:"英語は世界で約15億人が使う言語。熊本のTSMC関連外国人との対話にも直接役立つ。バイリンガルであることは異文化理解の入り口。"}},
+
+    {name:"現在進行形・過去形",yt:[{ch:"とある男が授業をしてみた",title:"現在進行形（am/is/are+ing）",url:"https://www.youtube.com/results?search_query=葉一+現在進行形+中学英語",desc:"今まさに〜している表現"},{ch:"Try IT 中学英語",title:"一般動詞の過去形（規則・不規則）",url:"https://www.youtube.com/results?search_query=TryIT+過去形+不規則動詞+中学英語",desc:"ed形と不規則変化を整理"}],
+     quiz:[
+       {q:"「私は今音楽を聴いています」を英語にすると？",qe:"Choose the correct present progressive form.",opts:["I listen music now.","I listening to music now.","I am listening to music now.","I was listen to music now."],ans:2,exp:"現在進行形：am/is/are ＋ 動詞のing形。「今まさに〜している」状態を表す。",expe:"Present progressive: am/is/are + verb-ing. Describes an action happening right now."},
+       {q:"「昨日私は学校に行きました」を英語にすると？",qe:"Choose the correct past tense form.",opts:["I go to school yesterday.","I goed to school yesterday.","I gone to school yesterday.","I went to school yesterday."],ans:3,exp:"goは不規則動詞：go→went。yesterdayは過去の目印。",expe:"Go is irregular: go→went. 'Yesterday' signals past tense."},
+       {q:"「彼女は昨日テレビを見ませんでした」を英語にすると？",qe:"Choose the correct past negative form.",opts:["She didn't watched TV yesterday.","She not watch TV yesterday.","She didn't watch TV yesterday.","She doesn't watched TV yesterday."],ans:2,exp:"過去の否定：didn't ＋ 動詞原形。didn'tで過去を示すのでwatchはそのまま原形。",expe:"Past negative: didn't + base verb. Didn't already shows past, so use the base form."}
+     ],
+     deep:{thinks:["現在進行形は「今この瞬間」を切り取る表現。SNSのライブ配信・速報ニュースでどう使われる？","英語の不規則動詞（go→went）はなぜ存在するのか？歴史的背景を調べてみよう。"],world:"現在進行形はニュース速報で頻用される（例：Flooding is occurring in Kumamoto.）。英語で「今」を伝える力はグローバルな発信力の基礎。"}},
+
+    {name:"名詞・代名詞・形容詞・副詞",yt:[{ch:"とある男が授業をしてみた",title:"品詞の基礎（名詞・代名詞）",url:"https://www.youtube.com/results?search_query=葉一+名詞+代名詞+形容詞+中学英語",desc:"英語の品詞を整理"},{ch:"Try IT 中学英語",title:"形容詞・副詞の使い方",url:"https://www.youtube.com/results?search_query=TryIT+形容詞+副詞+中学英語",desc:"修飾語の位置と使い方"}],
+     quiz:[
+       {q:"「美しい花」を英語にすると？",qe:"How do you say 'beautiful flower' in English?",opts:["flower beautiful","a beautiful flower","a flower beautiful","the flower beauty"],ans:1,exp:"英語の形容詞は名詞の前に置く（前置修飾）。日本語と同じ語順。",expe:"In English, adjectives come before nouns (attributive position) — same as Japanese."},
+       {q:"「彼は速く走ります」の「速く」は何品詞か？",qe:"What part of speech is 'fast' in 'He runs fast'?",opts:["形容詞","副詞","名詞","動詞"],ans:1,exp:"副詞は動詞・形容詞・他の副詞を修飾する。ここでは動詞runsを修飾している。",expe:"Adverbs modify verbs, adjectives, or other adverbs. Here, 'fast' modifies the verb 'runs'."},
+       {q:"「彼女のカバン」を英語にすると？",qe:"How do you say 'her bag' in English?",opts:["she bag","hers bag","her bag","his bag"],ans:2,exp:"所有格：my/your/his/her/its/our/their ＋ 名詞。「彼女の」はher。",expe:"Possessive adjectives: my/your/his/her/its/our/their + noun. 'Her' means 'belonging to her'."}
+     ],
+     deep:{thinks:["英語の品詞は日本語の品詞とどう対応している？違いを探してみよう。","形容詞と副詞の違いが分かると英語の文章の意味が正確に理解できる。具体例で考えよう。"],world:"品詞の理解は英語読解の基礎。NatGeoやBBCの英語記事を正確に読むための第一歩。語学は世界を広げる鍵（SDG4：質の高い教育）。"}},
+
+    {name:"疑問詞・命令文・感嘆文",yt:[{ch:"とある男が授業をしてみた",title:"疑問詞（when/where/who/what/how）",url:"https://www.youtube.com/results?search_query=葉一+疑問詞+中学英語",desc:"5W1Hの使い方を整理"},{ch:"Try IT 中学英語",title:"命令文・感嘆文",url:"https://www.youtube.com/results?search_query=TryIT+命令文+感嘆文+中学英語",desc:"Let's, Don't, What/How感嘆文"}],
+     quiz:[
+       {q:"「あなたはどこに住んでいますか？」を英語にすると？",qe:"How do you ask 'Where do you live?' in English?",opts:["What do you live?","Where do you live?","When do you live?","Who do you live?"],ans:1,exp:"whereは場所を尋ねる疑問詞。Where do you...?で場所を問う疑問文を作る。",expe:"'Where' asks about place. 'Where do you live?' asks about where someone lives."},
+       {q:"「窓を開けなさい」を英語にすると？",qe:"How do you say 'Open the window' as a command?",opts:["You open the window.","Open the window.","Please you open the window.","Do open the window."],ans:1,exp:"命令文：動詞の原形で文を始める。主語（You）は省略する。",expe:"Imperative: Start with the base verb. The subject (You) is omitted."},
+       {q:"「なんて美しい花でしょう！」を英語にすると？",qe:"How do you say 'What a beautiful flower!' as an exclamation?",opts:["How beautiful flower!","What beautiful a flower!","What a beautiful flower!","How a beautiful flower!"],ans:2,exp:"感嘆文：What ＋ (a/an) ＋ 形容詞 ＋ 名詞！　または How ＋ 形容詞/副詞！",expe:"Exclamation: What + (a/an) + adj + noun! or How + adj/adv!"}
+     ],
+     deep:{thinks:["疑問詞5W1H（What/When/Where/Who/Why/How）はジャーナリズムの基本でもある。ニュースとどうつながっている？","命令文は英語の指示・標識でよく使われる。身の回りの英語の命令文を探してみよう。"],world:"疑問詞は情報収集の基本ツール。Why（なぜ）を問い続けることが批判的思考の出発点。SDG4（質の高い教育）の核心は「なぜ？」と問う力。"}}
+  ],
+
+  "中2": [
+    {name:"不定詞・動名詞",yt:[{ch:"とある男が授業をしてみた",title:"不定詞の3用法",url:"https://www.youtube.com/results?search_query=葉一+不定詞+動名詞+中学英語",desc:"名詞的・形容詞的・副詞的用法"},{ch:"Try IT 中学英語",title:"動名詞（ing形）の使い方",url:"https://www.youtube.com/results?search_query=TryIT+不定詞+動名詞+中学英語",desc:"enjoy/finish/stopのあとはing形"}],
+     quiz:[
+       {q:"「私は英語を勉強したい」を英語にすると？",qe:"Choose the correct form.",opts:["I want study English.","I want studying English.","I want to study English.","I want to studying English."],ans:2,exp:"want to ＋ 動詞原形（不定詞）。want/like/hope/need/decideはto不定詞が続く。",expe:"want to + base verb (infinitive). Want, like, hope, need, decide take to-infinitives."},
+       {q:"「読書は楽しい」を動名詞を使って英語にすると？",qe:"Use a gerund to say 'Reading books is fun'.",opts:["To reading books is fun.","Read books is fun.","Books reading is fun.","Reading books is fun."],ans:3,exp:"動名詞：動詞＋ingで名詞として使う。Reading books（本を読むこと）が主語。",expe:"Gerund: verb + ing used as a noun. 'Reading books' (= the act of reading) is the subject."},
+       {q:"enjoyのあとに来るのはどちらか？",qe:"Which form follows 'enjoy'?",opts:["to＋動詞原形","動詞のing形","動詞の原形","過去形"],ans:1,exp:"enjoy/finish/stop/mindのあとは動名詞（ing形）。enjoy to swim は誤り。",expe:"Enjoy, finish, stop, mind are followed by gerunds (verb-ing). 'Enjoy to swim' is wrong."}
+     ],
+     deep:{thinks:["I enjoy learning / I want to understand / I hope to contribute — 学びへの意欲を英語で表現してみよう。","不定詞と動名詞の使い分けは英語学習者の難関。なぜ二つの形があるのか考えよう。"],world:"不定詞・動名詞は国際的なスピーチ・エッセイで必須。'I want to contribute to a sustainable world.' のように志を英語で語る力の土台。"}},
+
+    {name:"比較・受動態",yt:[{ch:"とある男が授業をしてみた",title:"比較級・最上級",url:"https://www.youtube.com/results?search_query=葉一+比較級+最上級+中学英語",desc:"er/est・more/mostの使い分け"},{ch:"Try IT 中学英語",title:"受動態（be動詞＋過去分詞）",url:"https://www.youtube.com/results?search_query=TryIT+受動態+中学英語",desc:"受け身の文を作る方法を解説"}],
+     quiz:[
+       {q:"「東京は大阪より大きい」を英語にすると？",qe:"Choose the correct comparative form.",opts:["Tokyo is big than Osaka.","Tokyo is the biggest than Osaka.","Tokyo bigger than Osaka.","Tokyo is bigger than Osaka."],ans:3,exp:"比較級：形容詞/副詞＋er ＋ than。big→bigger。thanと一緒に使う。",expe:"Comparative: adjective/adverb + er + than. big→bigger. Always use 'than' with comparatives."},
+       {q:"「富士山は日本で最も高い山です」を英語にすると？",qe:"Choose the correct superlative form.",opts:["Mt.Fuji is higher mountain in Japan.","Mt.Fuji is highest mountain in Japan.","Mt.Fuji is more high mountain in Japan.","Mt.Fuji is the highest mountain in Japan."],ans:3,exp:"最上級：the ＋ 形容詞/副詞＋est。3つ以上を比べるときに使う。",expe:"Superlative: the + adjective/adverb + est. Used when comparing 3 or more things."},
+       {q:"「この本は多くの生徒に読まれている」の受動態は？",qe:"Choose the correct passive voice form.",opts:["This book reads by many students.","This book was read many students.","Many students is read this book.","This book is read by many students."],ans:3,exp:"受動態：be動詞＋過去分詞（＋by 行為者）。is readで現在の受動を表す。",expe:"Passive voice: be verb + past participle (+ by agent). 'is read' = present passive."}
+     ],
+     deep:{thinks:["受動態は「誰がやったか」を隠す効果もある。政治ニュースでどう使われるか探してみよう。","比較表現は議論・プレゼンの基本。SDGsの達成状況を英語で比較してみよう。"],world:"ニュース英語では受動態が多用される（The policy was approved.）。批判的メディアリテラシーには英語力が不可欠。NatGeokidsやBBCを英語で読む力はここから始まる。"}},
+
+    {name:"接続詞・前置詞・There is構文",yt:[{ch:"とある男が授業をしてみた",title:"接続詞（when/if/because/that）",url:"https://www.youtube.com/results?search_query=葉一+接続詞+when+because+中学英語",desc:"文をつなぐ接続詞の使い方"},{ch:"Try IT 中学英語",title:"前置詞・There is/are構文",url:"https://www.youtube.com/results?search_query=TryIT+前置詞+There+is+中学英語",desc:"場所・時間の前置詞とThere構文"}],
+     quiz:[
+       {q:"「もし明日晴れたら、私は公園に行きます」を英語にすると？",qe:"Choose the correct conditional form.",opts:["If it will be sunny tomorrow, I go to the park.","If it is sunny tomorrow, I will go to the park.","If it is sunny tomorrow, I go to the park.","When it is sunny tomorrow, I will go to the park."],ans:1,exp:"if節の中は現在形、主節は未来形（will）。If it is sunny, I will go... が正しい。",expe:"In an if-clause, use present tense; use 'will' in the main clause. If it is sunny, I will go..."},
+       {q:"「テーブルの上に本があります」を英語にすると？",qe:"Use There is/are to say 'There is a book on the table'.",opts:["There are a book on the table.","A book is there on the table.","There is a book on the table.","There has a book on the table."],ans:2,exp:"There is ＋単数名詞 / There are ＋複数名詞。存在を表す構文。",expe:"There is + singular noun / There are + plural noun. Used to express existence."},
+       {q:"「私は音楽を聴きながら勉強します」の「ながら」に当たる接続詞は？",qe:"Which conjunction expresses 'while' in 'I study while listening to music'?",opts:["because","but","when","while"],ans:3,exp:"while（〜しながら、〜する間に）。同時進行の動作を表す接続詞。",expe:"'While' expresses simultaneous actions (doing two things at the same time)."}
+     ],
+     deep:{thinks:["接続詞を使いこなすと文章が豊かになる。because/if/when/whileをすべて使った英文を書いてみよう。","前置詞（in/on/at/by/with）の使い分けは英語学習者の難所。日本語にない前置詞の概念を考えよう。"],world:"接続詞を使って論理的に英語を話す力は、国際会議・プレゼン・ディベートに直結する。'Because climate change affects us all, we must act now.' のような表現が重要。"}},
+
+    {name:"助動詞（can/will/must/should）",yt:[{ch:"とある男が授業をしてみた",title:"助動詞（can/could/will/would）",url:"https://www.youtube.com/results?search_query=葉一+助動詞+can+will+中学英語",desc:"助動詞の意味と使い方"},{ch:"Try IT 中学英語",title:"must/have to/should",url:"https://www.youtube.com/results?search_query=TryIT+must+have+to+should+中学英語",desc:"義務・必要・アドバイスを表す"}],
+     quiz:[
+       {q:"「あなたは野菜を食べるべきです」を英語にすると？",qe:"Choose the correct form using 'should'.",opts:["You must to eat vegetables.","You should eat vegetables.","You should to eat vegetables.","You have eat vegetables."],ans:1,exp:"shouldは「〜すべき」「〜した方がいい」。助動詞のあとは動詞原形（to不要）。",expe:"Should expresses advice or recommendation. Modal verbs are followed by the base verb (no to)."},
+       {q:"「ここで写真を撮ってはいけません」を英語にすると？",qe:"Choose the correct prohibition form.",opts:["You don't take pictures here.","You must not take pictures here.","You should not take pictures here.","You cannot take pictures here."],ans:1,exp:"must not（mustn't）は禁止を表す。「絶対に〜してはいけない」という強い意味。",expe:"Must not (mustn't) expresses prohibition — a strong 'absolutely do not'."},
+       {q:"「彼女は5か国語を話すことができます」を英語にすると？",qe:"Choose the correct ability form.",opts:["She can speaks five languages.","She could speak five languages.","She can speak five languages.","She is able speaks five languages."],ans:2,exp:"canは能力・可能を表す。助動詞のあとは動詞原形（三単現のsは不要）。",expe:"Can expresses ability. After a modal verb, use the base form (no -s for third person)."}
+     ],
+     deep:{thinks:["助動詞で表せる微妙なニュアンス（must vs should vs can）は日本語にない表現。この違いを日本語でどう説明する？","Can you help me? と Will you help me?の違いを考えよう。どちらが丁寧？"],world:"助動詞は英語のコミュニケーションの核心。'We must address climate change now.' のような国際的な提言・議論で必須の表現力。"}}
+  ],
+
+  "中3": [
+    {name:"現在完了形",yt:[{ch:"とある男が授業をしてみた",title:"現在完了（完了・継続・経験）",url:"https://www.youtube.com/results?search_query=葉一+現在完了形+中学英語",desc:"have/has＋過去分詞の3用法"},{ch:"Try IT 中学英語",title:"現在完了とfor/since",url:"https://www.youtube.com/results?search_query=TryIT+現在完了+for+since+中学英語",desc:"継続用法とfor・sinceの使い方"}],
+     quiz:[
+       {q:"「私はすでに宿題を終えました」を英語にすると？",qe:"Choose the correct present perfect form.",opts:["I already finished my homework.","I have already finished my homework.","I had already finished my homework.","I finish my homework already."],ans:1,exp:"現在完了（完了）：have/has＋過去分詞。already（すでに）とよく使う。",expe:"Present perfect (completion): have/has + past participle. Often used with 'already'."},
+       {q:"「私は3年間英語を勉強しています」を英語にすると？",qe:"Choose the correct present perfect form.",opts:["I study English for three years.","I studied English for three years.","I have studied English for three years.","I have been studying English since three years."],ans:2,exp:"現在完了（継続）：have/has＋過去分詞＋for（期間）/since（起点）。",expe:"Present perfect (continuation): have/has + past participle + for (duration)/since (start point)."},
+       {q:"「あなたは東京に行ったことがありますか？」を英語にすると？",qe:"Choose the correct present perfect question.",opts:["Did you ever go to Tokyo?","Have you ever been to Tokyo?","Do you ever go to Tokyo?","Were you ever in Tokyo?"],ans:1,exp:"現在完了（経験）：Have you ever＋過去分詞？been to〜で「〜に行ったことがある」。",expe:"Present perfect (experience): Have you ever + past participle? 'Have been to' = have visited."}
+     ],
+     deep:{thinks:["現在完了形は「過去と現在のつながり」を表す英語独特の概念。日本語でどう表現するか比べよう。","'I have never been outside Japan, but I want to change that.' この文を出発点に夢を英語で書いてみよう。"],world:"現在完了形は国連・TEDスピーチで頻用される。'We have made progress, but there is still much to do.' のような表現は国際的な議論の基本。"}},
+
+    {name:"関係代名詞",yt:[{ch:"とある男が授業をしてみた",title:"関係代名詞（who/which/that）",url:"https://www.youtube.com/results?search_query=葉一+関係代名詞+who+which+that+中学英語",desc:"先行詞と関係詞節の使い方"},{ch:"Try IT 中学英語",title:"関係代名詞の省略・目的格",url:"https://www.youtube.com/results?search_query=TryIT+関係代名詞+目的格+中学英語",desc:"that/whichの省略パターン"}],
+     quiz:[
+       {q:"「私には英語を話せる友達がいます」を英語にすると？",qe:"Use a relative clause to say 'I have a friend who can speak English'.",opts:["I have a friend which can speak English.","I have a friend who can speak English.","I have a friend whom can speak English.","I have a friend whose can speak English."],ans:1,exp:"先行詞が人→who（主格）。「英語を話せる」が「友達」を修飾する。",expe:"When the antecedent is a person, use 'who' (subject). It modifies 'friend'."},
+       {q:"「これは私が昨日読んだ本です」を英語にすると？",qe:"Use a relative clause to say 'This is the book I read yesterday'.",opts:["This is the book which I read yesterday.","This is the book I reading yesterday.","This is a book that I reads yesterday.","This is the book who I read yesterday."],ans:0,exp:"先行詞が物→which/that。目的格の関係代名詞は省略できる（which/thatは省略可）。",expe:"For things, use 'which' or 'that'. Object relative pronouns can be omitted."},
+       {q:"「私が昨日会った人は先生です」を英語にすると？",qe:"Choose the correct relative clause.",opts:["The person who I met yesterday is a teacher.","The person which I met yesterday is a teacher.","The person whom I met yesterday is a teacher.","The person whose I met yesterday is a teacher."],ans:0,exp:"先行詞が人・目的格→who（またはwhom）。口語ではwhoを使うことが多い。",expe:"For people in the object position, use 'who' (or 'whom' formally). 'Who' is common in speech."}
+     ],
+     deep:{thinks:["関係代名詞を使うと複雑な情報を1文で伝えられる。英語と日本語の情報の組み方の違いを比べよう。","関係代名詞を使った文でSDGsの課題を表現してみよう。（例：People who lack access to clean water...）"],world:"関係代名詞は英語の情報圧縮技術。英語論文・NatGeoの記事・国連文書を読むための必須スキル。"}},
+
+    {name:"仮定法・間接疑問文",yt:[{ch:"とある男が授業をしてみた",title:"仮定法過去（If I were...）",url:"https://www.youtube.com/results?search_query=葉一+仮定法+if+were+could+中学英語",desc:"現実と反対のことを表す仮定法"},{ch:"Try IT 中学英語",title:"間接疑問文（I know what...）",url:"https://www.youtube.com/results?search_query=TryIT+間接疑問文+中学英語",desc:"疑問文が文中に入る間接疑問"}],
+     quiz:[
+       {q:"「もし私が鳥だったら空を飛べるのに」を英語にすると？",qe:"Choose the correct subjunctive form.",opts:["If I am a bird, I can fly.","If I were a bird, I could fly.","If I was a bird, I will fly.","If I were a bird, I can fly."],ans:1,exp:"仮定法過去：If＋過去形〜, would/could＋動詞原形。be動詞はすべてwereを使う。",expe:"Subjunctive: If + past tense, would/could + base verb. Use 'were' for all subjects with be."},
+       {q:"「彼女がどこに住んでいるか知っています」を英語にすると？",qe:"Choose the correct indirect question form.",opts:["I know where does she live.","I know where she lives.","I know where she does live.","I know where she lived."],ans:1,exp:"間接疑問文：疑問詞＋主語＋動詞（平叙文の語順）。疑問文の語順にしない！",expe:"Indirect question: question word + subject + verb (declarative order). Don't use question word order!"},
+       {q:"「もし100万円あったら何を買いますか？」を英語にすると？",qe:"Choose the correct subjunctive question.",opts:["If you have 1 million yen, what will you buy?","If you had 1 million yen, what would you buy?","If you will have 1 million yen, what would you buy?","If you would have 1 million yen, what will you buy?"],ans:1,exp:"仮定法過去の疑問文：If＋過去形〜, what/how/where would you...？",expe:"Subjunctive question: If + past tense, what/how/where would you...?"}
+     ],
+     deep:{thinks:["仮定法は「もし〜なら」という想像力を言語化したもの。創造的思考と仮定法のつながりを考えよう。","'If every person reduced plastic use, the ocean would be cleaner.' この文を使って世界へのメッセージを書こう。"],world:"仮定法は政策提言・ディベートの核心表現。'If countries cooperated more, climate change would slow down.' のように世界の問題を英語で語る力の土台。"}},
+
+    {name:"長文読解・英作文",yt:[{ch:"とある男が授業をしてみた",title:"英語長文の読み方",url:"https://www.youtube.com/results?search_query=葉一+英語+長文読解+中学英語",desc:"パラグラフの構造と速読のコツ"},{ch:"Try IT 中学英語",title:"英語作文の書き方",url:"https://www.youtube.com/results?search_query=TryIT+英語作文+意見文+中学英語",desc:"意見文・メール・スピーチの構成"}],
+     quiz:[
+       {q:"英語の意見文（エッセイ）の基本構成は？",qe:"What is the basic structure of an English opinion essay?",opts:["起承転結","Introduction/Body/Conclusion","序論のみ","自由形式"],ans:1,exp:"Introduction（主張）→Body（理由・根拠・例）→Conclusion（まとめ）が英語エッセイの基本。",expe:"Introduction (claim) → Body (reasons, evidence, examples) → Conclusion is the standard structure."},
+       {q:"PREP法とは何か？",qe:"What does PREP stand for in essay writing?",opts:["Point/Read/Example/Point","Point/Reason/Example/Point","Place/Reason/Explain/Point","Part/Reason/Event/Point"],ans:1,exp:"PREP：主張（Point）→理由（Reason）→例（Example）→主張の繰り返し（Point）。",expe:"PREP: Point → Reason → Example → Point (restate). A powerful structure for persuasive writing."},
+       {q:"長文読解で最初に確認すべきことは？",qe:"What should you check first when reading a long English passage?",opts:["難しい単語を調べる","タイトルと各段落の最初の文","全文を一語ずつ読む","最後の段落だけ読む"],ans:1,exp:"タイトルと各段落の最初の文（トピックセンテンス）を読むと全体の構造がつかめる。",expe:"Read the title and first sentence of each paragraph (topic sentence) to grasp the overall structure."}
+     ],
+     deep:{thinks:["英語で自分の意見を論理的に書く力は日本語の作文力とつながっている。両方の構造を比べてみよう。","NatGeo Kidsの記事を1つ読んで、PREP法を使って自分の意見を英語で書いてみよう。"],world:"英語での情報発信力はSDG4（質の高い教育）の成果であり、SDG17（パートナーシップ）を実現するための基礎ツール。英語を通じて世界と対話できる力を身につけよう。"}}
+  ]
+};
+
+var curUnit = null;
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+
+function buildUnits(grade) {
+  var id = grade==="中1"?"ul1":grade==="中2"?"ul2":"ul3";
+  var ul = document.getElementById(id);
+  if(ul.children.length>0) return;
+  units[grade].forEach(function(u){
+    var btn = document.createElement("button");
+    btn.className = "unit-btn";
+    btn.textContent = u.name;
+    btn.onclick = function(){
+      document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+      btn.classList.add("on");
+      openUnit(u);
+    };
+    ul.appendChild(btn);
+  });
+}
+
+function switchGrade(id,btn){
+  document.querySelectorAll(".grade-section").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".gtab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById(id).classList.add("on");
+  btn.classList.add("on");
+  var g=id==="g1"?"中1":id==="g2"?"中2":"中3";
+  buildUnits(g);
+  closeUnit();
+}
+
+function openUnit(u){
+  curUnit=u;
+  document.getElementById("unit-title").textContent=u.name;
+  document.getElementById("learn-area").classList.add("on");
+  switchLearn("video",document.querySelectorAll(".ltab")[0]);
+  document.getElementById("learn-area").scrollIntoView({behavior:"smooth"});
+}
+
+function closeUnit(){
+  document.getElementById("learn-area").classList.remove("on");
+  document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+  curUnit=null;
+}
+
+function switchLearn(step,btn){
+  document.querySelectorAll(".learn-step").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".ltab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById("ls-"+step).classList.add("on");
+  if(btn) btn.classList.add("on");
+  if(step==="video") renderVideos();
+  if(step==="quiz"){quizIdx=0;quizScore=0;renderQuiz();}
+  if(step==="deep") renderDeep();
+}
+
+function renderVideos(){
+  if(!curUnit) return;
+  var vl=document.getElementById("video-list");
+  vl.innerHTML="";
+  curUnit.yt.forEach(function(v){
+    var d=document.createElement("div");
+    d.className="yt-card";
+    d.innerHTML="<div class=\"yt-thumb\">&#9654;</div><div class=\"yt-info\"><div class=\"yt-ch\">"+v.ch+"</div><div class=\"yt-title\">"+v.title+"</div><div class=\"yt-desc\">"+v.desc+"</div><a href=\""+v.url+"\" target=\"_blank\" class=\"yt-btn\">&#9654; YouTubeで見る</a></div>";
+    vl.appendChild(d);
+  });
+}
+
+function renderQuiz(){
+  if(!curUnit) return;
+  var qs=curUnit.quiz;
+  var qa=document.getElementById("quiz-area");
+  if(quizIdx>=qs.length){
+    var pct=Math.round(quizScore/qs.length*100);
+    qa.innerHTML="<div style=\"text-align:center;padding:16px 0;\"><div style=\"font-size:32px;margin-bottom:8px;\">"+(pct>=80?"&#127881;":pct>=60?"&#128077;":"&#128170;")+"</div><div style=\"font-size:20px;font-weight:700;color:#185FA5;margin-bottom:6px;\">"+quizScore+" / "+qs.length+" 正解</div><button onclick=\"quizIdx=0;quizScore=0;renderQuiz()\" style=\"padding:8px 18px;border-radius:8px;background:#185FA5;color:#fff;font-size:13px;border:none;cursor:pointer;\">もう一度</button></div>";
+    return;
+  }
+  document.getElementById("score-disp").textContent=quizScore+"/"+qs.length;
+  document.getElementById("prog-fill").style.width=Math.round(quizScore/qs.length*100)+"%";
+  var q=qs[quizIdx];
+  qa.innerHTML="<div class=\"q-box\"><div class=\"q-en\">"+q.qe+"</div><div class=\"q-ja\">&#127471;&#127477; "+q.q+"</div><div class=\"opts\">"+q.opts.map(function(o,i){return "<button class=\"opt-btn\" onclick=\"answerQ("+i+")\">"+o+"</button>";}).join("")+"</div><div class=\"exp-box\" id=\"exp-box\"><strong>&#128218; 解説</strong><br>"+q.exp+"<div class=\"exp-en\">&#127468;&#127463; "+q.expe+"</div></div></div><button class=\"next-btn\" id=\"nxt-btn\" style=\"display:none;\" onclick=\"nextQ()\">"+(quizIdx<qs.length-1?"次の問題 &#8594;":"結果を見る &#127881;")+"</button>";
+  quizAnswered=false;
+}
+
+function answerQ(i){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  var q=curUnit.quiz[quizIdx];
+  document.querySelectorAll(".opt-btn").forEach(function(b,idx){
+    b.disabled=true;
+    if(idx===q.ans) b.classList.add("correct");
+    else if(idx===i&&i!==q.ans) b.classList.add("wrong");
+  });
+  if(i===q.ans) quizScore++;
+  document.getElementById("exp-box").style.display="block";
+  document.getElementById("nxt-btn").style.display="inline-block";
+  document.getElementById("score-disp").textContent=quizScore+"/"+curUnit.quiz.length;
+  document.getElementById("prog-fill").style.width=Math.round(quizScore/curUnit.quiz.length*100)+"%";
+}
+
+function nextQ(){quizIdx++;renderQuiz();}
+
+function renderDeep(){
+  if(!curUnit) return;
+  var d=curUnit.deep;
+  var da=document.getElementById("deep-area");
+  var html="";
+  d.thinks.forEach(function(t){html+="<div class=\"think-q\">&#129504; "+t+"</div>";});
+  html+="<textarea placeholder=\"考えたことを書こう / Write your thoughts...\"></textarea>";
+  html+="<div class=\"world-box\"><strong>&#127758; 世界・熊本とのつながり</strong><br>"+d.world+"</div>";
+  html+="<div style=\"margin-top:12px;\"><a href=\"tool6_study.html\" style=\"display:inline-block;padding:8px 14px;border-radius:8px;background:#185FA5;color:#fff;font-size:13px;font-weight:600;text-decoration:none;\">&#127891; 他の教科も学ぼう</a></div>";
+  da.innerHTML=html;
+}
+
+buildUnits("中1");
+</script>
+</body>
+</html>

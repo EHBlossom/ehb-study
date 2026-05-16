@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EHB 学習ナビゲーター</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Noto Sans JP',sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#3C3489;color:#fff;padding:22px 24px;text-align:center;}
+.header h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.header p{font-size:13px;opacity:.85;}
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;margin-top:8px;margin-right:5px;background:#EEEDFE;color:#3C3489;}
+.container{max-width:700px;margin:0 auto;padding:24px 16px;}
+.intro{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:#555;line-height:1.8;}
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 14px;background:#EEEDFE;border-radius:8px;margin-bottom:20px;font-size:12px;color:#3C3489;}
+.flow-step{padding:4px 10px;border-radius:20px;background:#534AB7;color:#fff;font-size:11px;font-weight:600;}
+.flow-arrow{color:#888;}
+a.subj-card{background:#fff;border:2px solid #e8e6e0;border-radius:14px;padding:20px 22px;margin-bottom:14px;display:flex;gap:18px;align-items:center;text-decoration:none;color:inherit;transition:all .15s;}
+a.subj-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1);}
+.subj-icon{font-size:40px;flex-shrink:0;}
+.subj-info{flex:1;}
+.subj-name{font-size:18px;font-weight:700;margin-bottom:5px;}
+.subj-desc{font-size:12px;color:#888;margin-bottom:8px;}
+.subj-units{display:flex;flex-wrap:wrap;gap:4px;}
+.unit-tag{font-size:11px;padding:2px 8px;border-radius:20px;background:#f8f7f4;color:#666;}
+.subj-arrow{font-size:20px;color:#ddd;flex-shrink:0;}
+.footer{text-align:center;padding:20px;font-size:12px;color:#aaa;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#127891; EHB 学習ナビゲーター</h1>
+  <p>中学テスト対策 × YouTube連携 × 英語×教科横断</p>
+  <span class="badge">全教科対応</span>
+  <span class="badge">YouTube連携</span>
+  <span class="badge">日英対応</span>
+</div>
+<div class="container">
+  <div class="flow">
+    <span class="flow-step">1 教科選択</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">2 学年・単元</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">3 動画で理解</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">4 確認クイズ</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">5 深掘り</span>
+  </div>
+
+  <a class="subj-card" href="tool6_sci.html" style="border-color:#1D9E75;">
+    <div class="subj-icon">&#128300;</div>
+    <div class="subj-info">
+      <div class="subj-name" style="color:#1D9E75;">理科</div>
+      <div class="subj-desc">中1〜中3 全単元カバー</div>
+      <div class="subj-units">
+        <span class="unit-tag">植物・動物</span><span class="unit-tag">光・音・力</span><span class="unit-tag">化学変化</span>
+        <span class="unit-tag">電流</span><span class="unit-tag">天気</span><span class="unit-tag">酸とアルカリ</span>
+        <span class="unit-tag">運動・エネルギー</span><span class="unit-tag">遺伝</span><span class="unit-tag">地球・宇宙</span>
+      </div>
+    </div>
+    <div class="subj-arrow">&#8250;</div>
+  </a>
+
+  <a class="subj-card" href="tool6_soc.html" style="border-color:#C8830A;">
+    <div class="subj-icon">&#127758;</div>
+    <div class="subj-info">
+      <div class="subj-name" style="color:#C8830A;">社会</div>
+      <div class="subj-desc">中1（地理）中2（歴史）中3（歴史・公民）</div>
+      <div class="subj-units">
+        <span class="unit-tag">世界・日本の地理</span><span class="unit-tag">古代〜現代史</span>
+        <span class="unit-tag">日本国憲法</span><span class="unit-tag">経済・財政</span><span class="unit-tag">国際社会・SDGs</span>
+      </div>
+    </div>
+    <div class="subj-arrow">&#8250;</div>
+  </a>
+
+  <a class="subj-card" href="tool6_eng.html" style="border-color:#185FA5;">
+    <div class="subj-icon">&#128172;</div>
+    <div class="subj-info">
+      <div class="subj-name" style="color:#185FA5;">英語</div>
+      <div class="subj-desc">中1〜中3 全単元 | 問題文も英語で！</div>
+      <div class="subj-units">
+        <span class="unit-tag">be動詞・一般動詞</span><span class="unit-tag">進行形・過去形</span>
+        <span class="unit-tag">不定詞・動名詞</span><span class="unit-tag">比較・受動態</span>
+        <span class="unit-tag">現在完了</span><span class="unit-tag">関係代名詞</span><span class="unit-tag">仮定法</span>
+      </div>
+    </div>
+    <div class="subj-arrow">&#8250;</div>
+  </a>
+
+  <a class="subj-card" href="tool6_math.html" style="border-color:#993556;">
+    <div class="subj-icon">&#10006;&#65039;</div>
+    <div class="subj-info">
+      <div class="subj-name" style="color:#993556;">数学</div>
+      <div class="subj-desc">中1〜中3 全単元 | 計算問題中心</div>
+      <div class="subj-units">
+        <span class="unit-tag">正負の数・文字式</span><span class="unit-tag">方程式・連立方程式</span>
+        <span class="unit-tag">関数・グラフ</span><span class="unit-tag">図形・三平方</span>
+        <span class="unit-tag">確率・統計</span>
+      </div>
+    </div>
+    <div class="subj-arrow">&#8250;</div>
+  </a>
+
+  <a class="subj-card" href="tool6_jpn.html" style="border-color:#534AB7;">
+    <div class="subj-icon">&#128394;</div>
+    <div class="subj-info">
+      <div class="subj-name" style="color:#534AB7;">国語</div>
+      <div class="subj-desc">中1〜中3 全単元（文法・読解・古典・作文）</div>
+      <div class="subj-units">
+        <span class="unit-tag">品詞・活用</span><span class="unit-tag">竹取・枕草子</span>
+        <span class="unit-tag">平家物語・奥の細道</span><span class="unit-tag">説明文・論説文</span>
+        <span class="unit-tag">意見文・小論文</span><span class="unit-tag">表現技法</span>
+      </div>
+    </div>
+    <div class="subj-arrow">&#8250;</div>
+  </a>
+
+</div>
+<div class="footer">English House Blossom · EHB 学習ナビゲーター · 中学3年間完全対応</div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国語 完全版 | EHB 学習ナビゲーター</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Noto Sans JP',sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#534AB7;color:#fff;padding:18px 20px;}
+.header h1{font-size:19px;font-weight:700;margin-bottom:3px;}
+.header p{font-size:12px;opacity:.85;}
+.back-btn{display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.2);color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.4);}
+.container{max-width:740px;margin:0 auto;padding:18px 16px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.grade-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.gtab{padding:8px 20px;border-radius:20px;border:1.5px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;font-weight:500;}
+.gtab.on{background:#534AB7;color:#fff;border-color:#534AB7;}
+.grade-section{display:none;}
+.grade-section.on{display:block;}
+.unit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.unit-btn{border:1.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;cursor:pointer;background:#f8f7f4;font-size:13px;text-align:left;line-height:1.4;color:#1a1a1a;}
+.unit-btn:hover{background:#EEEDFE;border-color:#534AB7;}
+.unit-btn.on{background:#534AB7;color:#fff;border-color:#534AB7;font-weight:600;}
+.learn-area{display:none;}
+.learn-area.on{display:block;}
+.learn-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ltab{padding:8px 16px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;}
+.ltab.on{background:#534AB7;color:#fff;border-color:#534AB7;}
+.learn-step{display:none;}
+.learn-step.on{display:block;}
+.yt-card{border:1.5px solid #e8e6e0;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;background:#f8f7f4;}
+.yt-thumb{width:44px;height:44px;border-radius:6px;background:#FF0000;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;}
+.yt-info{flex:1;}
+.yt-ch{font-size:11px;color:#666;margin-bottom:2px;}
+.yt-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+.yt-desc{font-size:12px;color:#888;}
+.yt-btn{display:inline-block;margin-top:6px;padding:5px 12px;border-radius:6px;background:#FF0000;color:#fff;font-size:11px;font-weight:600;text-decoration:none;}
+.q-box{background:#f8f7f4;border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.q-en{font-size:12px;color:#3C3489;font-weight:600;margin-bottom:3px;line-height:1.5;font-style:italic;}
+.q-ja{font-size:14px;font-weight:700;margin-bottom:10px;line-height:1.5;}
+.opts{display:grid;gap:6px;}
+.opt-btn{padding:9px 12px;border-radius:8px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;text-align:left;}
+.opt-btn:hover:not(:disabled){border-color:#534AB7;background:#EEEDFE;}
+.opt-btn.correct{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600;}
+.opt-btn.wrong{background:#FAECE7;border-color:#E05A3A;color:#712B13;}
+.opt-btn:disabled{cursor:default;}
+.exp-box{background:#EEEDFE;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;color:#3C3489;line-height:1.7;display:none;}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.score-n{font-size:20px;font-weight:700;color:#534AB7;}
+.prog-bar{flex:1;height:6px;background:#e8e6e0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:#534AB7;border-radius:3px;transition:width .4s;}
+.next-btn{padding:8px 18px;border-radius:8px;background:#534AB7;color:#fff;font-size:13px;border:none;cursor:pointer;margin-top:10px;}
+.think-q{background:#EEEDFE;border-left:3px solid #534AB7;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:10px;font-size:13px;line-height:1.65;color:#3C3489;}
+.think-en{font-size:12px;color:#534AB7;margin-top:4px;font-style:italic;}
+textarea{width:100%;padding:9px 12px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;resize:vertical;min-height:60px;font-family:inherit;margin-top:6px;}
+.world-box{background:#EEEDFE;border-radius:10px;padding:12px 16px;font-size:13px;color:#3C3489;line-height:1.75;margin-top:10px;}
+.unit-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.unit-title{font-size:15px;font-weight:700;flex:1;color:#534AB7;}
+.close-unit{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#128394; 国語 完全版</h1>
+  <p>中学1〜3年 全単元（文法・読解・古典・作文）| EHB 学習ナビゲーター</p>
+  <a href="tool6_study.html" class="back-btn">&#8592; 教科選択に戻る</a>
+</div>
+<div class="container">
+<div class="card">
+  <div class="grade-tabs">
+    <button class="gtab on" onclick="switchGrade('g1',this)">中1</button>
+    <button class="gtab" onclick="switchGrade('g2',this)">中2</button>
+    <button class="gtab" onclick="switchGrade('g3',this)">中3</button>
+  </div>
+  <div class="grade-section on" id="g1"><div class="unit-list" id="ul1"></div></div>
+  <div class="grade-section" id="g2"><div class="unit-list" id="ul2"></div></div>
+  <div class="grade-section" id="g3"><div class="unit-list" id="ul3"></div></div>
+</div>
+<div class="learn-area" id="learn-area">
+  <div class="card" style="padding:12px 16px;margin-bottom:10px;">
+    <div class="unit-header">
+      <span class="unit-title" id="unit-title"></span>
+      <button class="close-unit" onclick="closeUnit()">&#10005; 閉じる</button>
+    </div>
+    <div class="learn-tabs">
+      <button class="ltab on" onclick="switchLearn('video',this)">&#9654; 動画</button>
+      <button class="ltab" onclick="switchLearn('quiz',this)">&#129504; クイズ</button>
+      <button class="ltab" onclick="switchLearn('deep',this)">&#127775; 深掘り</button>
+    </div>
+  </div>
+  <div class="learn-step on" id="ls-video"><div class="card"><p style="font-size:13px;font-weight:700;color:#534AB7;margin-bottom:10px;">&#9654; おすすめ動画で理解しよう</p><div id="video-list"></div></div></div>
+  <div class="learn-step" id="ls-quiz"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#129504; 確認クイズ</p><div class="score-row"><span class="score-n" id="score-disp">0/0</span><div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div></div><div id="quiz-area"></div></div></div>
+  <div class="learn-step" id="ls-deep"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#127775; 深掘り — 国語と世界</p><div id="deep-area"></div></div></div>
+</div>
+</div>
+<script>
+var units = {
+  "中1": [
+    {name:"文法：品詞の種類",yt:[{ch:"とある男が授業をしてみた",title:"品詞の種類と見分け方",url:"https://www.youtube.com/results?search_query=葉一+品詞+国語+中学",desc:"10品詞の特徴と見分け方"},{ch:"Try IT 中学国語",title:"文節・単語の区切り方",url:"https://www.youtube.com/results?search_query=TryIT+品詞+文節+国語+中学",desc:"文節と単語を正確に区切る"}],
+     quiz:[{q:"「美しい花が咲いた」の「美しい」は何品詞か？",qe:"What part of speech is 'utsukushii' (beautiful) in this sentence?",opts:["名詞","形容詞","副詞","動詞"],ans:1,exp:"形容詞は物事の性質・状態を表す語。「〜い」で終わることが多い（美しい・大きい・楽しい）。",expe:"Adjectives (keiyoshi) describe the nature or state of things. Many end in 'i' in Japanese."},{q:"「ゆっくり歩く」の「ゆっくり」は何品詞か？",qe:"What part of speech is 'yukkuri' (slowly) in this phrase?",opts:["形容詞","動詞","副詞","接続詞"],ans:2,exp:"副詞は動詞・形容詞・形容動詞を修飾する語。「どのように」「どのくらい」を表す。",expe:"Adverbs (fukushi) modify verbs and adjectives. They express 'how' or 'to what extent'."},{q:"「しかし」「そして」「だから」は何品詞か？",qe:"What part of speech are 'shikashi' (however), 'soshite' (and), 'dakara' (therefore)?",opts:["動詞","副詞","接続詞","感動詞"],ans:2,exp:"接続詞は文と文・節と節をつなぐ語。しかし（逆接）・そして（順接）・だから（因果）。",expe:"Conjunctions (setsuzokushi) connect sentences or clauses. Similar to however/and/therefore in English."}],
+     deep:{thinks:[{q:"品詞の分類は言語によって異なる。英語と日本語の品詞の違いを比べてみよう。",qe:"Parts of speech differ between languages. Compare Japanese and English grammatical categories."},{q:"接続詞（だから・しかし・なぜなら）を使いこなすと文章がなぜ上手くなるのか？",qe:"Why does using conjunctions (therefore, however, because) make writing better?"}],world:"言語の文法構造は文化的思考パターンを反映する。英語（SVO）と日本語（SOV）の語順の違いは情報の提示順序とも関係する。グローバルな発信力には両方の文法の理解が必要。"}},
+
+    {name:"文法：活用・文の成分",yt:[{ch:"とある男が授業をしてみた",title:"動詞の活用形（未然・連用・終止...）",url:"https://www.youtube.com/results?search_query=葉一+動詞+活用形+国語+中学",desc:"6つの活用形を整理"},{ch:"Try IT 中学国語",title:"文の成分（主語・述語・修飾語）",url:"https://www.youtube.com/results?search_query=TryIT+文の成分+主語+述語+中学国語",desc:"文節の関係を正確に分析"}],
+     quiz:[{q:"「書く」の連用形は？",qe:"What is the 'renyokei' (continuative form) of 'kaku' (to write)?",opts:["書か","書き","書く","書け"],ans:1,exp:"連用形は「書き」。「書きます」「書いて」などの前に来る形。動詞の活用は暗記が重要。",expe:"The continuative form is 'kaki'. Used before 'masu' and 'te' forms. Verb conjugation requires memorization."},{q:"「走る選手が速い」の主語はどれか？",qe:"What is the subject of the sentence 'The athlete who runs is fast'?",opts:["走る","選手が","速い","走る選手が"],ans:3,exp:"主語は文全体の主となる語句。「走る選手が」が「速い」の主語。「が」でわかる。",expe:"The subject is the main topic of the sentence. 'Hashiru senshu ga' is marked by the subject marker 'ga'."},{q:"「彼は丁寧に問題を解いた」の「丁寧に」は？",qe:"What is the function of 'teinei ni' (carefully) in this sentence?",opts:["主語","述語","連体修飾語","連用修飾語"],ans:3,exp:"連用修飾語は述語（動詞）を修飾する語。「丁寧に解いた」→「丁寧に」が「解いた」を修飾。",expe:"An adverbial modifier modifies the predicate (verb). 'Teinei ni' modifies 'toita' (solved)."}],
+     deep:{thinks:[{q:"日本語には主語がなくても成り立つ文がある。英語と比較してなぜ違いが生まれたのか？",qe:"Japanese sentences can function without a subject. Why does this difference from English exist?"},{q:"動詞の活用形をすべて覚えることは必要か？それとも理解する方が重要か？",qe:"Is it necessary to memorize all verb conjugation forms, or is understanding the pattern more important?"}],world:"日本語の文法は世界の言語の中で独特の構造を持つ。SOV語順・敬語システム・省略の多さなど。言語の多様性はSDG4（質の高い教育）と文化遺産の保護（SDG11）に関わる。"}},
+
+    {name:"古典入門：竹取物語・枕草子",yt:[{ch:"とある男が授業をしてみた",title:"竹取物語の読み方・現代語訳",url:"https://www.youtube.com/results?search_query=葉一+竹取物語+古典+中学国語",desc:"日本最古の物語を読もう"},{ch:"Try IT 中学国語",title:"枕草子・徒然草の基礎",url:"https://www.youtube.com/results?search_query=TryIT+枕草子+徒然草+古典+中学国語",desc:"随筆文学の特徴と読み方"}],
+     quiz:[{q:"竹取物語は何時代に書かれたか？",qe:"In which period was The Tale of the Bamboo Cutter written?",opts:["奈良時代","平安時代","江戸時代","鎌倉時代"],ans:1,exp:"竹取物語は平安時代（9〜10世紀）。日本最古の物語文学で作者不詳。「かぐや姫」の物語。",expe:"Written in the Heian period (9th-10th century). Japan's oldest narrative literature, author unknown."},{q:"「今は昔」という書き出しは何を意味するか？",qe:"What does 'ima wa mukashi' (literally 'now is the past') mean?",opts:["現代の話","昔話の始まりの定型句","将来の話","外国の話"],ans:1,exp:"「今は昔」は「昔々のことですが」という意味の古文定型句。英語の「Once upon a time」に相当。",expe:"'Ima wa mukashi' is a conventional opener meaning 'Long ago' — the Japanese 'Once upon a time'."},{q:"枕草子を書いたのは誰か？",qe:"Who wrote the Pillow Book (Makura no Soshi)?",opts:["紫式部","清少納言","小野小町","与謝野晶子"],ans:1,exp:"清少納言（せいしょうなごん）が平安時代中期に書いた随筆。「春はあけぼの」で始まる。",expe:"Sei Shonagon wrote this essay collection in the mid-Heian period. Famous opening: 'In spring, the dawn...'"}],
+     deep:{thinks:[{q:"竹取物語は現代のSF・ファンタジーの原型。月から来た存在・不老不死の薬——現代的テーマがある。",qe:"The Bamboo Cutter is a prototype of sci-fi and fantasy. What modern themes does it contain?"},{q:"枕草子「春はあけぼの」と現代のSNS投稿を比べると、人間の感性はどう変わった？変わらない？",qe:"Compare Sei Shonagon's 'In spring, the dawn' with modern social media posts. How has human sensibility changed?"}],world:"竹取物語は英語に翻訳され世界中で読まれている。「かぐや姫」はジブリ映画にもなった。日本文学は世界のポップカルチャーに影響を与えるソフトパワー（SDG17：パートナーシップ）。"}},
+
+    {name:"読解：説明文・物語文",yt:[{ch:"とある男が授業をしてみた",title:"説明文の読み方（段落・要旨）",url:"https://www.youtube.com/results?search_query=葉一+説明文+読解+中学国語",desc:"段落の役割と要旨のつかみ方"},{ch:"Try IT 中学国語",title:"物語文・詩の読み方",url:"https://www.youtube.com/results?search_query=TryIT+物語文+詩+読解+中学国語",desc:"登場人物の心情・情景描写の読み方"}],
+     quiz:[{q:"説明文で筆者の主張を見つけるには？",qe:"How do you find the author's main argument in an expository text?",opts:["最初の段落だけ読む","接続詞・まとめの言葉に注目する","難しい言葉を調べる","段落数を数える"],ans:1,exp:"「つまり」「要するに」「このように」「したがって」などまとめの接続詞の後に主張が多い。",expe:"Summary words like 'in conclusion,' 'therefore,' 'in other words' often signal the main argument."},{q:"物語文で登場人物の心情を読み取る手がかりは？",qe:"What clues help understand a character's feelings in a story?",opts:["文字数を数える","言動・表情・情景描写","段落の数","漢字の読み方"],ans:1,exp:"登場人物の言葉・行動・表情・情景描写（その時の天気や環境）が心情を表す。",expe:"A character's words, actions, expressions, and the surrounding scenery reveal their inner feelings."},{q:"詩の「擬人法」とは？",qe:"What is 'personification' in poetry?",opts:["人が動物になる表現","人以外のものを人のように表現する技法","比喩で人を動物に例える","繰り返しの表現技法"],ans:1,exp:"擬人法：動物・植物・自然現象などを人間のように表現する修辞技法。",expe:"Personification: describing non-human things (animals, plants, nature) as if they were human."}],
+     deep:{thinks:[{q:"説明文の「筆者の主張→根拠→具体例」の構造は英語のエッセイ（PREP法）と同じ。日英の違いを比べよう。",qe:"The 'claim→evidence→example' structure in Japanese expository writing is similar to English essays. Compare the two."},{q:"物語を読むと共感力（エンパシー）が育つと言われている。なぜ読書は人を成長させるのか？",qe:"Reading stories is said to develop empathy. Why does reading help people grow?"}],world:"読解力はすべての学習の基盤。英語の読解力と日本語の読解力は相互に強化し合う（SDG4）。NatGeoやBBCを英語で読む力は、国語の読解力の応用でもある。"}}
+  ],
+
+  "中2": [
+    {name:"文法：用言（動詞・形容詞・形容動詞）",yt:[{ch:"とある男が授業をしてみた",title:"動詞の種類・形容詞と形容動詞",url:"https://www.youtube.com/results?search_query=葉一+動詞+形容詞+形容動詞+国語+中学",desc:"用言の3種類と活用の違い"},{ch:"Try IT 中学国語",title:"助詞・助動詞の種類",url:"https://www.youtube.com/results?search_query=TryIT+助詞+助動詞+国語+中学",desc:"付属語の役割と種類を整理"}],
+     quiz:[{q:"「静かだ」は何用言か？",qe:"What type of predicate word (yogen) is 'shizukada' (is quiet)?",opts:["動詞","形容詞","形容動詞","助動詞"],ans:2,exp:"形容動詞は「〜だ」「〜な」で活用する用言。静かだ・親切だ・簡単だなど。",expe:"Keiyodoshi (adjectival nouns) conjugate with 'da/na'. Examples: shizukada, shinsetsuda, kantanda."},{q:"「〜ない」がつく動詞の活用形は？",qe:"Which conjugation form of a verb is used before 'nai' (not)?",opts:["連用形","終止形","未然形","仮定形"],ans:2,exp:"未然形（みぜんけい）は「〜ない」「〜う/よう」などが続く形。「書かない」→「書か」が未然形。",expe:"Mizenkei (irrealis form) precedes 'nai' and 'u/you'. 'Kaka-nai' — 'kaka' is the mizenkei."},{q:"「です」「ます」「た」「ない」などは何品詞か？",qe:"What part of speech are 'desu', 'masu', 'ta', 'nai' in Japanese?",opts:["接続詞","助詞","助動詞","副詞"],ans:2,exp:"助動詞（じょどうし）は用言・体言に付いて意味を添える付属語。丁寧・過去・否定などを表す。",expe:"Jodoshi (auxiliary verbs) attach to other words to add meaning: politeness, past tense, negation, etc."}],
+     deep:{thinks:[{q:"日本語の敬語（尊敬語・謙譲語・丁寧語）はなぜこんなに複雑なのか？社会的な背景から考えよう。",qe:"Why is Japanese honorific language (keigo) so complex? Think about its social background."},{q:"英語に日本語の「助詞（は・が・を・に）」に当たるものはない。日本語の助詞がなぜ重要なのか考えよう。",qe:"English has no direct equivalent of Japanese particles (wa, ga, wo, ni). Why are particles so important?"}],world:"日本語の文法の複雑さ（敬語・助詞・活用）は日本文化の繊細さを反映している。外国人が日本語を学ぶ難しさを理解することで、他言語学習者への共感力が育つ（SDG10：不平等をなくそう）。"}},
+
+    {name:"古典：平家物語・方丈記",yt:[{ch:"とある男が授業をしてみた",title:"平家物語「祇園精舎」",url:"https://www.youtube.com/results?search_query=葉一+平家物語+中学国語",desc:"平家物語の冒頭と時代背景"},{ch:"Try IT 中学国語",title:"方丈記・鴨長明",url:"https://www.youtube.com/results?search_query=TryIT+方丈記+鴨長明+中学国語",desc:"無常観と方丈記の世界"}],
+     quiz:[{q:"「祇園精舎の鐘の声、諸行無常の響きあり」の出典は？",qe:"Where does the famous opening 'The sound of the Gion Shoja bells echoes the impermanence of all things' come from?",opts:["源氏物語","方丈記","平家物語","枕草子"],ans:2,exp:"平家物語の冒頭。「諸行無常」は仏教の考え方で、すべては変化し続けるという意味。",expe:"Opening of the Heike Monogatari. 'Shogyomujo' is a Buddhist concept meaning all things are impermanent."},{q:"方丈記を書いた人物は？",qe:"Who wrote Hojoki (An Account of My Hut)?",opts:["清少納言","鴨長明","吉田兼好","紫式部"],ans:1,exp:"鴨長明（かものちょうめい）が1212年に書いた随筆。火事・洪水・飢饉を経験後に方丈（約3畳）の庵に住んだ。",expe:"Kamo no Chomei wrote it in 1212. After disasters, he lived in a tiny hut (about 10 sq ft)."},{q:"「ゆく河の流れは絶えずして、しかも元の水にあらず」が表すものは？",qe:"What concept does 'The flowing river never stops, yet its water is never the same' express?",opts:["自然の美しさ","変化しないものの大切さ","無常観（すべては移ろう）","水の科学的性質"],ans:2,exp:"無常観（むじょうかん）：仏教的な「すべては変化し続ける」という世界観。",expe:"Mujokan (impermanence): the Buddhist view that everything is constantly changing."}],
+     deep:{thinks:[{q:"「諸行無常」の考え方は現代の変化の速い社会（AI・グローバル化）にどう当てはまる？",qe:"How does the concept of 'all things are impermanent' apply to today's rapidly changing society (AI, globalization)?"},{q:"鴨長明は大きな家より小さな庵（方丈）を選んだ。現代の「ミニマリスト」の考え方とどうつながる？",qe:"Chomei chose a tiny hut over a large house. How does this connect to modern minimalism?"}],world:"平家物語の無常観はグローバルに「日本美学」として認知されている。変化を受け入れる姿勢は急速に変化する現代（AI革命・気候変動）を生きるための哲学的基盤にもなる。"}},
+
+    {name:"読解：論説文・随筆",yt:[{ch:"とある男が授業をしてみた",title:"論説文の構造・反論への対処",url:"https://www.youtube.com/results?search_query=葉一+論説文+読解+構造+中学国語",desc:"論説文の論理展開を読み解く"},{ch:"Try IT 中学国語",title:"随筆の特徴・心情の変化",url:"https://www.youtube.com/results?search_query=TryIT+随筆+心情+読解+中学国語",desc:"随筆における筆者の視点と感情"}],
+     quiz:[{q:"論説文で「対比」が使われる効果は？",qe:"What is the effect of using 'contrast' in an argumentative essay?",opts:["読者を楽しませる","筆者の主張を際立たせる","文章を短くする","難しく見せる"],ans:1,exp:"A（従来の考え）対B（筆者の主張）を比較することでBの優位性・新しさが明確になる。",expe:"Contrasting A (conventional view) with B (author's view) highlights B's advantages and novelty."},{q:"「具体例」の段落はなぜ必要か？",qe:"Why are paragraphs with specific examples necessary?",opts:["文章を長くするため","抽象的な主張を理解しやすくするため","読者を驚かせるため","接続詞を使うため"],ans:1,exp:"具体例は抽象的な主張を「実感」できる形にする。主張→理由→具体例の3段構造が説得力の基本。",expe:"Examples make abstract claims concrete and relatable. Claim→Reason→Example is the basis of persuasion."},{q:"随筆の特徴として最も当てはまるものは？",qe:"Which best describes the characteristics of Japanese 'zuihitsu' (essays)?",opts:["作者の客観的な分析が中心","作者の主観・感想・思索が中心","登場人物の会話が中心","事実のみを記述する"],ans:1,exp:"随筆（ずいひつ）は作者の主観的な思索・感想・経験を自由に書く文学形式。",expe:"Zuihitsu essays are a literary form where the author freely expresses personal reflections and experiences."}],
+     deep:{thinks:[{q:"論説文と随筆の「説得力」の違いを考えよう。どちらが心に残るか？",qe:"Compare the persuasiveness of argumentative essays and personal essays. Which leaves a stronger impression?"},{q:"ニュース記事も論説文も同じ「主張→根拠→具体例」の構造を持つ。フェイクニュースを見分けるために論説文の読解力がなぜ必要か？",qe:"Both news articles and argumentative essays share the 'claim→evidence→example' structure. Why does reading comprehension help identify fake news?"}],world:"論説文の読解力はメディアリテラシーの基礎。フェイクニュース・プロパガンダを見分ける批判的思考力（SDG16：平和と公正）は、論説文の読み方から育てられる。"}
+    }
+  ],
+
+  "中3": [
+    {name:"文法：まとめと入試対策",yt:[{ch:"とある男が授業をしてみた",title:"文法総まとめ（品詞・活用・文節）",url:"https://www.youtube.com/results?search_query=葉一+国語+文法+総まとめ+中学",desc:"中学国語文法の全体像を整理"},{ch:"Try IT 中学国語",title:"入試によく出る文法問題",url:"https://www.youtube.com/results?search_query=TryIT+国語+文法+入試+中学",desc:"入試頻出の文法問題を解説"}],
+     quiz:[{q:"「走れば間に合う」の「走れ」の活用形は？",qe:"What is the conjugation form of 'hashire' in 'hashireba maniou' (if you run, you'll make it)?",opts:["未然形","連用形","連体形","仮定形"],ans:3,exp:"仮定形（かていけい）は「〜ば」が続く形。「走れば」→「走れ」が仮定形。",expe:"Kateikei (conditional form) precedes 'ba'. 'Hashire-ba' — 'hashire' is the conditional form."},{q:"「彼は静かに本を読んでいた」の「静かに」は？",qe:"What is 'shizukani' (quietly) in the sentence 'He was quietly reading a book'?",opts:["形容詞の連用形","形容動詞の連用形","副詞","連用修飾語（正確には形容動詞の連用形）"],ans:1,exp:"「静かだ（形容動詞）」の連用形「静かに」が述語「読んでいた」を修飾する。",expe:"'Shizukada' (adjectival noun) in its adverbial form 'shizukani' modifies the verb 'yonde-ita'."},{q:"「山田先生がいらっしゃいます」の「いらっしゃいます」は何語か？",qe:"What type of honorific is 'irasshaimasu' in this sentence about Mr. Yamada?",opts:["丁寧語","謙譲語","尊敬語","美化語"],ans:2,exp:"尊敬語（そんけいご）：相手（先生）の動作を高めて表す敬語。いらっしゃる＝いる・来る・行くの尊敬語。",expe:"Sonkeigo (respectful language) elevates the actions of the person being discussed. 'Irassharu' is the respectful form of 'iru/kuru/iku'."}],
+     deep:{thinks:[{q:"日本語の敬語が外国人に難しい理由を考えよう。敬語が日本の職場・社会でなぜ重要なのか？",qe:"Why do foreigners find Japanese honorifics difficult? Why are they so important in Japanese workplaces and society?"},{q:"将来AIが翻訳するなら、英語を学ぶ必要はあるか？国語力との関係で考えよう。",qe:"If AI can translate everything in the future, is it still necessary to learn English? Consider the relationship with Japanese language ability."}],world:"日本語の敬語システムは世界の言語の中で最も精緻なものの一つ。グローバル化の中でも日本語の繊細さを守ることはSDG11（文化遺産の保護）に関わる。"}},
+
+    {name:"古典：奥の細道・徒然草",yt:[{ch:"とある男が授業をしてみた",title:"奥の細道（松尾芭蕉）",url:"https://www.youtube.com/results?search_query=葉一+奥の細道+松尾芭蕉+中学国語",desc:"芭蕉の俳句と紀行文の世界"},{ch:"Try IT 中学国語",title:"徒然草（吉田兼好）",url:"https://www.youtube.com/results?search_query=TryIT+徒然草+吉田兼好+中学国語",desc:"徒然草の無常観と人生観"}],
+     quiz:[{q:"「松島や ああ松島や 松島や」を詠んだとされる俳人は？",qe:"Which haiku poet is said to have composed 'Matsushima ya, ah Matsushima ya, Matsushima ya'?",opts:["松尾芭蕉","与謝蕪村","小林一茶","正岡子規"],ans:0,exp:"松尾芭蕉（1644〜1694）。「奥の細道」で東北・北陸を旅した俳句の神様。",expe:"Matsuo Basho (1644-1694). The 'god of haiku' who traveled northeastern Japan, documented in Oku no Hosomichi."},{q:"俳句の形式は？",qe:"What is the syllable structure of haiku?",opts:["5・7・5","7・5・7・5","5・5・7","7・7・5"],ans:0,exp:"俳句は5・7・5の17音。季語（季節を表す言葉）が必要。",expe:"Haiku has 5-7-5 syllables (17 total) and requires a 'kigo' (seasonal reference word)."},{q:"「徒然草」を書いたのは？",qe:"Who wrote Tsurezuregusa (Essays in Idleness)?",opts:["鴨長明","松尾芭蕉","吉田兼好","清少納言"],ans:2,exp:"吉田兼好（1283頃〜1352頃）が書いた随筆集。「つれづれなるまま」の書き出しが有名。",expe:"Yoshida Kenko (c.1283-1352) wrote this essay collection. Famous opening: 'With nothing else to do...'"}],
+     deep:{thinks:[{q:"俳句は世界で「HAIKU」として親しまれている。なぜ5・7・5の短い形式が世界に広まったのか？",qe:"Haiku is now enjoyed worldwide as 'HAIKU'. Why has this 5-7-5 short form spread globally?"},{q:"芭蕉は徒歩で東北を旅した。現代の「旅」とどう違うか？旅と詩のつながりを考えよう。",qe:"Basho walked throughout northeastern Japan. How does his journey differ from modern travel? Consider the connection between travel and poetry."}],world:"俳句（HAIKU）は世界50か国以上で愛好される日本発の文化遺産。5・7・5の短さが翻訳を超えて伝わる「普遍的な美」を持つ。日本の文化的ソフトパワー（SDG17）の象徴。"}},
+
+    {name:"作文・意見文・小論文",yt:[{ch:"とある男が授業をしてみた",title:"意見文の書き方（構成・根拠）",url:"https://www.youtube.com/results?search_query=葉一+意見文+作文+書き方+中学国語",desc:"説得力ある意見文の構成方法"},{ch:"Try IT 中学国語",title:"小論文の書き方・反論の処理",url:"https://www.youtube.com/results?search_query=TryIT+小論文+作文+中学国語",desc:"反論を取り込んだ意見文の書き方"}],
+     quiz:[{q:"意見文の基本構成は？",qe:"What is the basic structure of an opinion essay?",opts:["起承転結","序論・本論・結論","頭括型のみ","自由形式"],ans:1,exp:"序論（主張）→本論（理由・根拠・具体例）→結論（まとめ・主張の繰り返し）が基本構成。",expe:"Introduction (claim) → Body (reasons, evidence, examples) → Conclusion (summary, restate claim)."},{q:"最も説得力のある根拠はどれか？",qe:"Which type of evidence is most persuasive?",opts:["自分の感想","友達の意見","統計データや専門家の意見","流行している考え方"],ans:2,exp:"客観的なデータ・統計・専門家の見解は主観的意見より説得力が高い（EBPM）。",expe:"Objective data, statistics, and expert opinions are more persuasive than subjective feelings (evidence-based)."},{q:"反論を取り上げることの効果は？",qe:"What is the effect of addressing counterarguments?",opts:["意見が弱く見える","主張の説得力が増す","文章が長くなる","読者を混乱させる"],ans:1,exp:"反論を先に提示し「しかし〜」と反駁することで主張が強固になる。ディベートと同じ技術。",expe:"Acknowledging counterarguments and refuting them ('However...') strengthens your argument — same as in debate."}],
+     deep:{thinks:[{q:"日本語の意見文とPREP法（英語エッセイ）の構造を比べよう。どこが同じでどこが違う？",qe:"Compare the structure of Japanese opinion essays with the PREP method in English essays. What is similar and what is different?"},{q:"「根拠のある意見」と「ただの感想」の違いは何か？SNSの投稿に当てはめて考えよう。",qe:"What is the difference between an evidence-based opinion and a mere feeling? Apply this to social media posts."}],world:"意見文の構成力は英語エッセイ・プレゼン・ディベートに直結する。日本語で論理的に書く力が英語での発信力（SDG4・17）につながる。国連スピーチも同じ構成で行われている。"},
+    },
+
+    {name:"文学作品の鑑賞・表現技法",yt:[{ch:"とある男が授業をしてみた",title:"表現技法（比喩・擬人法・対句）",url:"https://www.youtube.com/results?search_query=葉一+表現技法+比喩+擬人法+国語+中学",desc:"詩・文章の表現技法を整理"},{ch:"Try IT 中学国語",title:"文学作品の主題・心情読解",url:"https://www.youtube.com/results?search_query=TryIT+文学作品+主題+心情+中学国語",desc:"テーマと心情の読み取り方"}],
+     quiz:[{q:"「雪が白いコートをまとっている」は何という表現技法か？",qe:"What literary device is used in 'The snow is wearing a white coat'?",opts:["直喩","隠喩（暗喩）","擬人法","対句"],ans:2,exp:"擬人法（ぎじんほう）：人間以外のものを人間のように表現する技法。",expe:"Personification: describing non-human things (snow) as if they were human (wearing a coat)."},{q:"「彼女の笑顔は太陽のようだ」は何という表現技法か？",qe:"What is the literary device in 'Her smile is like the sun'?",opts:["直喩（明喩）","隠喩（暗喩）","擬人法","体言止め"],ans:0,exp:"直喩（ちょくゆ）：「〜のようだ」「〜みたい」など比較語を使った比喩。",expe:"Simile (chokuyu): a comparison using words like 'like' or 'as' (kanojo no egao wa taiyou no you da)."},{q:"詩の「体言止め」の効果は？",qe:"What is the effect of 'taigendome' (ending with a noun) in poetry?",opts:["読みやすくなる","余韻・余情を生む","意味がわかりやすくなる","リズムが乱れる"],ans:1,exp:"体言止め（たいげんどめ）：文を名詞で終える技法。余韻を生み印象を強める効果がある。",expe:"Taigendome: ending a line/sentence with a noun. Creates lingering impression and emotional resonance."}],
+     deep:{thinks:[{q:"比喩・擬人法・体言止め——これらの表現技法は英語の詩・文章にもある。日英の表現技法を比べてみよう。",qe:"Simile, personification, and noun endings also exist in English poetry. Compare literary devices in Japanese and English."},{q:"文学を読むことで「他者の視点を理解する力」（エンパシー）が育つと言われている。なぜか？",qe:"Literature is said to develop empathy (the ability to understand others' perspectives). Why?"}],world:"文学的表現力は詩・小説・広告・プレゼンすべてに応用できる普遍的スキル。グローバルな文化交流（SDG17）において、文学は言語の壁を越えて人々をつなぐ。"}}
+  ]
+};
+
+var curUnit=null,quizIdx=0,quizScore=0,quizAnswered=false;
+
+function buildUnits(grade){
+  var id=grade==="中1"?"ul1":grade==="中2"?"ul2":"ul3";
+  var ul=document.getElementById(id);
+  if(ul.children.length>0) return;
+  units[grade].forEach(function(u){
+    var btn=document.createElement("button");
+    btn.className="unit-btn";
+    btn.textContent=u.name;
+    btn.onclick=function(){
+      document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+      btn.classList.add("on");
+      openUnit(u);
+    };
+    ul.appendChild(btn);
+  });
+}
+
+function switchGrade(id,btn){
+  document.querySelectorAll(".grade-section").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".gtab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById(id).classList.add("on");
+  btn.classList.add("on");
+  var g=id==="g1"?"中1":id==="g2"?"中2":"中3";
+  buildUnits(g);
+  closeUnit();
+}
+
+function openUnit(u){
+  curUnit=u;
+  document.getElementById("unit-title").textContent=u.name;
+  document.getElementById("learn-area").classList.add("on");
+  switchLearn("video",document.querySelectorAll(".ltab")[0]);
+  document.getElementById("learn-area").scrollIntoView({behavior:"smooth"});
+}
+
+function closeUnit(){
+  document.getElementById("learn-area").classList.remove("on");
+  document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+  curUnit=null;
+}
+
+function switchLearn(step,btn){
+  document.querySelectorAll(".learn-step").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".ltab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById("ls-"+step).classList.add("on");
+  if(btn) btn.classList.add("on");
+  if(step==="video") renderVideos();
+  if(step==="quiz"){quizIdx=0;quizScore=0;renderQuiz();}
+  if(step==="deep") renderDeep();
+}
+
+function renderVideos(){
+  if(!curUnit) return;
+  var vl=document.getElementById("video-list");
+  vl.innerHTML="";
+  curUnit.yt.forEach(function(v){
+    var d=document.createElement("div");
+    d.className="yt-card";
+    d.innerHTML="<div class=\"yt-thumb\">&#9654;</div><div class=\"yt-info\"><div class=\"yt-ch\">"+v.ch+"</div><div class=\"yt-title\">"+v.title+"</div><div class=\"yt-desc\">"+v.desc+"</div><a href=\""+v.url+"\" target=\"_blank\" class=\"yt-btn\">&#9654; YouTubeで見る</a></div>";
+    vl.appendChild(d);
+  });
+}
+
+function renderQuiz(){
+  if(!curUnit) return;
+  var qs=curUnit.quiz,qa=document.getElementById("quiz-area");
+  if(quizIdx>=qs.length){
+    var pct=Math.round(quizScore/qs.length*100);
+    qa.innerHTML="<div style=\"text-align:center;padding:16px 0;\"><div style=\"font-size:32px;margin-bottom:8px;\">"+(pct>=80?"&#127881;":pct>=60?"&#128077;":"&#128170;")+"</div><div style=\"font-size:20px;font-weight:700;color:#534AB7;margin-bottom:6px;\">"+quizScore+" / "+qs.length+" 正解</div><button onclick=\"quizIdx=0;quizScore=0;renderQuiz()\" style=\"padding:8px 18px;border-radius:8px;background:#534AB7;color:#fff;font-size:13px;border:none;cursor:pointer;\">もう一度</button></div>";
+    return;
+  }
+  document.getElementById("score-disp").textContent=quizScore+"/"+qs.length;
+  document.getElementById("prog-fill").style.width=Math.round(quizScore/qs.length*100)+"%";
+  var q=qs[quizIdx];
+  qa.innerHTML="<div class=\"q-box\"><div class=\"q-en\">"+q.qe+"</div><div class=\"q-ja\">&#127471;&#127477; "+q.q+"</div><div class=\"opts\">"+q.opts.map(function(o,i){return "<button class=\"opt-btn\" onclick=\"answerQ("+i+")\">"+o+"</button>";}).join("")+"</div><div class=\"exp-box\" id=\"exp-box\"><strong>&#128218; 解説</strong><br>"+q.exp+"</div></div><button class=\"next-btn\" id=\"nxt-btn\" style=\"display:none;\" onclick=\"nextQ()\">"+(quizIdx<qs.length-1?"次の問題 &#8594;":"結果を見る &#127881;")+"</button>";
+  quizAnswered=false;
+}
+
+function answerQ(i){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  var q=curUnit.quiz[quizIdx];
+  document.querySelectorAll(".opt-btn").forEach(function(b,idx){
+    b.disabled=true;
+    if(idx===q.ans) b.classList.add("correct");
+    else if(idx===i&&i!==q.ans) b.classList.add("wrong");
+  });
+  if(i===q.ans) quizScore++;
+  document.getElementById("exp-box").style.display="block";
+  document.getElementById("nxt-btn").style.display="inline-block";
+  document.getElementById("score-disp").textContent=quizScore+"/"+curUnit.quiz.length;
+  document.getElementById("prog-fill").style.width=Math.round(quizScore/curUnit.quiz.length*100)+"%";
+}
+
+function nextQ(){quizIdx++;renderQuiz();}
+
+function renderDeep(){
+  if(!curUnit) return;
+  var d=curUnit.deep,da=document.getElementById("deep-area");
+  var html="";
+  d.thinks.forEach(function(t){html+="<div class=\"think-q\">&#129504; "+t.q+"<div class=\"think-en\">&#127468;&#127463; "+t.qe+"</div></div>";});
+  html+="<textarea placeholder=\"考えたことを書こう / Write your thoughts...\"></textarea>";
+  html+="<div class=\"world-box\"><strong>&#127758; 世界・熊本とのつながり</strong><br>"+d.world+"</div>";
+  html+="<div style=\"margin-top:12px;\"><a href=\"tool6_study.html\" style=\"display:inline-block;padding:8px 14px;border-radius:8px;background:#534AB7;color:#fff;font-size:13px;font-weight:600;text-decoration:none;\">&#127891; 他の教科も学ぼう</a></div>";
+  da.innerHTML=html;
+}
+
+buildUnits("中1");
+</script>
+</body>
+</html>

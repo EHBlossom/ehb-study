@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>理科 完全版 | EHB 学習ナビゲーター</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Noto Sans JP',sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#1D9E75;color:#fff;padding:18px 20px;}
+.header h1{font-size:19px;font-weight:700;margin-bottom:3px;}
+.header p{font-size:12px;opacity:.85;}
+.back-btn{display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.2);color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.4);}
+.container{max-width:740px;margin:0 auto;padding:18px 16px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.grade-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.gtab{padding:8px 20px;border-radius:20px;border:1.5px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;font-weight:500;transition:all .12s;}
+.gtab.on{background:#1D9E75;color:#fff;border-color:#1D9E75;}
+.grade-section{display:none;}
+.grade-section.on{display:block;}
+.unit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:4px;}
+.unit-btn{border:1.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;cursor:pointer;background:#f8f7f4;font-size:13px;text-align:left;transition:all .12s;line-height:1.4;color:#1a1a1a;}
+.unit-btn:hover{background:#E1F5EE;border-color:#1D9E75;}
+.unit-btn.on{background:#1D9E75;color:#fff;border-color:#1D9E75;font-weight:600;}
+.learn-area{display:none;}
+.learn-area.on{display:block;}
+.learn-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ltab{padding:8px 16px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;transition:all .12s;}
+.ltab.on{background:#1D9E75;color:#fff;border-color:#1D9E75;}
+.learn-step{display:none;}
+.learn-step.on{display:block;}
+.yt-card{border:1.5px solid #e8e6e0;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;background:#f8f7f4;}
+.yt-thumb{width:44px;height:44px;border-radius:6px;background:#FF0000;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;}
+.yt-info{flex:1;}
+.yt-ch{font-size:11px;color:#666;margin-bottom:2px;}
+.yt-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+.yt-desc{font-size:12px;color:#888;}
+.yt-btn{display:inline-block;margin-top:6px;padding:5px 12px;border-radius:6px;background:#FF0000;color:#fff;font-size:11px;font-weight:600;text-decoration:none;}
+.q-box{background:#f8f7f4;border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.q-en{font-size:12px;color:#085041;font-weight:600;margin-bottom:3px;line-height:1.5;}
+.q-ja{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:10px;line-height:1.5;}
+.opts{display:grid;gap:6px;}
+.opt-btn{padding:9px 12px;border-radius:8px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;text-align:left;transition:all .12s;}
+.opt-btn:hover:not(:disabled){border-color:#1D9E75;background:#E1F5EE;}
+.opt-btn.correct{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600;}
+.opt-btn.wrong{background:#FAECE7;border-color:#E05A3A;color:#712B13;}
+.opt-btn:disabled{cursor:default;}
+.exp-box{background:#EEEDFE;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;color:#3C3489;line-height:1.7;display:none;}
+.exp-en{font-size:12px;color:#534AB7;margin-top:5px;font-style:italic;}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.score-n{font-size:20px;font-weight:700;color:#1D9E75;}
+.prog-bar{flex:1;height:6px;background:#e8e6e0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:#1D9E75;border-radius:3px;transition:width .4s;}
+.next-btn{padding:8px 18px;border-radius:8px;background:#1D9E75;color:#fff;font-size:13px;border:none;cursor:pointer;margin-top:10px;}
+.think-q{background:#FEF6E8;border-left:3px solid #C8830A;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:10px;font-size:14px;line-height:1.65;}
+.think-en{font-size:12px;color:#BA7517;margin-top:4px;font-style:italic;}
+textarea{width:100%;padding:9px 12px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;resize:vertical;min-height:60px;font-family:inherit;margin-top:6px;}
+.world-box{background:#E1F5EE;border-radius:10px;padding:12px 16px;font-size:13px;color:#085041;line-height:1.75;margin-top:10px;}
+.unit-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.unit-title{font-size:15px;font-weight:700;flex:1;color:#085041;}
+.close-unit{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#128300; 理科 完全版</h1>
+  <p>中学1〜3年 全単元 | YouTube連携 | EHB 学習ナビゲーター</p>
+  <a href="tool6_study.html" class="back-btn">&#8592; 教科選択に戻る</a>
+</div>
+<div class="container">
+
+<div class="card">
+  <div class="grade-tabs">
+    <button class="gtab on" onclick="switchGrade('g1',this)">中1</button>
+    <button class="gtab" onclick="switchGrade('g2',this)">中2</button>
+    <button class="gtab" onclick="switchGrade('g3',this)">中3</button>
+  </div>
+
+  <div class="grade-section on" id="g1">
+    <div class="unit-list" id="ul1"></div>
+  </div>
+  <div class="grade-section" id="g2">
+    <div class="unit-list" id="ul2"></div>
+  </div>
+  <div class="grade-section" id="g3">
+    <div class="unit-list" id="ul3"></div>
+  </div>
+</div>
+
+<div class="learn-area" id="learn-area">
+  <div class="card" style="padding:12px 16px;margin-bottom:10px;">
+    <div class="unit-header">
+      <span class="unit-title" id="unit-title"></span>
+      <button class="close-unit" onclick="closeUnit()">&#10005; 閉じる</button>
+    </div>
+    <div class="learn-tabs">
+      <button class="ltab on" onclick="switchLearn('video',this)">&#9654; 動画</button>
+      <button class="ltab" onclick="switchLearn('quiz',this)">&#129504; クイズ</button>
+      <button class="ltab" onclick="switchLearn('deep',this)">&#127775; 深掘り</button>
+    </div>
+  </div>
+
+  <div class="learn-step on" id="ls-video">
+    <div class="card">
+      <p style="font-size:13px;font-weight:700;color:#1D9E75;margin-bottom:10px;">&#9654; おすすめ動画で理解しよう</p>
+      <div id="video-list"></div>
+    </div>
+  </div>
+
+  <div class="learn-step" id="ls-quiz">
+    <div class="card">
+      <p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#129504; 確認クイズ</p>
+      <div class="score-row">
+        <span class="score-n" id="score-disp">0/0</span>
+        <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      </div>
+      <div id="quiz-area"></div>
+    </div>
+  </div>
+
+  <div class="learn-step" id="ls-deep">
+    <div class="card">
+      <p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#127775; 深掘り — なぜ？世界とのつながり</p>
+      <div id="deep-area"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+var units = {
+  "中1": [
+    {name:"植物のつくりとはたらき",
+     yt:[{ch:"とある男が授業をしてみた",title:"光合成・蒸散・呼吸",url:"https://www.youtube.com/results?search_query=葉一+光合成+植物+中学理科",desc:"植物の3大はたらきをわかりやすく"},
+         {ch:"Try IT 中学理科",title:"植物のからだのつくり",url:"https://www.youtube.com/results?search_query=TryIT+植物+中学理科",desc:"道管・師管・気孔を整理"}],
+     quiz:[
+       {q:"光合成が行われる細胞の器官は？",qe:"Where does photosynthesis occur in plant cells?",opts:["ミトコンドリア","葉緑体","細胞膜","液胞"],ans:1,exp:"葉緑体（クロロプラスト）で光合成。光エネルギーでCO2と水からデンプンと酸素を作る。",expe:"Photosynthesis occurs in chloroplasts, using light to convert CO2 and water into glucose and oxygen."},
+       {q:"植物が気体を出し入れする穴を何という？",qe:"What are the tiny pores on leaves for gas exchange?",opts:["道管","師管","気孔","維管束"],ans:2,exp:"気孔（きこう）は葉の裏側に多い。CO2を取り込み酸素と水蒸気を出す。",expe:"Stomata are tiny pores on leaf undersides. They take in CO2 and release O2 and water vapor."},
+       {q:"根から葉へ水を運ぶ管は？",qe:"Which tube carries water from roots to leaves?",opts:["師管","道管","気孔","葉脈"],ans:1,exp:"道管は根→茎→葉へ水と無機塩類を運ぶ。師管は葉のデンプンを全身に運ぶ。",expe:"Xylem carries water and minerals upward. Phloem carries sugars made in leaves downward."}
+     ],
+     deep:{thinks:[
+       {q:"アマゾンが「地球の肺」と呼ばれる理由を光合成で説明しよう。",qe:"Explain why the Amazon is called 'the lungs of the Earth' using photosynthesis."},
+       {q:"気候変動で植物の生育が変わると食料生産にどう影響する？",qe:"How would changes in plant growth due to climate change affect food production?"}
+     ],world:"熊本のトマト・イグサ栽培も光合成の仕組みを利用。気候変動でSDG2（食料）とSDG13（気候）が交差している。"}},
+
+    {name:"動物のなかま",
+     yt:[{ch:"とある男が授業をしてみた",title:"セキツイ動物の分類",url:"https://www.youtube.com/results?search_query=葉一+動物+分類+セキツイ+中学理科",desc:"5グループの特徴を整理"},
+         {ch:"さわにい",title:"無セキツイ動物",url:"https://www.youtube.com/results?search_query=さわにい+無脊椎動物+中学理科",desc:"節足動物・軟体動物をイラストで"}],
+     quiz:[
+       {q:"背骨を持つ動物をまとめて何という？",qe:"What is the term for animals with a backbone?",opts:["無セキツイ動物","セキツイ動物","節足動物","軟体動物"],ans:1,exp:"セキツイ動物は魚類・両生類・ハチュウ類・鳥類・哺乳類の5グループ。",expe:"Vertebrates include fish, amphibians, reptiles, birds, and mammals — 5 groups."},
+       {q:"魚類の呼吸器官は？",qe:"What do fish use to breathe?",opts:["肺","えら","皮膚","気管"],ans:1,exp:"魚類はえらで水中の溶存酸素を取り込む。両生類は幼生がえら、成体は肺と皮膚。",expe:"Fish use gills to extract dissolved oxygen from water. Adult amphibians use lungs and skin."},
+       {q:"イルカは何類か？",qe:"What class of animal is a dolphin?",opts:["魚類","両生類","ハチュウ類","哺乳類"],ans:3,exp:"イルカは水中生活だが哺乳類。肺呼吸・恒温・胎生・母乳の特徴を持つ。",expe:"Dolphins are mammals despite living in water: lungs, warm-blooded, live birth, nurse young."}
+     ],
+     deep:{thinks:[
+       {q:"生物の多様性が失われると生態系にどんな影響がある？",qe:"What happens to ecosystems when biodiversity is lost?"},
+       {q:"有明海のカブトガニが絶滅危惧種である理由を考えよう。",qe:"Why is the horseshoe crab in the Ariake Sea an endangered species?"}
+     ],world:"熊本の有明海には絶滅危惧種のカブトガニが生息。SDG14・15（海と陸の豊かさ）に直結する課題。"}},
+
+    {name:"光と音",
+     yt:[{ch:"とある男が授業をしてみた",title:"光の反射・屈折",url:"https://www.youtube.com/results?search_query=葉一+光+反射+屈折+中学理科",desc:"入射角・反射角・屈折をわかりやすく"},
+         {ch:"Try IT 中学理科",title:"凸レンズと音の性質",url:"https://www.youtube.com/results?search_query=TryIT+光+音+中学理科",desc:"焦点・音速・振動数を解説"}],
+     quiz:[
+       {q:"光が鏡で跳ね返る現象を何という？",qe:"What is it called when light bounces off a mirror?",opts:["屈折","反射","分散","吸収"],ans:1,exp:"反射。入射角＝反射角（反射の法則）。",expe:"Reflection. The angle of incidence equals the angle of reflection."},
+       {q:"音の速さは約何m/sか？",qe:"How fast does sound travel through air?",opts:["約34m/s","約340m/s","約3400m/s","約34000m/s"],ans:1,exp:"音速は気温15℃で約340m/s。光速（約30万km/s）より遥かに遅い。",expe:"Sound travels at about 340m/s at 15°C — much slower than light (300,000km/s)."},
+       {q:"凸レンズで光が集まる点を何という？",qe:"What is the point where a convex lens focuses light?",opts:["焦点","節点","中心","頂点"],ans:0,exp:"焦点（しょうてん）。カメラ・眼・望遠鏡はすべてこの原理を利用している。",expe:"The focal point. Cameras, eyes, and telescopes all use this principle."}
+     ],
+     deep:{thinks:[
+       {q:"スマホカメラのレンズは凸レンズの原理を使っている。光技術が現代社会をどう支えているか考えよう。",qe:"Smartphone cameras use convex lens principles. How does light technology support modern society?"},
+       {q:"雷が光ってから音が聞こえるまでの時間で距離を計算する方法を考えよう。",qe:"Calculate the distance of lightning using the time between flash and thunder."}
+     ],world:"光技術はTSMCの半導体製造（フォトリソグラフィー）の核心。光を制御する技術が現代デジタル社会を支えている（SDG9）。"}},
+
+    {name:"大地の変化",
+     yt:[{ch:"とある男が授業をしてみた",title:"地震・火山・地層",url:"https://www.youtube.com/results?search_query=葉一+地震+火山+地層+中学理科",desc:"P波・S波・マグマを整理"},
+         {ch:"さわにい",title:"地層の読み方",url:"https://www.youtube.com/results?search_query=さわにい+地層+岩石+中学理科",desc:"堆積岩・火成岩をイラストで"}],
+     quiz:[
+       {q:"地震の速い波を何という？",qe:"What is the name of the faster seismic wave?",opts:["S波","P波","L波","T波"],ans:1,exp:"P波（Primary wave）は縦波で速い。緊急地震速報はP波を検知して発令される。",expe:"P-waves are faster compressional waves. Earthquake early warnings detect P-waves first."},
+       {q:"マグマが地表に出たものを何という？",qe:"What is magma called after it reaches the surface?",opts:["岩石","溶岩","鉱物","地層"],ans:1,exp:"溶岩（ようがん）。熊本の阿蘇山は世界最大級のカルデラを持つ。",expe:"Lava. Kumamoto's Mt. Aso has one of the world's largest calderas."},
+       {q:"地層は下にあるほど？",qe:"In undisturbed rock layers, lower layers are?",opts:["新しい","古い","同じ年代","わからない"],ans:1,exp:"地層累重の法則：下にある地層ほど古い。地層を読むことで過去の環境がわかる。",expe:"Law of superposition: lower layers are older, revealing past environments."}
+     ],
+     deep:{thinks:[
+       {q:"熊本地震（2016年）は内陸の断層が原因だった。なぜ日本は地震が多いのか？",qe:"The 2016 Kumamoto earthquake was from an inland fault. Why does Japan have so many earthquakes?"},
+       {q:"火山は危険だが恩恵もある。阿蘇山の例で考えよう。",qe:"Volcanoes are dangerous but also beneficial. Use Mt. Aso as an example."}
+     ],world:"熊本地震（2016年）・阿蘇山・球磨川流域の地形は大地変化の生きた教材。防災教育はSDG11（住み続けられるまちづくり）の重要テーマ。"}},
+
+    {name:"身の回りの物質",
+     yt:[{ch:"とある男が授業をしてみた",title:"物質の性質・密度",url:"https://www.youtube.com/results?search_query=葉一+密度+物質+中学理科",desc:"金属・非金属・密度の計算"},
+         {ch:"Try IT 中学理科",title:"状態変化・融点・沸点",url:"https://www.youtube.com/results?search_query=TryIT+状態変化+蒸留+中学理科",desc:"固体・液体・気体の変化"}],
+     quiz:[
+       {q:"密度の公式は？",qe:"What is the formula for density?",opts:["密度=体積÷質量","密度=質量÷体積","密度=質量×体積","密度=体積×重力"],ans:1,exp:"密度（g/cm³）＝質量（g）÷体積（cm³）。密度でその物質が何かを特定できる。",expe:"Density (g/cm³) = mass (g) ÷ volume (cm³). Density helps identify substances."},
+       {q:"水が沸騰する温度は？",qe:"At what temperature does water boil (at sea level)?",opts:["80℃","90℃","100℃","110℃"],ans:2,exp:"水の沸点は100℃（1気圧）。標高が高いほど沸点は下がる（富士山頂では約88℃）。",expe:"Water boils at 100°C at sea level. Higher altitude = lower boiling point (88°C on Mt. Fuji)."},
+       {q:"砂糖水から純粋な水を取り出す方法は？",qe:"How can you separate pure water from sugar water?",opts:["ろ過","蒸留","沈殿","磁石"],ans:1,exp:"蒸留（じょうりゅう）：沸点の違いを利用して混合物を分離する方法。",expe:"Distillation: separating mixtures using differences in boiling points."}
+     ],
+     deep:{thinks:[
+       {q:"密度を使えば金が本物かどうか確認できる。アルキメデスの話と結びつけて考えよう。",qe:"Density can verify if gold is real. Connect this to the story of Archimedes."},
+       {q:"海水から真水を作る蒸留技術は中東の水不足を解決している。SDG6とつなげて考えよう。",qe:"Distillation creates fresh water from seawater in the Middle East. Connect this to SDG6."}
+     ],world:"蒸留技術は中東の水不足解決（SDG6）に活用。密度の概念は船舶設計・半導体材料選択にも使われる技術の基礎。"}},
+
+    {name:"力と圧力",
+     yt:[{ch:"とある男が授業をしてみた",title:"力の3要素・圧力",url:"https://www.youtube.com/results?search_query=葉一+力+圧力+中学理科",desc:"重力・弾性力・浮力・圧力の計算"},
+         {ch:"Try IT 中学理科",title:"水圧・浮力",url:"https://www.youtube.com/results?search_query=TryIT+水圧+浮力+中学理科",desc:"アルキメデスの原理を映像で"}],
+     quiz:[
+       {q:"圧力の公式は？",qe:"What is the formula for pressure?",opts:["圧力=面積÷力","圧力=力÷面積","圧力=力×面積","圧力=質量÷面積"],ans:1,exp:"圧力（Pa）＝力（N）÷面積（m²）。面積が小さいほど圧力が大きい（画びょうの先端）。",expe:"Pressure (Pa) = Force (N) ÷ Area (m²). Smaller area = greater pressure (like a pin)."},
+       {q:"水中の物体にはたらく上向きの力は？",qe:"What upward force acts on objects submerged in water?",opts:["重力","弾性力","浮力","摩擦力"],ans:2,exp:"浮力（ふりょく）。アルキメデスの原理：浮力＝排除した水の重さ。",expe:"Buoyancy (Archimedes' Principle): buoyant force equals the weight of water displaced."},
+       {q:"1Nの重力がかかる物体の質量は約何gか？",qe:"What is the mass of an object with 1N of gravity acting on it?",opts:["10g","100g","1000g","10000g"],ans:1,exp:"地球上では100gの物体に約1Nの重力（重力加速度9.8m/s²≈10m/s²で計算）。",expe:"On Earth, 100g has about 1N of gravity (using g≈10m/s²)."}
+     ],
+     deep:{thinks:[
+       {q:"なぜ鉄の船が水に浮くのか？浮力と密度で説明しよう。",qe:"Why do iron ships float? Explain using buoyancy and density."},
+       {q:"血圧計・タイヤの空気圧・深海魚——圧力の概念が使われている身近な例を探そう。",qe:"Find everyday examples where pressure is important: blood pressure, tire pressure, deep-sea fish."}
+     ],world:"浮力の原理は船舶・潜水艦・魚の浮き袋に応用。圧力は血圧管理（SDG3）・建築設計（SDG11）に直結する基礎知識。"}
+    }
+  ],
+
+  "中2": [
+    {name:"化学変化と原子・分子",
+     yt:[{ch:"とある男が授業をしてみた",title:"原子・分子・化学式",url:"https://www.youtube.com/results?search_query=葉一+原子+分子+化学式+中学理科",desc:"元素記号・化学式・化学反応式"},
+         {ch:"Try IT 中学理科",title:"酸化・還元・質量保存",url:"https://www.youtube.com/results?search_query=TryIT+化学変化+酸化+中学理科",desc:"化学変化の種類と法則"}],
+     quiz:[
+       {q:"水を電気分解すると何ができるか？",qe:"What are produced when water is electrolyzed?",opts:["水素と炭素","酸素と炭素","水素と酸素","窒素と酸素"],ans:2,exp:"H2O→H2（水素）+O2（酸素）。水素は燃料電池の次世代エネルギー源。",expe:"H2O → H2 (hydrogen) + O2 (oxygen). Hydrogen is a next-generation clean energy source."},
+       {q:"鉄が酸素と結びつく変化を何という？",qe:"What is it called when iron combines with oxygen?",opts:["還元","中和","酸化","分解"],ans:2,exp:"酸化（さんか）。鉄がさびる・銅が黒くなるのも酸化。酸化の逆は還元。",expe:"Oxidation. Iron rusting and copper darkening are oxidation. The reverse is reduction."},
+       {q:"化学変化の前後で変わらないものは？",qe:"What is conserved before and after a chemical reaction?",opts:["体積","色","質量","温度"],ans:2,exp:"質量保存の法則：化学変化前後で物質全体の質量は変わらない。",expe:"Law of conservation of mass: total mass is unchanged in a chemical reaction."}
+     ],
+     deep:{thinks:[
+       {q:"水素エネルギーが「夢のエネルギー」と呼ばれる理由を化学の視点から説明しよう。",qe:"Explain why hydrogen is called a 'dream energy source' from a chemistry perspective."},
+       {q:"鉄がさびると重くなる。なぜ？質量保存の法則と矛盾しない？",qe:"Iron gets heavier when it rusts. Why? Does this contradict the law of conservation of mass?"}
+     ],world:"水素エネルギーは日本が世界で最も力を入れている分野（SDG7）。熊本のTSMC工場では高純度化学物質が半導体製造に使われている。"}},
+
+    {name:"電流とその利用",
+     yt:[{ch:"とある男が授業をしてみた",title:"オームの法則・回路計算",url:"https://www.youtube.com/results?search_query=葉一+オームの法則+直列+並列+中学理科",desc:"V=IRの計算・直列並列回路"},
+         {ch:"さわにい",title:"電力・発熱・電磁誘導",url:"https://www.youtube.com/results?search_query=さわにい+電力+電磁誘導+中学理科",desc:"電力計算・モーターの原理"}],
+     quiz:[
+       {q:"電圧6V・電流2Aの抵抗は？",qe:"If voltage is 6V and current is 2A, what is the resistance?",opts:["2Ω","3Ω","8Ω","12Ω"],ans:1,exp:"R=V÷I=6÷2=3Ω。オームの法則V=IR（電圧＝抵抗×電流）。",expe:"R=V÷I=6÷2=3Ω. Ohm's Law: V=IR (voltage = resistance × current)."},
+       {q:"直列回路の電流の特徴は？",qe:"How does current behave in a series circuit?",opts:["場所で異なる","全体で同じ","電圧に比例","抵抗に比例"],ans:1,exp:"直列回路では電流はどこでも同じ。並列回路では各枝に分かれる。",expe:"In a series circuit, current is the same everywhere. In parallel, it splits between branches."},
+       {q:"電力（W）を求める式は？",qe:"Which formula calculates electric power?",opts:["電力=電流×抵抗","電力=電圧×電流","電力=電圧÷電流","電力=抵抗²×電流"],ans:1,exp:"電力（W）＝電圧（V）×電流（A）。電気代の計算の基本。",expe:"Power (W) = Voltage (V) × Current (A). The basis of calculating electricity costs."}
+     ],
+     deep:{thinks:[
+       {q:"再生可能エネルギー（太陽光・風力）が増えると電力安定供給はどう変わる？",qe:"How does increasing renewable energy affect stable electricity supply?"},
+       {q:"熊本地震（2016年）では長期停電が発生した。電気インフラの重要性を考えよう。",qe:"The 2016 Kumamoto earthquake caused long-term power outages. Consider the importance of electrical infrastructure."}
+     ],world:"TSMCの半導体工場は大量の電力を消費するが地域経済を支える。再生可能エネルギーへの転換はSDG7の重要課題。"}},
+
+    {name:"天気とその変化",
+     yt:[{ch:"とある男が授業をしてみた",title:"前線・高気圧・低気圧",url:"https://www.youtube.com/results?search_query=葉一+天気+前線+高気圧+中学理科",desc:"天気図の読み方と天気の変化"},
+         {ch:"Try IT 中学理科",title:"日本の天気・季節の特徴",url:"https://www.youtube.com/results?search_query=TryIT+天気+気象+中学理科",desc:"四季の天気パターンを解説"}],
+     quiz:[
+       {q:"寒気が暖気の下に潜り込む前線は？",qe:"What front forms where cold air slides under warm air?",opts:["温暖前線","寒冷前線","閉塞前線","停滞前線"],ans:1,exp:"寒冷前線。通過後は気温が急激に下がり強い雨が短時間降る。",expe:"Cold front. After it passes, temperature drops sharply and heavy rain falls briefly."},
+       {q:"雲ができる仕組みは？",qe:"How do clouds form?",opts:["水が蒸発して増える","空気が上昇し冷えて水蒸気が凝結","気温が上がって水が増える","風が水を運ぶ"],ans:1,exp:"空気が上昇すると気温が下がり、水蒸気が水滴・氷晶になって雲ができる。",expe:"As air rises and cools, water vapor condenses into tiny droplets forming clouds."},
+       {q:"日本の夏が暑い主な理由は？",qe:"What mainly causes Japan's hot summers?",opts:["太陽に近くなる","太平洋高気圧が張り出し暖湿気が入る","大気が濃くなる","太陽が大きくなる"],ans:1,exp:"太平洋高気圧が発達し南東から暖湿気が流れ込む。熊本の猛暑もこれが原因。",expe:"The Pacific High brings hot humid air from the southeast — the cause of Kumamoto's intense summers."}
+     ],
+     deep:{thinks:[
+       {q:"2020年の熊本豪雨で球磨川が氾濫した。線状降水帯と気候変動の関係を考えよう。",qe:"The 2020 Kumamoto floods devastated the Kuma River. Consider the relationship between linear precipitation bands and climate change."},
+       {q:"AI気象予報はどこまで正確になれるか？予測の限界と可能性を考えよう。",qe:"How accurate can AI weather forecasting become? Think about its limits and possibilities."}
+     ],world:"2020年熊本豪雨は線状降水帯と気候変動の関係が注目された。気象AIはSDG13（気候変動対策）とSDG9（技術革新）の交点。"}},
+
+    {name:"酸とアルカリ・中和",
+     yt:[{ch:"とある男が授業をしてみた",title:"pH・酸とアルカリ・中和",url:"https://www.youtube.com/results?search_query=葉一+酸+アルカリ+pH+中和+中学理科",desc:"リトマス・BTB・中和反応を解説"},
+         {ch:"Try IT 中学理科",title:"イオンと電解質",url:"https://www.youtube.com/results?search_query=TryIT+イオン+電解質+中学理科",desc:"イオン化・電離をわかりやすく"}],
+     quiz:[
+       {q:"酸性で青色リトマス紙はどうなる？",qe:"What happens to blue litmus paper in an acid?",opts:["青のまま","赤に変わる","緑になる","消える"],ans:1,exp:"酸性→青色リトマスが赤に変化。アルカリ性→赤色リトマスが青に変化。",expe:"Acids turn blue litmus red. Bases turn red litmus blue."},
+       {q:"酸とアルカリを混ぜると？",qe:"What happens when an acid and base are mixed?",opts:["爆発する","中和して塩と水ができる","蒸発する","固体になる"],ans:1,exp:"中和：酸＋アルカリ→塩＋水。HCl＋NaOH→NaCl＋H2O。",expe:"Neutralization: acid + base → salt + water. HCl + NaOH → NaCl + H2O."},
+       {q:"pH2の水溶液の性質は？",qe:"What is the nature of a solution with pH 2?",opts:["強アルカリ性","弱酸性","中性","強酸性"],ans:3,exp:"pH0〜7未満が酸性、pH2は強い酸性（胃酸はpH1〜2）。7が中性、7超はアルカリ性。",expe:"pH below 7 = acid. pH 2 is strongly acidic (stomach acid is pH 1-2). pH 7 = neutral."}
+     ],
+     deep:{thinks:[
+       {q:"酸性雨が森林・建造物・生態系に与える影響を考えよう。",qe:"How does acid rain affect forests, buildings, and ecosystems?"},
+       {q:"胃薬（制酸剤）が胃痛を和らげる仕組みを化学で説明しよう。",qe:"Explain using chemistry how antacids relieve stomach pain."}
+     ],world:"酸性雨（pH5.6以下）は大気汚染由来でSDG15に関連。熊本の阿蘇山の火山ガス（SO2）も酸性雨の原因になる。"}},
+
+    {name:"動物の体のつくりとはたらき",
+     yt:[{ch:"とある男が授業をしてみた",title:"消化・吸収・循環",url:"https://www.youtube.com/results?search_query=葉一+消化+吸収+循環+中学理科",desc:"消化酵素・血液循環・呼吸"},
+         {ch:"Try IT 中学理科",title:"神経系・感覚器官",url:"https://www.youtube.com/results?search_query=TryIT+神経+感覚器+中学理科",desc:"脳・脊髄・反射を解説"}],
+     quiz:[
+       {q:"デンプンを分解する消化酵素は？",qe:"Which enzyme breaks down starch?",opts:["ペプシン","アミラーゼ","リパーゼ","トリプシン"],ans:1,exp:"アミラーゼ（だ液中）がデンプンを麦芽糖に分解する。",expe:"Amylase (in saliva) breaks down starch into maltose."},
+       {q:"血液を全身に送るポンプの役割をするのは？",qe:"What pumps blood throughout the body?",opts:["肺","肝臓","心臓","腎臓"],ans:2,exp:"心臓は筋肉でできたポンプ。左心室が全身へ、右心室が肺へ血液を送る。",expe:"The heart is a muscular pump. The left ventricle pumps blood to the body, the right to the lungs."},
+       {q:"熱いものに触れたとき素早く手を引っ込める反応を何という？",qe:"What is the rapid response of pulling away from heat called?",opts:["意識的行動","反射","条件反射","本能"],ans:1,exp:"反射（はんしゃ）。脊髄を経由して命令が出るため、脳に届く前に反応できる。",expe:"A reflex. The signal goes through the spinal cord, allowing response before reaching the brain."}
+     ],
+     deep:{thinks:[
+       {q:"運動すると心拍数が上がる。なぜ？体のシステムとして考えよう。",qe:"Why does heart rate increase during exercise? Think about it as a body system."},
+       {q:"反射と意識的行動の違いはどこにある？AIの「反応」と比較してみよう。",qe:"What is the difference between reflexes and conscious actions? Compare with AI responses."}
+     ],world:"体のシステムは機械工学のモデルに応用されている。人工心臓・人工透析はSDG3（健康）の最前線技術。"}},
+
+    {name:"植物の体のつくりと生殖",
+     yt:[{ch:"とある男が授業をしてみた",title:"細胞・組織・器官",url:"https://www.youtube.com/results?search_query=葉一+細胞+組織+器官+中学理科",desc:"細胞のつくりと植物の生殖"},
+         {ch:"Try IT 中学理科",title:"有性生殖・無性生殖",url:"https://www.youtube.com/results?search_query=TryIT+生殖+花+種子+中学理科",desc:"花のつくりと受粉・結実"}],
+     quiz:[
+       {q:"細胞を包んでいる植物特有の構造は？",qe:"What structure unique to plant cells surrounds the cell?",opts:["細胞膜","細胞壁","核","葉緑体"],ans:1,exp:"細胞壁（さいぼうへき）は植物・細菌にある。動物細胞にはない。",expe:"Cell walls are found in plants and bacteria, but not in animal cells."},
+       {q:"花粉が雌しべの柱頭につくことを何という？",qe:"What is it called when pollen lands on the stigma?",opts:["受精","受粉","発芽","結実"],ans:1,exp:"受粉（じゅふん）の後、花粉管が伸びて精細胞が卵細胞と受精する。",expe:"After pollination, the pollen tube grows and the sperm cell fertilizes the egg cell."},
+       {q:"栄養生殖の例はどれか？",qe:"Which is an example of vegetative reproduction?",opts:["種子から発芽","ジャガイモのいも","卵から孵化","胞子から発芽"],ans:1,exp:"ジャガイモの塊茎（いも）からの無性生殖。挿し木・球根なども栄養生殖。",expe:"Potato tubers reproduce asexually. Cuttings and bulbs are also vegetative reproduction."}
+     ],
+     deep:{thinks:[
+       {q:"クローン技術は栄養生殖の応用。倫理的問題と科学的意義を両面から考えよう。",qe:"Clone technology is applied vegetative reproduction. Consider both ethical issues and scientific significance."},
+       {q:"受粉を助けるハチが減少している問題（蜂群崩壊症候群）は食料生産にどう影響する？",qe:"Bee colony collapse disorder reduces pollination. How does this affect food production?"}
+     ],world:"ミツバチの減少は世界の食料生産の30%に影響（SDG2・15）。ゲノム編集による品種改良はSDG2の解決策としても注目される。"}
+    }
+  ],
+
+  "中3": [
+    {name:"運動とエネルギー",
+     yt:[{ch:"とある男が授業をしてみた",title:"力と運動・慣性の法則",url:"https://www.youtube.com/results?search_query=葉一+力+運動+慣性+ニュートン+中学理科",desc:"ニュートン3法則を丁寧に解説"},
+         {ch:"Try IT 中学理科",title:"仕事・エネルギー保存",url:"https://www.youtube.com/results?search_query=TryIT+仕事+エネルギー+中学理科",desc:"仕事の原理とエネルギー変換"}],
+     quiz:[
+       {q:"力が働かなければ静止した物体は？",qe:"What does a stationary object do if no force acts on it?",opts:["動き出す","静止し続ける","重力で落ちる","回転する"],ans:1,exp:"慣性の法則（ニュートン第1法則）：外力がない限り静止・等速直線運動を続ける。",expe:"Newton's First Law (Inertia): Objects remain at rest or in uniform motion unless a force acts."},
+       {q:"仕事（J）の公式は？",qe:"What is the formula for work?",opts:["仕事=質量×速さ","仕事=力×距離","仕事=エネルギー×時間","仕事=速さ÷時間"],ans:1,exp:"仕事（J）＝力（N）×距離（m）。仕事の原理：道具を使っても仕事量は変わらない。",expe:"Work (J) = Force (N) × Distance (m). Using tools doesn't change total work."},
+       {q:"エネルギー保存の法則とは？",qe:"What does the law of conservation of energy state?",opts:["エネルギーは消える","総量は常に一定","運動エネが増える","位置エネが不変"],ans:1,exp:"エネルギーは形を変えるが総量は変わらない。運動⇔位置、電気⇔熱など。",expe:"Energy changes form but total amount is conserved. Kinetic⇔potential, electrical⇔thermal, etc."}
+     ],
+     deep:{thinks:[
+       {q:"電気自動車の回生ブレーキはなぜ発電できるのか？エネルギー変換で説明しよう。",qe:"Why can EV regenerative braking generate electricity? Explain using energy conversion."},
+       {q:"核エネルギーはE=mc²で説明できる。質量とエネルギーの関係を考えよう。",qe:"Nuclear energy is explained by E=mc². Think about the relationship between mass and energy."}
+     ],world:"再生可能エネルギー（太陽光・風力）は運動・熱・光エネルギーを電気に変換。日本のエネルギー自給率13%（SDG7）の課題に直結。"}},
+
+    {name:"生命の連続性・遺伝",
+     yt:[{ch:"とある男が授業をしてみた",title:"DNA・遺伝子・メンデルの法則",url:"https://www.youtube.com/results?search_query=葉一+遺伝+DNA+メンデル+中学理科",desc:"優性・劣性・分離の法則"},
+         {ch:"Try IT 中学理科",title:"細胞分裂・有性生殖と遺伝",url:"https://www.youtube.com/results?search_query=TryIT+遺伝+細胞分裂+中学理科",desc:"染色体・減数分裂を映像で"}],
+     quiz:[
+       {q:"遺伝情報を担う物質は？",qe:"What molecule carries genetic information?",opts:["タンパク質","RNA","DNA","細胞膜"],ans:2,exp:"DNA（デオキシリボ核酸）は二重らせん構造で細胞の核の中にある。",expe:"DNA (deoxyribonucleic acid) has a double helix structure and is in the cell nucleus."},
+       {q:"丸（優性）×シワ（劣性）のF1は？",qe:"In Mendel's pea experiment, crossing round (dominant) with wrinkled (recessive) produces F1 that are?",opts:["すべてシワ","すべて丸","半々","3:1"],ans:1,exp:"F1はすべて丸（優性が現れる）。F2では丸:シワ＝3:1になる（分離の法則）。",expe:"F1 are all round (dominant appears). F2 shows 3:1 round to wrinkled (Law of Segregation)."},
+       {q:"染色体が半分になる細胞分裂は？",qe:"Which cell division halves the chromosome number?",opts:["体細胞分裂","減数分裂","無性生殖","有糸分裂"],ans:1,exp:"減数分裂（げんすうぶんれつ）：生殖細胞（精子・卵子）を作るときの細胞分裂。染色体数が半分になる。",expe:"Meiosis: the cell division that creates sex cells (sperm/egg), halving chromosome number."}
+     ],
+     deep:{thinks:[
+       {q:"ゲノム編集（CRISPR）は病気治療と「デザイナーベビー」問題の両面を持つ。倫理的にどう考える？",qe:"CRISPR can treat diseases but also create 'designer babies.' How do you think about this ethically?"},
+       {q:"DNA情報は究極の個人情報。遺伝子情報の活用と倫理的問題を考えよう。",qe:"DNA is the ultimate personal data. Discuss the uses and ethical concerns of genetic information."}
+     ],world:"ゲノム編集はSDG3（健康）の最前線だが倫理的課題も大きい。DNA情報の保護はSDG16（公正）にも関わる現代的問題。"}},
+
+    {name:"地球と宇宙",
+     yt:[{ch:"とある男が授業をしてみた",title:"太陽系・惑星・月の運動",url:"https://www.youtube.com/results?search_query=葉一+太陽系+惑星+月+中学理科",desc:"8惑星の特徴・月の満ち欠け"},
+         {ch:"さわにい",title:"地球の自転・公転と季節",url:"https://www.youtube.com/results?search_query=さわにい+地球+自転+公転+季節+中学理科",desc:"地軸の傾きと季節変化を図解"}],
+     quiz:[
+       {q:"地球が1年で太陽を一周する運動は？",qe:"What is Earth's yearly journey around the Sun called?",opts:["自転","公転","歳差","偏西風"],ans:1,exp:"公転（こうてん）。自転は地球が24時間で1回転する動き。",expe:"Revolution. Rotation is Earth spinning on its axis once every 24 hours."},
+       {q:"日本の夏が暑い主な理由は？",qe:"Why is Japan hot in summer? (astronomical reason)",opts:["太陽に近い","地軸が傾いて太陽高度が高い","大気が濃い","太陽が大きい"],ans:1,exp:"地軸が約23.4度傾いているため夏は太陽高度が高く昼が長い。実は冬の方が太陽に近い！",expe:"Earth's axis tilts 23.4°, making the Sun higher in summer. Actually, Earth is closer to Sun in winter!"},
+       {q:"太陽系最大の惑星は？",qe:"Which is the largest planet in our solar system?",opts:["土星","木星","天王星","海王星"],ans:1,exp:"木星（Jupiter）。直径は地球の約11倍、質量は約318倍。大赤斑（巨大嵐）が有名。",expe:"Jupiter. Its diameter is 11 times Earth's and mass 318 times. Famous for the Great Red Spot."}
+     ],
+     deep:{thinks:[
+       {q:"地軸が傾いていなければ季節はどうなる？日本の農業・文化への影響を考えよう。",qe:"What if Earth's axis weren't tilted? How would Japanese agriculture and culture be affected?"},
+       {q:"宇宙探査と地球上の問題（貧困・環境）への投資、どちらを優先すべきか？",qe:"Should we prioritize space exploration or solving Earth's problems like poverty and climate change?"}
+     ],world:"JAXAの宇宙探査は国際協力の象徴（SDG17）。火星移住研究は食料・水・エネルギー技術にフィードバックされSDG全体に貢献する可能性がある。"}},
+
+    {name:"自然と人間",
+     yt:[{ch:"とある男が授業をしてみた",title:"生態系・食物連鎖・環境問題",url:"https://www.youtube.com/results?search_query=葉一+生態系+食物連鎖+環境問題+中学理科",desc:"炭素循環・生物濃縮・外来種"},
+         {ch:"Try IT 中学理科",title:"科学技術と環境",url:"https://www.youtube.com/results?search_query=TryIT+自然+環境+科学技術+中学理科",desc:"エネルギー問題・プラスチック・持続可能性"}],
+     quiz:[
+       {q:"食物連鎖で一次消費者が食べるのは？",qe:"What does a primary consumer eat in a food chain?",opts:["他の動物","植物（生産者）","分解者","腐った有機物"],ans:1,exp:"一次消費者は植物（生産者）を食べる草食動物。生産者→一次消費者→二次消費者→分解者。",expe:"Primary consumers are herbivores that eat plants (producers). Producers→1st→2nd consumers→decomposers."},
+       {q:"農薬などが食物連鎖で濃縮される現象は？",qe:"What is the concentration of pollutants through the food chain called?",opts:["光合成","生物濃縮","分解","栄養循環"],ans:1,exp:"生物濃縮（せいぶつのうしゅく）：水銀・PCBなど脂溶性の物質が上位の生物ほど高濃度になる。",expe:"Bioaccumulation: fat-soluble pollutants like mercury and PCBs concentrate in higher organisms."},
+       {q:"外来種が問題になる理由は？",qe:"Why are invasive species a problem?",opts:["見た目が悪い","天敵がなく在来種を脅かす","食べられない","動きが遅い"],ans:1,exp:"外来種は天敵がいないため大繁殖し、在来の生態系を破壊することがある。",expe:"Invasive species often lack natural predators and can multiply uncontrolled, destroying native ecosystems."}
+     ],
+     deep:{thinks:[
+       {q:"プラスチックによる海洋汚染と生物濃縮の関係を説明しよう。",qe:"Explain the relationship between ocean plastic pollution and bioaccumulation."},
+       {q:"外来種問題と人間の移動・貿易のグローバル化の関係を考えよう。",qe:"Consider the relationship between invasive species and globalization of human movement and trade."}
+     ],world:"マイクロプラスチックは食物連鎖で人体にも蓄積（SDG14）。外来種問題は国際貿易・観光のグローバル化と不可分（SDG15）。熊本の有明海でも外来種の影響が報告されている。"}
+    }
+  ]
+};
+
+var curUnit = null;
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+
+// Build unit buttons
+function buildUnits(grade) {
+  var gradeUnits = units[grade];
+  var gradeKey = grade === "中1" ? "g1" : grade === "中2" ? "g2" : "g3";
+  var ulId = grade === "中1" ? "ul1" : grade === "中2" ? "ul2" : "ul3";
+  var ul = document.getElementById(ulId);
+  if (ul.children.length > 0) return;
+  gradeUnits.forEach(function(u) {
+    var btn = document.createElement("button");
+    btn.className = "unit-btn";
+    btn.textContent = u.name;
+    btn.onclick = function() {
+      document.querySelectorAll(".unit-btn").forEach(function(b) { b.classList.remove("on"); b.style.background=""; b.style.color=""; });
+      btn.classList.add("on");
+      openUnit(u);
+    };
+    ul.appendChild(btn);
+  });
+}
+
+function switchGrade(id, btn) {
+  document.querySelectorAll(".grade-section").forEach(function(s) { s.classList.remove("on"); });
+  document.querySelectorAll(".gtab").forEach(function(t) { t.classList.remove("on"); });
+  document.getElementById(id).classList.add("on");
+  btn.classList.add("on");
+  var grade = id === "g1" ? "中1" : id === "g2" ? "中2" : "中3";
+  buildUnits(grade);
+  closeUnit();
+}
+
+function openUnit(u) {
+  curUnit = u;
+  document.getElementById("unit-title").textContent = u.name;
+  document.getElementById("learn-area").classList.add("on");
+  switchLearn("video", document.querySelectorAll(".ltab")[0]);
+  document.getElementById("learn-area").scrollIntoView({behavior:"smooth"});
+}
+
+function closeUnit() {
+  document.getElementById("learn-area").classList.remove("on");
+  document.querySelectorAll(".unit-btn").forEach(function(b) { b.classList.remove("on"); });
+  curUnit = null;
+}
+
+function switchLearn(step, btn) {
+  document.querySelectorAll(".learn-step").forEach(function(s) { s.classList.remove("on"); });
+  document.querySelectorAll(".ltab").forEach(function(t) { t.classList.remove("on"); });
+  document.getElementById("ls-" + step).classList.add("on");
+  if (btn) btn.classList.add("on");
+  if (step === "video") renderVideos();
+  if (step === "quiz") { quizIdx = 0; quizScore = 0; renderQuiz(); }
+  if (step === "deep") renderDeep();
+}
+
+function renderVideos() {
+  if (!curUnit) return;
+  var vl = document.getElementById("video-list");
+  vl.innerHTML = "";
+  curUnit.yt.forEach(function(v) {
+    var d = document.createElement("div");
+    d.className = "yt-card";
+    d.innerHTML = "<div class=\"yt-thumb\">&#9654;</div><div class=\"yt-info\"><div class=\"yt-ch\">" + v.ch + "</div><div class=\"yt-title\">" + v.title + "</div><div class=\"yt-desc\">" + v.desc + "</div><a href=\"" + v.url + "\" target=\"_blank\" class=\"yt-btn\">&#9654; YouTubeで見る</a></div>";
+    vl.appendChild(d);
+  });
+}
+
+function renderQuiz() {
+  if (!curUnit) return;
+  var qs = curUnit.quiz;
+  var qa = document.getElementById("quiz-area");
+  if (quizIdx >= qs.length) {
+    var pct = Math.round(quizScore / qs.length * 100);
+    qa.innerHTML = "<div style=\"text-align:center;padding:16px 0;\"><div style=\"font-size:32px;margin-bottom:8px;\">" + (pct>=80?"&#127881;":pct>=60?"&#128077;":"&#128170;") + "</div><div style=\"font-size:20px;font-weight:700;color:#1D9E75;margin-bottom:6px;\">" + quizScore + " / " + qs.length + " 正解</div><div style=\"font-size:13px;color:#666;margin-bottom:14px;\">" + pct + "% — " + (pct>=80?"Great!":pct>=60?"Good! もう一度動画を見よう":"動画を見直してチャレンジ！") + "</div><button onclick=\"quizIdx=0;quizScore=0;renderQuiz()\" style=\"padding:8px 18px;border-radius:8px;background:#1D9E75;color:#fff;font-size:13px;border:none;cursor:pointer;\">もう一度</button></div>";
+    return;
+  }
+  updateScoreBar(qs.length);
+  var q = qs[quizIdx];
+  var optsHTML = q.opts.map(function(o, i) { return "<button class=\"opt-btn\" onclick=\"answerQ(" + i + ")\">" + o + "</button>"; }).join("");
+  qa.innerHTML = "<div class=\"q-box\"><div class=\"q-en\">&#127468;&#127463; " + q.qe + "</div><div class=\"q-ja\">&#127471;&#127477; " + q.q + "</div><div class=\"opts\">" + optsHTML + "</div><div class=\"exp-box\" id=\"exp-box\"><strong>&#128218; 解説</strong><br>" + q.exp + "<div class=\"exp-en\">&#127468;&#127463; " + q.expe + "</div></div></div><button class=\"next-btn\" id=\"nxt-btn\" style=\"display:none;\" onclick=\"nextQ()\">" + (quizIdx < qs.length-1 ? "次の問題 &#8594;" : "結果を見る &#127881;") + "</button>";
+  quizAnswered = false;
+}
+
+function answerQ(i) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  var q = curUnit.quiz[quizIdx];
+  document.querySelectorAll(".opt-btn").forEach(function(b, idx) {
+    b.disabled = true;
+    if (idx === q.ans) b.classList.add("correct");
+    else if (idx === i && i !== q.ans) b.classList.add("wrong");
+  });
+  if (i === q.ans) quizScore++;
+  document.getElementById("exp-box").style.display = "block";
+  document.getElementById("nxt-btn").style.display = "inline-block";
+  updateScoreBar(curUnit.quiz.length);
+}
+
+function nextQ() { quizIdx++; renderQuiz(); }
+
+function updateScoreBar(total) {
+  document.getElementById("score-disp").textContent = quizScore + "/" + total;
+  document.getElementById("prog-fill").style.width = Math.round(quizScore/total*100) + "%";
+}
+
+function renderDeep() {
+  if (!curUnit) return;
+  var d = curUnit.deep;
+  var da = document.getElementById("deep-area");
+  var html = "";
+  d.thinks.forEach(function(t) {
+    html += "<div class=\"think-q\">&#129504; " + t.q + "<div class=\"think-en\">&#127468;&#127463; " + t.qe + "</div></div>";
+  });
+  html += "<textarea placeholder=\"考えたことを書こう / Write your thoughts (English or Japanese OK)...\"></textarea>";
+  html += "<div class=\"world-box\"><strong>&#127758; 世界・熊本とのつながり</strong><br>" + d.world + "</div>";
+  html += "<div style=\"margin-top:12px;\"><a href=\"tool6_study.html\" style=\"display:inline-block;padding:8px 14px;border-radius:8px;background:#1D9E75;color:#fff;font-size:13px;font-weight:600;text-decoration:none;\">&#127891; 他の教科も学ぼう</a></div>";
+  da.innerHTML = html;
+}
+
+// Initialize
+buildUnits("中1");
+</script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学 完全版 | EHB 学習ナビゲーター</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Noto Sans JP',sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#993556;color:#fff;padding:18px 20px;}
+.header h1{font-size:19px;font-weight:700;margin-bottom:3px;}
+.header p{font-size:12px;opacity:.85;}
+.back-btn{display:inline-block;margin-top:8px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.2);color:#fff;font-size:12px;text-decoration:none;border:1px solid rgba(255,255,255,.4);}
+.container{max-width:740px;margin:0 auto;padding:18px 16px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+.grade-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.gtab{padding:8px 20px;border-radius:20px;border:1.5px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;font-weight:500;}
+.gtab.on{background:#993556;color:#fff;border-color:#993556;}
+.grade-section{display:none;}
+.grade-section.on{display:block;}
+.unit-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.unit-btn{border:1.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;cursor:pointer;background:#f8f7f4;font-size:13px;text-align:left;line-height:1.4;color:#1a1a1a;}
+.unit-btn:hover{background:#FAEAF0;border-color:#993556;}
+.unit-btn.on{background:#993556;color:#fff;border-color:#993556;font-weight:600;}
+.learn-area{display:none;}
+.learn-area.on{display:block;}
+.learn-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ltab{padding:8px 16px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;}
+.ltab.on{background:#993556;color:#fff;border-color:#993556;}
+.learn-step{display:none;}
+.learn-step.on{display:block;}
+.yt-card{border:1.5px solid #e8e6e0;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;background:#f8f7f4;}
+.yt-thumb{width:44px;height:44px;border-radius:6px;background:#FF0000;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0;}
+.yt-info{flex:1;}
+.yt-ch{font-size:11px;color:#666;margin-bottom:2px;}
+.yt-title{font-size:13px;font-weight:600;margin-bottom:3px;}
+.yt-desc{font-size:12px;color:#888;}
+.yt-btn{display:inline-block;margin-top:6px;padding:5px 12px;border-radius:6px;background:#FF0000;color:#fff;font-size:11px;font-weight:600;text-decoration:none;}
+.q-box{background:#f8f7f4;border-radius:10px;padding:12px 14px;margin-bottom:12px;}
+.q-en{font-size:12px;color:#6B1E38;font-weight:600;margin-bottom:3px;line-height:1.5;}
+.q-ja{font-size:15px;font-weight:700;margin-bottom:10px;line-height:1.5;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.opt-btn{padding:10px 12px;border-radius:8px;border:1.5px solid #ddd;background:#fff;font-size:14px;cursor:pointer;text-align:center;font-weight:600;}
+.opt-btn:hover:not(:disabled){border-color:#993556;background:#FAEAF0;}
+.opt-btn.correct{background:#E1F5EE;border-color:#1D9E75;color:#085041;}
+.opt-btn.wrong{background:#FAECE7;border-color:#E05A3A;color:#712B13;}
+.opt-btn:disabled{cursor:default;}
+.exp-box{background:#FAEAF0;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13px;color:#6B1E38;line-height:1.7;display:none;}
+.exp-en{font-size:12px;color:#993556;margin-top:5px;font-style:italic;}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.score-n{font-size:20px;font-weight:700;color:#993556;}
+.prog-bar{flex:1;height:6px;background:#e8e6e0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:#993556;border-radius:3px;transition:width .4s;}
+.next-btn{padding:8px 18px;border-radius:8px;background:#993556;color:#fff;font-size:13px;border:none;cursor:pointer;margin-top:10px;}
+.think-q{background:#FAEAF0;border-left:3px solid #993556;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:10px;font-size:13px;line-height:1.65;color:#6B1E38;}
+textarea{width:100%;padding:9px 12px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;resize:vertical;min-height:60px;font-family:inherit;margin-top:6px;}
+.world-box{background:#FAEAF0;border-radius:10px;padding:12px 16px;font-size:13px;color:#6B1E38;line-height:1.75;margin-top:10px;}
+.unit-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.unit-title{font-size:15px;font-weight:700;flex:1;color:#993556;}
+.close-unit{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#10006; 数学 完全版</h1>
+  <p>中学1〜3年 全単元 | 英語でも理解 | EHB 学習ナビゲーター</p>
+  <a href="tool6_study.html" class="back-btn">&#8592; 教科選択に戻る</a>
+</div>
+<div class="container">
+<div class="card">
+  <div class="grade-tabs">
+    <button class="gtab on" onclick="switchGrade('g1',this)">中1</button>
+    <button class="gtab" onclick="switchGrade('g2',this)">中2</button>
+    <button class="gtab" onclick="switchGrade('g3',this)">中3</button>
+  </div>
+  <div class="grade-section on" id="g1"><div class="unit-list" id="ul1"></div></div>
+  <div class="grade-section" id="g2"><div class="unit-list" id="ul2"></div></div>
+  <div class="grade-section" id="g3"><div class="unit-list" id="ul3"></div></div>
+</div>
+<div class="learn-area" id="learn-area">
+  <div class="card" style="padding:12px 16px;margin-bottom:10px;">
+    <div class="unit-header">
+      <span class="unit-title" id="unit-title"></span>
+      <button class="close-unit" onclick="closeUnit()">&#10005; 閉じる</button>
+    </div>
+    <div class="learn-tabs">
+      <button class="ltab on" onclick="switchLearn('video',this)">&#9654; 動画</button>
+      <button class="ltab" onclick="switchLearn('quiz',this)">&#9999; 計算クイズ</button>
+      <button class="ltab" onclick="switchLearn('deep',this)">&#127775; 深掘り</button>
+    </div>
+  </div>
+  <div class="learn-step on" id="ls-video"><div class="card"><p style="font-size:13px;font-weight:700;color:#993556;margin-bottom:10px;">&#9654; おすすめ動画で理解しよう</p><div id="video-list"></div></div></div>
+  <div class="learn-step" id="ls-quiz"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#9999; 計算クイズ</p><div class="score-row"><span class="score-n" id="score-disp">0/0</span><div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div></div><div id="quiz-area"></div></div></div>
+  <div class="learn-step" id="ls-deep"><div class="card"><p style="font-size:14px;font-weight:700;margin-bottom:10px;">&#127775; 深掘り — 数学と世界</p><div id="deep-area"></div></div></div>
+</div>
+</div>
+<script>
+var units = {
+  "中1": [
+    {name:"正負の数",yt:[{ch:"とある男が授業をしてみた",title:"正の数・負の数の計算",url:"https://www.youtube.com/results?search_query=葉一+正の数+負の数+中学数学",desc:"プラスマイナスの四則計算"},{ch:"Try IT 中学数学",title:"絶対値・数直線",url:"https://www.youtube.com/results?search_query=TryIT+正の数+負の数+数直線+中学数学",desc:"絶対値と数直線の考え方"}],
+     quiz:[{q:"(-3)×(-4)=?",qe:"Calculate: (-3)×(-4)",opts:["-12","12","-7","7"],ans:1,exp:"負×負＝正。(-3)×(-4)＝+12。同符号→正、異符号→負。",expe:"Negative × Negative = Positive. (-3)×(-4) = +12. Same signs→positive, different signs→negative."},{q:"(-8)÷4=?",qe:"Calculate: (-8)÷4",opts:["2","-2","32","-32"],ans:1,exp:"異符号→負。(-8)÷4＝-2。割り算も掛け算と同じ符号のルール。",expe:"Different signs→negative. (-8)÷4 = -2. Division follows the same sign rules as multiplication."},{q:"-3²=?（-3の2乗）",qe:"What is -3² ?",opts:["9","-9","6","-6"],ans:1,exp:"-3²は-(3²)＝-9。(-3)²なら+9。累乗の計算順序に注意！",expe:"-3² means -(3²) = -9. But (-3)² = +9. Pay attention to the order of operations!"}],
+     deep:{thinks:["マイナスの数は最初「存在しない」とされていた。数学の歴史で負の数が認められた経緯を調べよう。","温度・高度・金融の損益——負の数が使われる実例を10個探してみよう。"],world:"負の数の概念はインドで発見されアラビアを経て世界に広まった。現代の株価・気温・海底深度すべてに使われる（SDG4：質の高い教育で数学的思考を育てる）。"}},
+
+    {name:"文字式",yt:[{ch:"とある男が授業をしてみた",title:"文字式の計算・同類項",url:"https://www.youtube.com/results?search_query=葉一+文字式+同類項+中学数学",desc:"文字式のルールと同類項の整理"},{ch:"Try IT 中学数学",title:"式の値・代入",url:"https://www.youtube.com/results?search_query=TryIT+文字式+代入+中学数学",desc:"文字に数を代入する計算"}],
+     quiz:[{q:"3a+2b-a+5b を整理すると？",qe:"Simplify: 3a+2b-a+5b",opts:["4a+3b","2a+7b","3a+7b","2a+3b"],ans:1,exp:"同類項をまとめる。3a-a=2a、2b+5b=7b。→2a+7b。",expe:"Combine like terms: 3a-a=2a, 2b+5b=7b. Answer: 2a+7b."},{q:"x=3のとき、4x-5の値は？",qe:"When x=3, what is the value of 4x-5?",opts:["7","17","9","2"],ans:0,exp:"代入：x=3を代入。4×3-5=12-5=7。",expe:"Substitute x=3: 4×3-5=12-5=7."},{q:"2(3x-4)を展開すると？",qe:"Expand: 2(3x-4)",opts:["6x-4","6x-8","3x-8","5x-4"],ans:1,exp:"分配法則：2×3x-2×4=6x-8。かっこの中の各項に外の数をかける。",expe:"Distributive law: 2×3x-2×4=6x-8. Multiply each term inside the brackets by the outside number."}],
+     deep:{thinks:["文字式はプログラミングの変数と全く同じ概念。Python でx=3と書くのは数学の代入と同じ原理？","文字式を使うと「すべての場合に当てはまる」式が書ける。これはなぜ重要なのか考えよう。"],world:"文字式はプログラミング・AI・データサイエンスの基礎。TSMCの半導体設計エンジニアも文字式（アルゴリズム）を日々書いている（SDG9：産業・技術革新）。"}},
+
+    {name:"方程式",yt:[{ch:"とある男が授業をしてみた",title:"一次方程式の解き方",url:"https://www.youtube.com/results?search_query=葉一+一次方程式+移項+中学数学",desc:"移項・等式の性質をわかりやすく"},{ch:"Try IT 中学数学",title:"方程式の文章題",url:"https://www.youtube.com/results?search_query=TryIT+方程式+文章題+中学数学",desc:"文章を方程式に変換する方法"}],
+     quiz:[{q:"3x+5=14 の解は？",qe:"Solve: 3x+5=14",opts:["x=2","x=3","x=4","x=6"],ans:1,exp:"3x=14-5=9。x=9÷3=3。移項して文字を一方にまとめる。",expe:"3x=14-5=9. x=9÷3=3. Move terms to isolate the variable."},{q:"2x-3=x+4 の解は？",qe:"Solve: 2x-3=x+4",opts:["x=5","x=7","x=3","x=1"],ans:1,exp:"2x-x=4+3。x=7。文字を左辺に、数を右辺に移項。",expe:"2x-x=4+3. x=7. Move variables to the left side, numbers to the right."},{q:"「ある数の3倍から5を引くと13」を方程式にすると？",qe:"Write the equation: '3 times a number minus 5 equals 13'",opts:["3x+5=13","3(x-5)=13","3x-5=13","x-5=13"],ans:2,exp:"ある数をxとおく。3倍→3x、5を引く→3x-5、13になる→3x-5=13。",expe:"Let x = the number. 3 times x minus 5 = 13 → 3x-5=13."}],
+     deep:{thinks:["方程式はプログラミングの変数と同じ発想。AIやアプリ開発でどう使われているか調べよう。","「お得な買い物」を方程式で解いてみよう。2つの店の価格を比較する式を立てよう。"],world:"方程式はAI・機械学習・経済学の基礎。線形計画法（コスト最小化）にも使われる。TSMCの半導体設計も方程式の連立を解くことで成り立っている（SDG9）。"}},
+
+    {name:"比例と反比例",yt:[{ch:"とある男が授業をしてみた",title:"比例・反比例のグラフ",url:"https://www.youtube.com/results?search_query=葉一+比例+反比例+グラフ+中学数学",desc:"比例定数とグラフの形"},{ch:"Try IT 中学数学",title:"比例・反比例の利用",url:"https://www.youtube.com/results?search_query=TryIT+比例+反比例+中学数学",desc:"身近な問題への応用"}],
+     quiz:[{q:"y=3xのグラフの特徴は？",qe:"What does the graph of y=3x look like?",opts:["右下がりの直線","原点を通る右上がりの直線","放物線","双曲線"],ans:1,exp:"比例y=axのグラフは原点（0,0）を通る直線。a>0なら右上がり。",expe:"The graph of y=ax (direct proportion) is a straight line through the origin. If a>0, it goes upward."},{q:"y=6/xのグラフの特徴は？",qe:"What does the graph of y=6/x look like?",opts:["原点を通る直線","放物線","双曲線（なめらかな曲線）","円"],ans:2,exp:"反比例y=a/xのグラフは双曲線（ハイパーボラ）。第1・3象限または第2・4象限に現れる。",expe:"The graph of y=a/x (inverse proportion) is a hyperbola, appearing in quadrants 1&3 or 2&4."},{q:"速さ60km/hで走る車の、時間xと距離yの関係は？",qe:"A car travels at 60km/h. What is the relationship between time x and distance y?",opts:["反比例","比例（y=60x）","y=60/x","関係なし"],ans:1,exp:"距離＝速さ×時間。y=60x。速さが一定のとき時間と距離は比例する。",expe:"Distance = speed × time. y=60x. When speed is constant, time and distance are directly proportional."}],
+     deep:{thinks:["比例・反比例は自然界・社会のどんな現象に現れるか探してみよう（バネ・音の大きさ・需要と供給）。","気候変動グラフも比例に近い形をしている。CO2と気温の関係を考えよう。"],world:"比例・反比例は物理・経済・工学の基礎。気候変動データの分析（SDG13）も数学的モデルに基づいている。"}},
+
+    {name:"平面図形・空間図形",yt:[{ch:"とある男が授業をしてみた",title:"平面図形（多角形・円）",url:"https://www.youtube.com/results?search_query=葉一+平面図形+多角形+円+中学数学",desc:"角度の計算と図形の性質"},{ch:"Try IT 中学数学",title:"空間図形（柱・錐・球）",url:"https://www.youtube.com/results?search_query=TryIT+空間図形+体積+表面積+中学数学",desc:"体積・表面積の計算"}],
+     quiz:[{q:"三角形の内角の和は？",qe:"What is the sum of interior angles of a triangle?",opts:["90°","180°","270°","360°"],ans:1,exp:"三角形の内角の和は180°。四角形は360°。n角形は180°×(n-2)。",expe:"The sum of interior angles of a triangle is 180°. For quadrilaterals: 360°. For n-gons: 180°×(n-2)."},{q:"半径5cmの円の面積は？（π＝3.14）",qe:"What is the area of a circle with radius 5cm? (π=3.14)",opts:["15.7cm²","31.4cm²","78.5cm²","157cm²"],ans:2,exp:"円の面積＝πr²＝3.14×5²＝3.14×25＝78.5cm²。",expe:"Circle area = πr² = 3.14×5² = 3.14×25 = 78.5cm²."},{q:"底面積20cm²・高さ9cmの三角柱の体積は？",qe:"What is the volume of a triangular prism with base area 20cm² and height 9cm?",opts:["60cm³","90cm³","180cm³","29cm³"],ans:2,exp:"柱の体積＝底面積×高さ＝20×9＝180cm³。",expe:"Volume of prism = base area × height = 20×9 = 180cm³."}],
+     deep:{thinks:["建築・デザイン・アート——図形の知識がどう使われているか具体例を探してみよう。","ピラミッドの体積を計算してみよう。古代エジプトの人々はどうやって設計したのか考えよう。"],world:"図形は建築・都市設計・3DCG・ゲーム開発の基礎。熊本の道路設計・TSMC工場の建設にも図形の計算が不可欠（SDG11：住み続けられるまちづくり）。"}}
+  ],
+
+  "中2": [
+    {name:"連立方程式",yt:[{ch:"とある男が授業をしてみた",title:"連立方程式（加減法・代入法）",url:"https://www.youtube.com/results?search_query=葉一+連立方程式+加減法+代入法+中学数学",desc:"2つの解き方を完全マスター"},{ch:"Try IT 中学数学",title:"連立方程式の文章題",url:"https://www.youtube.com/results?search_query=TryIT+連立方程式+文章題+中学数学",desc:"連立方程式で解く文章題"}],
+     quiz:[{q:"x+y=5, x-y=1 を解くと？",qe:"Solve the system: x+y=5, x-y=1",opts:["x=3,y=2","x=2,y=3","x=4,y=1","x=1,y=4"],ans:0,exp:"加減法：2式を足すと2x=6、x=3。代入するとy=2。",expe:"Add equations: 2x=6, x=3. Substitute to get y=2."},{q:"2x+3y=12, x+y=5 を解くと？",qe:"Solve: 2x+3y=12, x+y=5",opts:["x=3,y=2","x=2,y=3","x=4,y=1","x=1,y=4"],ans:0,exp:"代入法：x=5-yを2x+3y=12に代入。2(5-y)+3y=12。10+y=12。y=2。x=3。",expe:"Substitution: x=5-y into 2x+3y=12. 2(5-y)+3y=12. 10+y=12. y=2, x=3."},{q:"連立方程式の解はグラフで何を表すか？",qe:"What does the solution of simultaneous equations represent on a graph?",opts:["2直線の傾き","2直線の交点","2直線の切片","2点の中点"],ans:1,exp:"連立方程式の解は2つの一次方程式のグラフ（直線）の交点の座標。",expe:"The solution of simultaneous equations is the intersection point of the two linear graphs."}],
+     deep:{thinks:["連立方程式はAIの機械学習・経済モデルにも使われる。2つの条件を同時に満たすとはどういうことか？","連立方程式を使って「速さ・道のり・時間」の問題を解いてみよう。"],world:"連立方程式は線形計画法（ビジネス最適化）の基礎。AIの機械学習アルゴリズムは大量の連立方程式を解くことで機能する（SDG9）。"}},
+
+    {name:"一次関数",yt:[{ch:"とある男が授業をしてみた",title:"一次関数y=ax+bのグラフ",url:"https://www.youtube.com/results?search_query=葉一+一次関数+グラフ+中学数学",desc:"傾きと切片の意味・グラフの書き方"},{ch:"Try IT 中学数学",title:"一次関数の式を求める",url:"https://www.youtube.com/results?search_query=TryIT+一次関数+式+中学数学",desc:"2点から式を求める方法"}],
+     quiz:[{q:"y=2x+3の傾きは？",qe:"What is the slope of y=2x+3?",opts:["3","2","-2","1"],ans:1,exp:"y=ax+bのaが傾き、bがy切片。y=2x+3の傾きは2（xが1増えるとyが2増える）。",expe:"In y=ax+b, a is the slope and b is the y-intercept. Slope=2 means y increases by 2 when x increases by 1."},{q:"(1,5)と(3,9)を通る一次関数の傾きは？",qe:"What is the slope through points (1,5) and (3,9)?",opts:["1","3","2","4"],ans:2,exp:"傾き＝（yの変化量）÷（xの変化量）＝(9-5)÷(3-1)=4÷2=2。",expe:"Slope = change in y ÷ change in x = (9-5)÷(3-1) = 4÷2 = 2."},{q:"y=-x+4のグラフは？",qe:"What does the graph of y=-x+4 look like?",opts:["右上がり","右下がり","水平","垂直"],ans:1,exp:"傾きが負（-1）→右下がり。y切片は4（x=0のときy=4）。",expe:"Negative slope (-1) means the graph goes downward from left to right. y-intercept is 4."}],
+     deep:{thinks:["一次関数は「変化の速さ（傾き）」を表す。気候変動グラフの「傾き」が示すことを考えよう。","ビジネスでの「売上=単価×個数」は一次関数。身近なビジネスモデルを一次関数で表してみよう。"],world:"一次関数のグラフで「変化の傾向」を読む力はデータサイエンスの基礎。SDGsの達成状況グラフも一次関数で分析できる。"}},
+
+    {name:"確率",yt:[{ch:"とある男が授業をしてみた",title:"確率の求め方・樹形図",url:"https://www.youtube.com/results?search_query=葉一+確率+樹形図+中学数学",desc:"確率の基本と樹形図の使い方"},{ch:"Try IT 中学数学",title:"確率の計算（コイン・サイコロ）",url:"https://www.youtube.com/results?search_query=TryIT+確率+コイン+サイコロ+中学数学",desc:"コインとサイコロの確率問題"}],
+     quiz:[{q:"コインを1回投げて表が出る確率は？",qe:"What is the probability of getting heads when flipping a coin once?",opts:["1/4","1/2","1/3","2/3"],ans:1,exp:"確率＝求める事象の数÷全事象の数＝1÷2＝1/2。",expe:"Probability = favorable outcomes ÷ total outcomes = 1÷2 = 1/2."},{q:"サイコロを1回投げて3以上の目が出る確率は？",qe:"What is the probability of rolling 3 or more on one die?",opts:["1/3","1/2","2/3","1/6"],ans:2,exp:"3以上の目は{3,4,5,6}で4通り。全体は6通り。4÷6=2/3。",expe:"Numbers 3 or above: {3,4,5,6} = 4 outcomes. Total = 6. Probability = 4÷6 = 2/3."},{q:"赤玉3個・白玉2個の袋から1個取り出すとき、赤玉が出る確率は？",qe:"A bag has 3 red and 2 white balls. What is the probability of drawing red?",opts:["2/5","3/5","1/5","1/2"],ans:1,exp:"赤玉3個、全体5個。3÷5=3/5。",expe:"3 red out of 5 total. Probability = 3÷5 = 3/5."}],
+     deep:{thinks:["確率は医療（薬の効果）・保険・天気予報・AIに使われている。身近な確率の例を5つ探そう。","「確率1%」と「100人に1人」は同じ？確率の表現方法の違いと誤解について考えよう。"],world:"確率統計はAI・医療・金融・気象予報の基礎。新型ウイルスの感染確率・ワクチンの有効性もすべて確率で表される（SDG3：健康）。"}},
+
+    {name:"図形の性質（合同・相似の基礎）",yt:[{ch:"とある男が授業をしてみた",title:"三角形の合同条件",url:"https://www.youtube.com/results?search_query=葉一+合同+三角形+中学数学",desc:"3つの合同条件と証明の書き方"},{ch:"Try IT 中学数学",title:"平行四辺形・特別な四角形",url:"https://www.youtube.com/results?search_query=TryIT+平行四辺形+中学数学",desc:"平行四辺形・ひし形・長方形の性質"}],
+     quiz:[{q:"三角形の合同条件のうち正しくないのはどれか？",qe:"Which is NOT a congruence condition for triangles?",opts:["3辺が等しい（SSS）","2辺とその間の角（SAS）","2角と1辺（ASA）","2辺と1辺（SSA）"],ans:3,exp:"SSAは合同条件にならない（2通りの三角形ができる場合がある）。",expe:"SSA is not a congruence condition — two different triangles can satisfy the same SSA conditions."},{q:"平行四辺形の性質として正しいのはどれか？",qe:"Which property is true of a parallelogram?",opts:["4つの角がすべて等しい","対角線が垂直に交わる","対辺は平行で等しい","4つの辺がすべて等しい"],ans:2,exp:"平行四辺形：対辺が平行で等しい・対角が等しい・対角線は互いを2等分。",expe:"Parallelogram: opposite sides parallel and equal, opposite angles equal, diagonals bisect each other."},{q:"正三角形の1つの内角は？",qe:"What is the measure of each interior angle of an equilateral triangle?",opts:["45°","60°","90°","120°"],ans:1,exp:"正三角形は3つの角が等しく、内角の和180°÷3=60°。",expe:"An equilateral triangle has all angles equal: 180°÷3 = 60°."}],
+     deep:{thinks:["建築・デザイン・自然界の中に合同・相似の図形を探してみよう。","なぜ数学では「証明」が必要なのか？直感と証明の違いを考えよう。"],world:"合同・相似の概念はGPS・カメラ・地図・建築設計の基礎。「縮図」の概念がなければ地図も設計図も存在しない（SDG11）。"}}
+  ],
+
+  "中3": [
+    {name:"二次方程式",yt:[{ch:"とある男が授業をしてみた",title:"二次方程式（因数分解・解の公式）",url:"https://www.youtube.com/results?search_query=葉一+二次方程式+因数分解+解の公式+中学数学",desc:"3つの解き方を完全マスター"},{ch:"Try IT 中学数学",title:"二次方程式の文章題",url:"https://www.youtube.com/results?search_query=TryIT+二次方程式+文章題+中学数学",desc:"面積・整数・速さの文章題"}],
+     quiz:[{q:"x²-5x+6=0 を解くと？",qe:"Solve: x²-5x+6=0",opts:["x=2, x=3","x=-2, x=-3","x=1, x=6","x=2, x=-3"],ans:0,exp:"因数分解：(x-2)(x-3)=0。x=2またはx=3。",expe:"Factor: (x-2)(x-3)=0. Therefore x=2 or x=3."},{q:"x²-4=0 を解くと？",qe:"Solve: x²-4=0",opts:["x=4","x=2","x=±2","x=±4"],ans:2,exp:"x²=4。x=±√4=±2。",expe:"x²=4. x=±√4=±2."},{q:"x²+6x+9 を因数分解すると？",qe:"Factor: x²+6x+9",opts:["(x+3)(x-3)","(x+3)²","(x+9)(x+1)","(x+6)(x+3)"],ans:1,exp:"完全平方式：x²+2×3×x+3²=(x+3)²。",expe:"Perfect square: x²+2(3)x+3² = (x+3)²."}],
+     deep:{thinks:["二次方程式の解が「存在しない」場合もある。数学で「答えがない」ことの意味を考えよう。","二次方程式は放物線とつながっている。橋・ロケット・衛星アンテナとの関係を調べよう。"],world:"二次方程式は物理・工学・コンピュータグラフィクスの基礎。橋のアーチ・衛星アンテナ・スマホカメラのレンズ設計に使われる（SDG9）。"}},
+
+    {name:"二次関数y=ax²",yt:[{ch:"とある男が授業をしてみた",title:"y=ax²のグラフ（放物線）",url:"https://www.youtube.com/results?search_query=葉一+二次関数+放物線+中学数学",desc:"放物線の形・頂点・軸"},{ch:"Try IT 中学数学",title:"二次関数の変化の割合",url:"https://www.youtube.com/results?search_query=TryIT+二次関数+変化の割合+中学数学",desc:"変化の割合と最大・最小値"}],
+     quiz:[{q:"y=2x²のグラフの形は？",qe:"What shape is the graph of y=2x²?",opts:["右下がりの直線","放物線（上向き）","放物線（下向き）","双曲線"],ans:1,exp:"y=ax²はa>0で上向き放物線。a<0で下向き。a=2はy=x²より急な形。",expe:"y=ax² with a>0 is an upward parabola. a<0 is downward. a=2 is steeper than y=x²."},{q:"y=-x²のグラフが通る点はどれか？",qe:"Which point does the graph of y=-x² pass through?",opts:["(1,1)","(1,-1)","(-1,1)","(0,1)"],ans:1,exp:"x=1を代入：y=-(1)²=-1。よって(1,-1)を通る。",expe:"Substitute x=1: y=-(1)²=-1. Therefore the graph passes through (1,-1)."},{q:"y=ax²でa>0のとき、x=0で関数はどうなるか？",qe:"For y=ax² with a>0, what happens when x=0?",opts:["最大値になる","最小値（0）になる","変化の割合が最大","増加し続ける"],ans:1,exp:"y=ax²（a>0）はx=0のとき最小値y=0（頂点が原点）。",expe:"For y=ax² (a>0), the minimum value is y=0 at x=0 (vertex at the origin)."}],
+     deep:{thinks:["放物線はボールの軌跡・橋・衛星アンテナに現れる。自然界と数学のつながりを考えよう。","y=ax²のaの値が変わると何が変わる？具体的にグラフを描いて考えよう。"],world:"放物線は物理（放物線運動）・建築（アーチ橋）・通信（パラボラアンテナ）に応用。数学は「言語」として自然界を記述する（SDG4・9）。"}},
+
+    {name:"相似・三平方の定理",yt:[{ch:"とある男が授業をしてみた",title:"相似の条件・相似比",url:"https://www.youtube.com/results?search_query=葉一+相似+相似比+中学数学",desc:"相似の3条件と面積比・体積比"},{ch:"Try IT 中学数学",title:"三平方の定理と応用",url:"https://www.youtube.com/results?search_query=TryIT+三平方の定理+応用+中学数学",desc:"ピタゴラスの定理と空間図形"}],
+     quiz:[{q:"直角三角形の2辺が3と4のとき斜辺は？",qe:"If two sides of a right triangle are 3 and 4, what is the hypotenuse?",opts:["5","6","7","√7"],ans:0,exp:"三平方の定理：3²+4²=9+16=25=5²。斜辺は5（3-4-5はピタゴラス数）。",expe:"Pythagorean theorem: 3²+4²=9+16=25=5². Hypotenuse=5 (3-4-5 is a Pythagorean triple)."},{q:"相似比2:3の2つの三角形の面積比は？",qe:"If two similar triangles have a ratio of 2:3, what is the ratio of their areas?",opts:["2:3","4:6","4:9","8:27"],ans:2,exp:"相似比がa:bのとき面積比はa²:b²。2²:3²=4:9。",expe:"If similarity ratio is a:b, area ratio is a²:b². 2²:3² = 4:9."},{q:"地面から見て仰角30°で100m先の建物の高さは？（tan30°≈0.577）",qe:"A building is 100m away, viewed at a 30° angle. What is its height? (tan30°≈0.577)",opts:["約17m","約57.7m","約100m","約173m"],ans:1,exp:"高さ＝距離×tan30°＝100×0.577≈57.7m。三角比の応用。",expe:"Height = distance × tan30° = 100×0.577 ≈ 57.7m. Application of trigonometry."}],
+     deep:{thinks:["三平方の定理はGPS・地図・建築設計・3DCGの基礎。スマホが位置情報を計算する仕組みを調べよう。","相似の概念がなければ地図も設計図も存在しない。縮図と実際のスケールの関係を考えよう。"],world:"三平方の定理（ピタゴラスの定理）は約2500年前に発見され、現代のGPS・建築・CG・ゲームのすべてに使われている。数学は時代を超えた「共通言語」（SDG4・9）。"}},
+
+    {name:"標本調査・データ分析",yt:[{ch:"とある男が授業をしてみた",title:"標本調査・代表値",url:"https://www.youtube.com/results?search_query=葉一+標本調査+平均+中央値+中学数学",desc:"平均値・中央値・最頻値の使い分け"},{ch:"Try IT 中学数学",title:"箱ひげ図・データの分析",url:"https://www.youtube.com/results?search_query=TryIT+箱ひげ図+データ+中学数学",desc:"データの散らばりと箱ひげ図"}],
+     quiz:[{q:"データ{3,5,7,7,8}の平均値・中央値・最頻値は？",qe:"For {3,5,7,7,8}, what are the mean, median, and mode?",opts:["平均6,中央値7,最頻値7","平均7,中央値6,最頻値8","平均5,中央値7,最頻値6","平均6,中央値8,最頻値7"],ans:0,exp:"平均=(3+5+7+7+8)/5=30/5=6。中央値=3番目=7。最頻値=最も多い=7。",expe:"Mean=(3+5+7+7+8)/5=30/5=6. Median=3rd value=7. Mode=most frequent=7."},{q:"母集団から一部を取り出して調査する方法を何という？",qe:"What is the method of selecting a part of a population for investigation?",opts:["全数調査","標本調査","比例調査","無作為抽出"],ans:1,exp:"標本調査：母集団の一部（標本）を調べて全体を推定する。視聴率・選挙の出口調査など。",expe:"Sampling: Investigate a part (sample) to estimate the whole population. Used in TV ratings, exit polls, etc."},{q:"データの散らばりを表す指標として使われるのは？",qe:"Which measure is used to show the spread of data?",opts:["平均値","中央値","最頻値","四分位範囲"],ans:3,exp:"四分位範囲（IQR）はデータの散らばりを表す。箱ひげ図で視覚化される。",expe:"Interquartile Range (IQR) shows the spread of data. It is visualized in box-and-whisker plots."}],
+     deep:{thinks:["統計データは操作できる。「平均値」が嘘をつくことがある？具体例で考えよう。","AIは大量のデータを分析して学習する。統計的思考がAI時代に必要な理由を考えよう。"],world:"統計・データ分析はAI・医療・経済・社会科学の基礎。SDGsの進捗管理も統計データに基づく。データリテラシー（データを正しく読む力）は21世紀の必須スキル（SDG4・9）。"}}
+  ]
+};
+
+var curUnit=null,quizIdx=0,quizScore=0,quizAnswered=false;
+
+function buildUnits(grade){
+  var id=grade==="中1"?"ul1":grade==="中2"?"ul2":"ul3";
+  var ul=document.getElementById(id);
+  if(ul.children.length>0) return;
+  units[grade].forEach(function(u){
+    var btn=document.createElement("button");
+    btn.className="unit-btn";
+    btn.textContent=u.name;
+    btn.onclick=function(){
+      document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+      btn.classList.add("on");
+      openUnit(u);
+    };
+    ul.appendChild(btn);
+  });
+}
+
+function switchGrade(id,btn){
+  document.querySelectorAll(".grade-section").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".gtab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById(id).classList.add("on");
+  btn.classList.add("on");
+  var g=id==="g1"?"中1":id==="g2"?"中2":"中3";
+  buildUnits(g);
+  closeUnit();
+}
+
+function openUnit(u){
+  curUnit=u;
+  document.getElementById("unit-title").textContent=u.name;
+  document.getElementById("learn-area").classList.add("on");
+  switchLearn("video",document.querySelectorAll(".ltab")[0]);
+  document.getElementById("learn-area").scrollIntoView({behavior:"smooth"});
+}
+
+function closeUnit(){
+  document.getElementById("learn-area").classList.remove("on");
+  document.querySelectorAll(".unit-btn").forEach(function(b){b.classList.remove("on");});
+  curUnit=null;
+}
+
+function switchLearn(step,btn){
+  document.querySelectorAll(".learn-step").forEach(function(s){s.classList.remove("on");});
+  document.querySelectorAll(".ltab").forEach(function(t){t.classList.remove("on");});
+  document.getElementById("ls-"+step).classList.add("on");
+  if(btn) btn.classList.add("on");
+  if(step==="video") renderVideos();
+  if(step==="quiz"){quizIdx=0;quizScore=0;renderQuiz();}
+  if(step==="deep") renderDeep();
+}
+
+function renderVideos(){
+  if(!curUnit) return;
+  var vl=document.getElementById("video-list");
+  vl.innerHTML="";
+  curUnit.yt.forEach(function(v){
+    var d=document.createElement("div");
+    d.className="yt-card";
+    d.innerHTML="<div class=\"yt-thumb\">&#9654;</div><div class=\"yt-info\"><div class=\"yt-ch\">"+v.ch+"</div><div class=\"yt-title\">"+v.title+"</div><div class=\"yt-desc\">"+v.desc+"</div><a href=\""+v.url+"\" target=\"_blank\" class=\"yt-btn\">&#9654; YouTubeで見る</a></div>";
+    vl.appendChild(d);
+  });
+}
+
+function renderQuiz(){
+  if(!curUnit) return;
+  var qs=curUnit.quiz,qa=document.getElementById("quiz-area");
+  if(quizIdx>=qs.length){
+    var pct=Math.round(quizScore/qs.length*100);
+    qa.innerHTML="<div style=\"text-align:center;padding:16px 0;\"><div style=\"font-size:32px;margin-bottom:8px;\">"+(pct>=80?"&#127881;":pct>=60?"&#128077;":"&#128170;")+"</div><div style=\"font-size:20px;font-weight:700;color:#993556;margin-bottom:6px;\">"+quizScore+" / "+qs.length+" 正解</div><button onclick=\"quizIdx=0;quizScore=0;renderQuiz()\" style=\"padding:8px 18px;border-radius:8px;background:#993556;color:#fff;font-size:13px;border:none;cursor:pointer;\">もう一度</button></div>";
+    return;
+  }
+  document.getElementById("score-disp").textContent=quizScore+"/"+qs.length;
+  document.getElementById("prog-fill").style.width=Math.round(quizScore/qs.length*100)+"%";
+  var q=qs[quizIdx];
+  qa.innerHTML="<div class=\"q-box\"><div class=\"q-en\">&#127468;&#127463; "+q.qe+"</div><div class=\"q-ja\">&#127471;&#127477; "+q.q+"</div><div class=\"opts\">"+q.opts.map(function(o,i){return "<button class=\"opt-btn\" onclick=\"answerQ("+i+")\">"+o+"</button>";}).join("")+"</div><div class=\"exp-box\" id=\"exp-box\"><strong>&#128218; 解説</strong><br>"+q.exp+"<div class=\"exp-en\">"+q.expe+"</div></div></div><button class=\"next-btn\" id=\"nxt-btn\" style=\"display:none;\" onclick=\"nextQ()\">"+(quizIdx<qs.length-1?"次の問題 &#8594;":"結果を見る &#127881;")+"</button>";
+  quizAnswered=false;
+}
+
+function answerQ(i){
+  if(quizAnswered) return;
+  quizAnswered=true;
+  var q=curUnit.quiz[quizIdx];
+  document.querySelectorAll(".opt-btn").forEach(function(b,idx){
+    b.disabled=true;
+    if(idx===q.ans) b.classList.add("correct");
+    else if(idx===i&&i!==q.ans) b.classList.add("wrong");
+  });
+  if(i===q.ans) quizScore++;
+  document.getElementById("exp-box").style.display="block";
+  document.getElementById("nxt-btn").style.display="inline-block";
+  document.getElementById("score-disp").textContent=quizScore+"/"+curUnit.quiz.length;
+  document.getElementById("prog-fill").style.width=Math.round(quizScore/curUnit.quiz.length*100)+"%";
+}
+
+function nextQ(){quizIdx++;renderQuiz();}
+
+function renderDeep(){
+  if(!curUnit) return;
+  var d=curUnit.deep,da=document.getElementById("deep-area");
+  var html="";
+  d.thinks.forEach(function(t){html+="<div class=\"think-q\">&#129504; "+t+"</div>";});
+  html+="<textarea placeholder=\"考えたことを書こう / Write your thoughts...\"></textarea>";
+  html+="<div class=\"world-box\"><strong>&#127758; 世界・熊本とのつながり</strong><br>"+d.world+"</div>";
+  html+="<div style=\"margin-top:12px;\"><a href=\"tool6_study.html\" style=\"display:inline-block;padding:8px 14px;border-radius:8px;background:#993556;color:#fff;font-size:13px;font-weight:600;text-decoration:none;\">&#127891; 他の教科も学ぼう</a></div>";
+  da.innerHTML=html;
+}
+
+buildUnits("中1");
+</script>
+</body>
+</html>
