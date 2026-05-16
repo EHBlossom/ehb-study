@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EHB 学習ナビゲーター | EHB Global Learning</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Noto Sans JP',sans-serif;background:#f8f7f4;color:#1a1a1a;}
+.header{background:#3C3489;color:#fff;padding:20px 24px;}
+.header h1{font-size:20px;font-weight:700;margin-bottom:4px;}
+.header p{font-size:13px;opacity:.85;}
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;margin-top:8px;margin-right:5px;background:#EEEDFE;color:#3C3489;}
+.container{max-width:740px;margin:0 auto;padding:20px 16px;}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+.sec{font-size:15px;font-weight:700;margin-bottom:10px;}
+.sub{font-size:13px;color:#666;line-height:1.65;margin-bottom:10px;}
+
+/* Subject selector */
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:4px;}
+.subj-btn{border:2px solid #e8e6e0;border-radius:10px;padding:14px 8px;cursor:pointer;background:#f8f7f4;text-align:center;transition:all .15s;}
+.subj-btn:hover{background:#fff;}
+.subj-btn.on{border-color:var(--sc);background:var(--sb);}
+.subj-icon{font-size:26px;margin-bottom:5px;}
+.subj-name{font-size:13px;font-weight:700;}
+
+/* Grade / unit tabs */
+.grade-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.gtab{padding:7px 16px;border-radius:20px;border:1.5px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;font-weight:500;transition:all .12s;}
+.gtab.on{color:#fff;}
+
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+.unit-btn{border:1.5px solid #e8e6e0;border-radius:8px;padding:10px 12px;cursor:pointer;background:#f8f7f4;font-size:13px;text-align:left;transition:all .12s;line-height:1.4;}
+.unit-btn:hover{background:#fff;}
+.unit-btn.on{font-weight:600;color:#fff;}
+
+/* Learning area */
+.learn-area{display:none;}
+.learn-area.on{display:block;}
+.learn-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.ltab{padding:8px 16px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;cursor:pointer;color:#666;transition:all .12s;}
+.ltab.on{background:#3C3489;color:#fff;border-color:#3C3489;}
+.learn-step{display:none;}
+.learn-step.on{display:block;}
+
+/* YouTube cards */
+.yt-card{border:1.5px solid #e8e6e0;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;background:#f8f7f4;}
+.yt-thumb{width:52px;height:52px;border-radius:8px;background:#FF0000;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;color:#fff;}
+.yt-info{flex:1;}
+.yt-ch{font-size:11px;font-weight:600;color:#666;margin-bottom:3px;}
+.yt-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:4px;line-height:1.4;}
+.yt-desc{font-size:12px;color:#888;line-height:1.5;}
+.yt-btn{display:inline-block;margin-top:8px;padding:6px 14px;border-radius:6px;background:#FF0000;color:#fff;font-size:12px;font-weight:600;text-decoration:none;}
+.yt-btn:hover{background:#CC0000;}
+
+/* Quiz */
+.quiz-wrap{margin-top:4px;}
+.q-box{background:#f8f7f4;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.q-en{font-size:13px;color:#3C3489;font-weight:600;margin-bottom:4px;line-height:1.5;}
+.q-ja{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:12px;line-height:1.5;}
+.opts{display:grid;gap:7px;}
+.opt-btn{padding:10px 14px;border-radius:8px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;text-align:left;transition:all .12s;}
+.opt-btn:hover:not(:disabled){border-color:#534AB7;background:#EEEDFE;}
+.opt-btn.correct{background:#E1F5EE;border-color:#1D9E75;color:#085041;font-weight:600;}
+.opt-btn.wrong{background:#FAECE7;border-color:#E05A3A;color:#712B13;}
+.opt-btn:disabled{cursor:default;}
+.exp-box{background:#EEEDFE;border-radius:8px;padding:12px 14px;margin-top:10px;font-size:13px;color:#3C3489;line-height:1.7;display:none;}
+.exp-en{font-size:12px;color:#534AB7;margin-top:6px;font-style:italic;}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.score-n{font-size:22px;font-weight:700;color:#3C3489;}
+.prog-bar{flex:1;height:6px;background:#e8e6e0;border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:#3C3489;border-radius:3px;transition:width .4s;}
+.next-btn{padding:8px 20px;border-radius:8px;background:#3C3489;color:#fff;font-size:13px;border:none;cursor:pointer;margin-top:10px;}
+.restart-btn{padding:8px 20px;border-radius:8px;background:#f8f7f4;color:#666;font-size:13px;border:1px solid #ddd;cursor:pointer;margin-top:10px;margin-right:8px;}
+
+/* Deep dive */
+.think-q{background:#FEF6E8;border-left:3px solid #C8830A;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:10px;font-size:14px;line-height:1.65;color:#1a1a1a;}
+.think-en{font-size:12px;color:#BA7517;margin-top:4px;font-style:italic;}
+textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #ddd;background:#f8f7f4;font-size:13px;resize:vertical;min-height:65px;font-family:inherit;margin-top:6px;}
+.world-box{background:#E1F5EE;border-radius:10px;padding:14px 18px;font-size:13px;color:#085041;line-height:1.75;margin-top:10px;}
+.world-title{font-weight:700;margin-bottom:6px;font-size:14px;}
+
+.flow-box{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 14px;background:#EEEDFE;border-radius:8px;margin-bottom:12px;font-size:12px;color:#3C3489;}
+.flow-step{padding:4px 10px;border-radius:20px;background:#534AB7;color:#fff;font-size:11px;font-weight:600;}
+.flow-arrow{color:#888;}
+@media(max-width:600px){.subj-grid{grid-template-columns:repeat(3,1fr);}.unit-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>&#127891; EHB 学習ナビゲーター</h1>
+  <p>中学テスト対策 × YouTube連携 × 英語×教科横断 | English House Blossom</p>
+  <span class="badge">全教科対応</span>
+  <span class="badge">YouTube連携</span>
+  <span class="badge">日英対応</span>
+</div>
+<div class="container">
+
+<div class="card">
+  <div class="flow-box">
+    <span class="flow-step">1 教科</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">2 学年・単元</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">3 動画で理解</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">4 確認クイズ</span>
+    <span class="flow-arrow">&#8594;</span>
+    <span class="flow-step">5 深掘り</span>
+  </div>
+
+  <p class="sec">教科を選ぼう</p>
+  <div class="subj-grid" id="subj-grid"></div>
+</div>
+
+<div class="card" id="unit-card" style="display:none;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <span id="subj-label" style="font-size:16px;font-weight:700;"></span>
+    <button onclick="resetSubj()" style="margin-left:auto;font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;">教科を変える</button>
+  </div>
+  <p class="sub">学年を選んで、単元をタップしよう</p>
+  <div class="grade-tabs" id="grade-tabs"></div>
+  <div class="unit-grid" id="unit-grid"></div>
+</div>
+
+<div class="learn-area" id="learn-area">
+  <div class="card" style="padding:14px 18px;margin-bottom:10px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <span id="unit-label" style="font-size:15px;font-weight:700;flex:1;"></span>
+      <button onclick="resetUnit()" style="font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;background:#f8f7f4;color:#666;cursor:pointer;">単元を変える</button>
+    </div>
+    <div class="learn-tabs">
+      <button class="ltab on" onclick="switchLearn('video',this)">&#9654; 動画で理解</button>
+      <button class="ltab" onclick="switchLearn('quiz',this)">&#129504; 確認クイズ</button>
+      <button class="ltab" onclick="switchLearn('deep',this)">&#127775; 深掘り</button>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="learn-step on" id="ls-video">
+    <div class="card">
+      <p class="sec">&#9654; おすすめ動画で理解しよう</p>
+      <p class="sub">まずこの単元を動画で確認。見た後にクイズと深掘りに進もう！</p>
+      <div id="video-list"></div>
+      <div style="margin-top:12px;background:#f8f7f4;border-radius:8px;padding:10px 14px;font-size:12px;color:#888;">
+        &#128161; 動画を見ながら大事だと思った言葉をメモしておこう。クイズで役立つよ！
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="learn-step" id="ls-quiz">
+    <div class="card">
+      <p class="sec">&#129504; 確認クイズ</p>
+      <div class="score-row">
+        <span class="score-n" id="score-disp">0 / 0</span>
+        <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      </div>
+      <div id="quiz-area"></div>
+    </div>
+  </div>
+
+  <!-- DEEP -->
+  <div class="learn-step" id="ls-deep">
+    <div class="card">
+      <p class="sec">&#127775; 深掘り — なぜ？世界とのつながり</p>
+      <p class="sub">覚えるだけで終わらせない。考えて、書いて、本当の理解にしよう。</p>
+      <div id="deep-area"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+var DB = {
+  subjects: [
+    {key:"sci", name:"理科", icon:"&#128300;", color:"#1D9E75", bg:"#E1F5EE", dark:"#085041"},
+    {key:"soc", name:"社会", icon:"&#127758;", color:"#C8830A", bg:"#FAEEDA", dark:"#633806"},
+    {key:"eng", name:"英語", icon:"&#128172;", color:"#185FA5", bg:"#E6F1FB", dark:"#0C447C"},
+    {key:"math", name:"数学", icon:"&#10006;&#65039;", color:"#993556", bg:"#FAEAF0", dark:"#6B1E38"},
+    {key:"jpn", name:"国語", icon:"&#128394;", color:"#534AB7", bg:"#EEEDFE", dark:"#3C3489"}
+  ],
+  units: {
+    sci: {
+      "中1": [
+        {name:"植物のつくりとはたらき", yt:[
+          {ch:"とある男が授業をしてみた",title:"植物のつくり①〜光合成〜",url:"https://www.youtube.com/results?search_query=葉一+植物+光合成+中学理科",desc:"光合成・蒸散・呼吸のしくみを解説"},
+          {ch:"Try IT 中学理科",title:"植物のからだのつくり",url:"https://www.youtube.com/results?search_query=TryIT+植物+中学理科",desc:"映像授業で整理"}
+        ],quiz:[
+          {q:"光合成が行われる細胞の中の器官は何か？",qe:"Where in plant cells does photosynthesis take place?",opts:["ミトコンドリア","葉緑体","細胞膜","液胞"],ans:1,exp:"葉緑体（クロロプラスト）で光合成が行われる。光エネルギーを使って、CO2と水からデンプンと酸素を作る。",expe:"Photosynthesis occurs in chloroplasts. Plants use light to convert CO2 and water into glucose and oxygen."},
+          {q:"植物が気体を出し入れする穴を何という？",qe:"What are the tiny pores on leaves called through which plants exchange gases?",opts:["道管","師管","気孔","維管束"],ans:2,exp:"気孔（きこう）は葉の裏側に多くある小さな穴。CO2を取り込み、酸素と水蒸気を出す。",expe:"Stomata are tiny pores mostly on the underside of leaves. They allow CO2 in and O2 and water vapor out."},
+          {q:"根から葉へ水や養分を運ぶ管を何という？",qe:"What tube carries water and nutrients from roots to leaves?",opts:["師管","道管","気孔","葉脈"],ans:1,exp:"道管（どうかん）は根→茎→葉へと水や無機塩類を運ぶ。師管は葉で作ったデンプンを全身に運ぶ。",expe:"Xylem tubes transport water and minerals from roots up. Phloem transports sugars made in leaves down."}
+        ],deep:{thinks:[
+          {q:"植物は光合成で酸素を作る。アマゾンが「地球の肺」と呼ばれる理由を光合成と結びつけて説明しよう。",qe:"Explain why the Amazon rainforest is called 'the lungs of the Earth' using your knowledge of photosynthesis."},
+          {q:"気候変動で植物の成長が変化している。食料生産への影響を考えよう。",qe:"Climate change is affecting plant growth. Think about the impact on global food production."}
+        ],world:"熊本は農業が盛ん。トマトやイグサの栽培も光合成のしくみを利用。世界では気候変動で植物の生育環境が変化し食料生産に影響が出始めている（SDG2・13）。"}},
+        {name:"動物のなかま", yt:[
+          {ch:"とある男が授業をしてみた",title:"脊椎動物・無脊椎動物の分類",url:"https://www.youtube.com/results?search_query=葉一+動物+分類+中学理科",desc:"セキツイ動物5グループを整理"},
+          {ch:"さわにい【中高生学習チャンネル】",title:"動物の分類まとめ",url:"https://www.youtube.com/results?search_query=さわにい+動物+分類",desc:"イラスト豊富でわかりやすい解説"}
+        ],quiz:[
+          {q:"背骨を持つ動物をまとめて何類というか？",qe:"What is the collective term for animals that have a backbone?",opts:["無セキツイ動物","セキツイ動物","節足動物","軟体動物"],ans:1,exp:"セキツイ動物は魚類・両生類・ハチュウ類・鳥類・哺乳類の5グループ。背骨（脊椎）を持つ。",expe:"Vertebrates have a backbone and include fish, amphibians, reptiles, birds, and mammals — 5 groups."},
+          {q:"魚類の呼吸器官はどれか？",qe:"What is the breathing organ of fish?",opts:["肺","えら","皮膚","気管"],ans:1,exp:"魚類はえらで水中の酸素を取り込む。両生類は幼生（おたまじゃくし）はえら、成体は肺と皮膚で呼吸。",expe:"Fish breathe through gills. Amphibians use gills as larvae and lungs + skin as adults."},
+          {q:"次のうち哺乳類はどれか？",qe:"Which of the following is a mammal?",opts:["カメ","イルカ","ペンギン","カエル"],ans:1,exp:"イルカは水中生活だが哺乳類。肺呼吸・恒温・胎生・母乳で育てる特徴を持つ。見た目ではなく特徴で分類！",expe:"Dolphins are mammals despite living in water. Key features: lungs, warm-blooded, live birth, nurse young."}
+        ],deep:{thinks:[
+          {q:"イルカはなぜ魚類ではなく哺乳類に分類されるのか？分類の基準を考えよう。",qe:"Why are dolphins classified as mammals and not fish? Think about the criteria for classification."},
+          {q:"生物の多様性が失われると何が起きる？有明海のカブトガニを例に考えよう。",qe:"What happens when biodiversity is lost? Use the horseshoe crab in the Ariake Sea as an example."}
+        ],world:"熊本の有明海には絶滅危惧種のカブトガニが生息。世界では毎年数百種の生物が絶滅しており、SDG15（陸の豊かさを守ろう）でも大きな課題。"}},
+        {name:"光と音", yt:[
+          {ch:"とある男が授業をしてみた",title:"光の反射・屈折とレンズ",url:"https://www.youtube.com/results?search_query=葉一+光+反射+屈折+中学理科",desc:"光の性質とレンズの原理をわかりやすく"},
+          {ch:"Try IT 中学理科",title:"音の性質・速さ",url:"https://www.youtube.com/results?search_query=TryIT+音+光+中学理科",desc:"音と光の比較を映像で解説"}
+        ],quiz:[
+          {q:"光が鏡で跳ね返ることを何という？",qe:"What do we call it when light bounces off a mirror?",opts:["屈折","反射","分散","吸収"],ans:1,exp:"反射は光が物体の表面で跳ね返る現象。入射角＝反射角（反射の法則）。鏡・水面などで起こる。",expe:"Reflection is when light bounces off a surface. The angle of incidence equals the angle of reflection."},
+          {q:"音の速さは約何m/sか？",qe:"Approximately how fast does sound travel through air?",opts:["約340m/s","約3000m/s","約30m/s","約3400m/s"],ans:0,exp:"音速は気温15℃で約340m/s。光速（約30万km/s）より遥かに遅い。雷と稲妻の時間差で距離がわかる！",expe:"Sound travels at about 340m/s at 15°C — much slower than light. That&#39;s why we see lightning before hearing thunder."},
+          {q:"凸レンズで光が一点に集まる点を何という？",qe:"What is the point where a convex lens focuses light called?",opts:["焦点","節点","中心点","屈折点"],ans:0,exp:"焦点（しょうてん）はレンズから焦点距離の位置。カメラ・眼・望遠鏡の原理はすべて凸レンズの焦点を利用。",expe:"The focal point is where parallel rays converge after a convex lens. Used in cameras, eyes, and telescopes."}
+        ],deep:{thinks:[
+          {q:"スマートフォンのカメラは凸レンズの原理を使っている。光の技術が現代社会をどう支えているか考えよう。",qe:"Smartphone cameras use the principle of convex lenses. How does light technology support modern society?"},
+          {q:"音のドップラー効果とは何か？救急車のサイレンを例に説明しよう。",qe:"What is the Doppler effect? Use an ambulance siren as an example to explain."}
+        ],world:"凸レンズの原理はTSMCの半導体製造（フォトリソグラフィー）の核心技術。光を制御する技術が現代のデジタル社会を支えている（SDG9）。"}},
+        {name:"大地の変化（地震・火山）", yt:[
+          {ch:"とある男が授業をしてみた",title:"地震・火山のしくみ",url:"https://www.youtube.com/results?search_query=葉一+地震+火山+地層+中学理科",desc:"地震波・火山噴火・地層を整理"},
+          {ch:"さわにい【中高生学習チャンネル】",title:"地層と岩石の種類",url:"https://www.youtube.com/results?search_query=さわにい+地震+火山+中学理科",desc:"イラストでわかりやすく解説"}
+        ],quiz:[
+          {q:"地震の揺れを伝える波のうち、速い方を何というか？",qe:"What is the name of the faster seismic wave?",opts:["S波","P波","L波","R波"],ans:1,exp:"P波（Primary wave）は縦波で速い。S波（Secondary wave）は横波で遅い。緊急地震速報はP波を検知して発令される。",expe:"P-waves are faster compressional waves. S-waves are slower shear waves. Earthquake early warnings detect P-waves first."},
+          {q:"マグマが地表に噴き出したものを何という？",qe:"What do we call magma that has erupted onto Earth&#39;s surface?",opts:["岩石","溶岩","鉱物","地層"],ans:1,exp:"溶岩（ようがん）はマグマが地表に出たもの。熊本は阿蘇山を持ち、世界最大級のカルデラがある。",expe:"Lava is magma that has reached the surface. Kumamoto has Mt. Aso with one of the world&#39;s largest calderas."},
+          {q:"地層が堆積した順番で、最も古い地層はどこか？",qe:"In undisturbed rock layers, which layer was deposited first?",opts:["一番上","一番下","真ん中","順番はわからない"],ans:1,exp:"地層累重の法則：下にある地層ほど古い。地層を読むことで過去の環境・生物がわかる。",expe:"Law of superposition: lower layers are older. Reading rock layers reveals Earth&#39;s ancient environments."}
+        ],deep:{thinks:[
+          {q:"熊本地震（2016年）は内陸の活断層が原因だった。なぜ日本は世界の地震の約20%が集中するのか？",qe:"The 2016 Kumamoto earthquake was from an inland fault. Why does Japan experience about 20% of the world&#39;s earthquakes?"},
+          {q:"火山は危険だが地熱発電・温泉・豊かな土壌など恩恵もある。リスクと恩恵のバランスをどう考える？",qe:"Volcanoes are dangerous but also provide geothermal energy, hot springs, and rich soil. How do you balance risks and benefits?"}
+        ],world:"熊本地震（2016年）はプレート境界から離れた内陸の活断層が原因。阿蘇山は世界最大級のカルデラを持つ観光資源でもある。防災教育はSDG11（住み続けられるまちづくり）の重要テーマ。"}
+        }
+      ],
+      "中2": [
+        {name:"化学変化と原子・分子", yt:[
+          {ch:"とある男が授業をしてみた",title:"原子と分子・化学式",url:"https://www.youtube.com/results?search_query=葉一+原子+分子+化学式+中学",desc:"原子・分子・化学式の基礎をわかりやすく"},
+          {ch:"Try IT 中学理科",title:"化学変化（酸化・還元）",url:"https://www.youtube.com/results?search_query=TryIT+化学変化+酸化+中学理科",desc:"酸化・還元・化学反応式を映像で解説"}
+        ],quiz:[
+          {q:"水を分解すると何ができるか？",qe:"What are the products when water is decomposed by electrolysis?",opts:["水素と炭素","酸素と炭素","水素と酸素","窒素と酸素"],ans:2,exp:"水（H2O）を電気分解すると水素（H2）と酸素（O2）ができる。水素は燃料電池にも使われる次世代エネルギー。",expe:"Water (H2O) decomposes into hydrogen (H2) and oxygen (O2). Hydrogen is used in fuel cells as clean energy."},
+          {q:"鉄が酸素と結びつく変化を何という？",qe:"What is the term for iron combining with oxygen?",opts:["還元","中和","酸化","分解"],ans:2,exp:"酸化は物質が酸素と結びつく変化。鉄の酸化（さびる）、銅の酸化（黒くなる）などが代表例。",expe:"Oxidation is when a substance combines with oxygen. Iron rusting and copper darkening are common examples."},
+          {q:"化学変化の前後で変わらないものは何か？",qe:"What is conserved before and after a chemical reaction?",opts:["体積","色","質量","においの強さ"],ans:2,exp:"質量保存の法則：化学変化の前後で物質全体の質量は変わらない。原子の種類と数が変わらないため。",expe:"Law of conservation of mass: total mass is unchanged. The number and type of atoms stay the same."}
+        ],deep:{thinks:[
+          {q:"水素を燃料として使うと水しか出ない。なぜ水素は「夢のエネルギー」と呼ばれるのか？",qe:"Hydrogen fuel only produces water when burned. Why is hydrogen called a 'dream energy source'?"},
+          {q:"鉄がさびると重くなる。なぜ？質量保存の法則と矛盾しないのはなぜか？",qe:"Iron gets heavier when it rusts. Why? Explain why this doesn&#39;t contradict the law of conservation of mass."}
+        ],world:"熊本のTSMC工場では半導体製造に高純度の化学物質が使われる。水素エネルギーは日本が世界で最も力を入れている分野の一つ（SDG7：クリーンエネルギー）。"}},
+        {name:"電流とその利用", yt:[
+          {ch:"とある男が授業をしてみた",title:"電流・電圧・抵抗（オームの法則）",url:"https://www.youtube.com/results?search_query=葉一+オームの法則+中学理科",desc:"オームの法則を計算例付きで解説"},
+          {ch:"さわにい【中高生学習チャンネル】",title:"直列回路・並列回路",url:"https://www.youtube.com/results?search_query=さわにい+直列+並列+電流",desc:"回路の計算を図解で丁寧に解説"}
+        ],quiz:[
+          {q:"電圧6V、電流2Aのとき、抵抗は何Ωか？",qe:"If voltage is 6V and current is 2A, what is the resistance?",opts:["2Ω","3Ω","8Ω","12Ω"],ans:1,exp:"オームの法則：抵抗（Ω）＝電圧（V）÷電流（A）＝6÷2＝3Ω。V=IRで覚えよう。",expe:"Ohm's Law: Resistance (Ω) = Voltage (V) ÷ Current (A) = 6 ÷ 2 = 3Ω. Remember: V = IR."},
+          {q:"直列回路では、電流はどうなるか？",qe:"In a series circuit, how does current behave?",opts:["場所によって異なる","つながった部分はすべて同じ","電圧に比例する","抵抗に比例する"],ans:1,exp:"直列回路では回路のどこでも電流は同じ。並列回路では各枝の電流が分かれ、合計が全体の電流になる。",expe:"In a series circuit, current is the same throughout. In parallel, current splits between branches."},
+          {q:"電力（W）を求める式はどれか？",qe:"Which formula correctly calculates electric power?",opts:["電力＝電流×抵抗","電力＝電圧×電流","電力＝電圧÷電流","電力＝電流²×時間"],ans:1,exp:"電力（W）＝電圧（V）×電流（A）。1W＝1V×1A。電気代の計算にも使われる！",expe:"Electric power (W) = Voltage (V) × Current (A). This is how we calculate electricity costs!"}
+        ],deep:{thinks:[
+          {q:"電力会社が「節電」を呼びかけるのはなぜか？電力需要と発電の関係から考えよう。",qe:"Why do power companies ask people to save electricity? Think about electricity demand and generation."},
+          {q:"太陽光発電や風力発電が増えると、電力の安定供給はどう変わる？",qe:"How does increasing solar and wind power affect the stability of electricity supply?"}
+        ],world:"熊本では2016年の地震で長期停電が発生。電気のある生活の大切さと再生可能エネルギーへの移行が世界的な課題（SDG7）。TSMCの工場は大量の電力を消費するが、それも地域経済を支える。"}},
+        {name:"天気とその変化", yt:[
+          {ch:"とある男が授業をしてみた",title:"前線・高気圧・低気圧",url:"https://www.youtube.com/results?search_query=葉一+天気+前線+高気圧+中学理科",desc:"天気の変化の仕組みをわかりやすく"},
+          {ch:"Try IT 中学理科",title:"日本の天気の特徴と季節",url:"https://www.youtube.com/results?search_query=TryIT+天気+気象+中学理科",desc:"四季と天気の関係を映像で解説"}
+        ],quiz:[
+          {q:"寒気が暖気の下に潜り込む前線を何という？",qe:"What front forms where cold air pushes under warm air?",opts:["温暖前線","寒冷前線","閉塞前線","停滞前線"],ans:1,exp:"寒冷前線は寒気が暖気の下に潜り込む。通過後は気温が急激に下がり、強い雨が短時間降る。",expe:"A cold front occurs where cold air wedges under warm air. After it passes, temperature drops sharply and heavy rain occurs briefly."},
+          {q:"日本の夏に張り出す太平洋高気圧の影響はどれか？",qe:"What effect does the Pacific High have on Japan in summer?",opts:["大雪が降る","南東から暖湿気が流れ込み猛暑になる","梅雨が長引く","台風が来なくなる"],ans:1,exp:"太平洋高気圧が発達すると南東から暖湿気が流れ込む。熊本の猛暑・熱帯夜もこのため。",expe:"When the Pacific High develops, hot humid air flows from the southeast, causing intense heat in Kumamoto."},
+          {q:"雲ができる仕組みとして正しいのはどれか？",qe:"Which correctly explains how clouds form?",opts:["水が蒸発して水蒸気になる","空気が上昇して冷え水蒸気が凝結する","気温が上がって水分が増える","風が水を運んでくる"],ans:1,exp:"空気が上昇すると気温が下がり、水蒸気が水滴や氷晶になって雲ができる。山の風上側に雨が多い理由もこれ。",expe:"As air rises and cools, water vapor condenses into tiny droplets forming clouds. Mountains cause more rain on their windward side."}
+        ],deep:{thinks:[
+          {q:"2020年の熊本豪雨で球磨川が氾濫した。気候変動と線状降水帯の関係を調べよう。",qe:"The Kuma River flooded in the 2020 Kumamoto floods. Research the connection between climate change and linear precipitation bands."},
+          {q:"AI気象予報はどこまで正確になれるか？予測の限界と可能性を考えよう。",qe:"How accurate can AI weather forecasting become? Think about the limits and possibilities of prediction."}
+        ],world:"2020年の熊本豪雨は気候変動で強まった線状降水帯が原因とも言われる。気象予報の精度向上はAIと連携し（SDG13・SDG9）命を守る技術として進化している。"}},
+        {name:"酸とアルカリ・中和", yt:[
+          {ch:"とある男が授業をしてみた",title:"酸・アルカリ・pH・中和反応",url:"https://www.youtube.com/results?search_query=葉一+酸+アルカリ+中和+pH+中学理科",desc:"pH・中和・イオンをわかりやすく解説"},
+          {ch:"Try IT 中学理科",title:"イオンと酸・アルカリ",url:"https://www.youtube.com/results?search_query=TryIT+酸+アルカリ+pH+中学理科",desc:"酸とアルカリの性質を映像で解説"}
+        ],quiz:[
+          {q:"酸性の水溶液で青色リトマス紙はどうなるか？",qe:"What happens to blue litmus paper in an acidic solution?",opts:["青色のまま","赤に変わる","緑になる","消える"],ans:1,exp:"酸性：青→赤、pH7未満。アルカリ性：赤→青、pH7超。中性：pH7。レモン汁は酸性、石鹸はアルカリ性。",expe:"Acids turn blue litmus red (pH below 7). Bases turn red litmus blue (pH above 7). Lemon is acidic, soap is basic."},
+          {q:"酸とアルカリを混ぜると何が起きるか？",qe:"What happens when an acid and a base are mixed?",opts:["爆発する","中和して塩と水ができる","蒸発する","固体になる"],ans:1,exp:"中和：酸＋アルカリ→塩＋水。例：塩酸＋水酸化ナトリウム→食塩＋水。胃酸と制酸剤も中和の例。",expe:"Neutralization: acid + base → salt + water. Example: HCl + NaOH → NaCl + H₂O. Like stomach acid + antacids."},
+          {q:"pHが2の水溶液はどんな性質か？",qe:"What is the nature of a solution with pH 2?",opts:["強いアルカリ性","弱い酸性","中性","強い酸性"],ans:3,exp:"pHは0に近いほど強酸性、14に近いほど強アルカリ性、7が中性。pH2は強い酸性（胃酸はpH1〜2）。",expe:"pH 0 = strongly acidic, 14 = strongly basic, 7 = neutral. pH 2 is strongly acidic — like stomach acid (pH 1-2)."}
+        ],deep:{thinks:[
+          {q:"酸性雨はなぜ問題なのか？森林・建造物・生態系への影響を考えよう。",qe:"Why is acid rain a problem? Consider its effects on forests, buildings, and ecosystems."},
+          {q:"熊本の阿蘇山の火山ガス（SO₂）は酸性雨の原因になる。自然由来と人間由来の酸性雨の違いは？",qe:"Mt. Aso&#39;s volcanic gases cause acid rain. How does naturally-caused acid rain differ from human-caused acid rain?"}
+        ],world:"酸性雨（pH5.6以下）は大気汚染が原因で森林・建造物・魚類を死滅させる。SDG15（陸の豊かさ）とSDG14（海の豊かさ）に深く関連している。"}
+        }
+      ],
+      "中3": [
+        {name:"運動とエネルギー", yt:[
+          {ch:"とある男が授業をしてみた",title:"力と運動・慣性の法則",url:"https://www.youtube.com/results?search_query=葉一+力+運動+慣性+中学理科",desc:"ニュートンの運動の法則をわかりやすく"},
+          {ch:"Try IT 中学理科",title:"仕事とエネルギー",url:"https://www.youtube.com/results?search_query=TryIT+仕事+エネルギー+中学理科",desc:"エネルギーの移り変わりを映像で解説"}
+        ],quiz:[
+          {q:"物体に力を加えなければ、静止した物体はどうなるか？",qe:"What happens to a stationary object if no force is applied to it?",opts:["ゆっくり動き出す","その場に静止し続ける","重力で動く","磁力に引かれる"],ans:1,exp:"慣性の法則（ニュートンの第1法則）：力が働かない限り静止した物体は静止し続け、動いている物体は等速直線運動を続ける。",expe:"Newton&#39;s First Law: An object at rest stays at rest, and an object in motion stays in motion, unless acted upon by a force."},
+          {q:"仕事（J）を求める式はどれか？",qe:"Which formula correctly calculates work done?",opts:["仕事＝質量×速さ","仕事＝力×距離","仕事＝エネルギー×時間","仕事＝速さ÷時間"],ans:1,exp:"仕事（J）＝力（N）×距離（m）。仕事の原理：道具を使っても仕事の量は変わらない。",expe:"Work (J) = Force (N) × Distance (m). The work principle: using a tool doesn&#39;t change the total amount of work."},
+          {q:"エネルギー保存の法則とは何か？",qe:"What does the law of conservation of energy state?",opts:["エネルギーは使うと消える","エネルギーの総量は常に一定","運動エネルギーは増え続ける","位置エネルギーは変わらない"],ans:1,exp:"エネルギーは形を変えるが、総量は変わらない。運動⇔位置、電気⇔熱など変換される。",expe:"Energy cannot be created or destroyed — it only changes form. Kinetic ⇔ potential, electrical ⇔ thermal, etc."}
+        ],deep:{thinks:[
+          {q:"電気自動車の「回生ブレーキ」はなぜブレーキをかけると発電できるのか？エネルギー変換の観点から説明しよう。",qe:"Why can EV 'regenerative braking' generate electricity? Explain using energy conversion."},
+          {q:"再生可能エネルギーは「エネルギーを作る」のではなく「変換する」。この違いを考えよう。",qe:"Renewable energy 'converts' rather than 'creates' energy. Think about what this distinction means."}
+        ],world:"再生可能エネルギー（太陽光・風力）は光や風の運動エネルギーを電気に変える。日本のエネルギー自給率は約13%（2022年）。SDG7の課題として熊本でも考えられる身近な問題。"}},
+        {name:"生命の連続性・遺伝", yt:[
+          {ch:"とある男が授業をしてみた",title:"遺伝とDNA・メンデルの法則",url:"https://www.youtube.com/results?search_query=葉一+遺伝+DNA+メンデル+中学理科",desc:"DNA・遺伝子・メンデルの法則を解説"},
+          {ch:"Try IT 中学理科",title:"細胞分裂と遺伝",url:"https://www.youtube.com/results?search_query=TryIT+遺伝+中学理科",desc:"遺伝の仕組みを映像でわかりやすく"}
+        ],quiz:[
+          {q:"遺伝情報を担う物質を何という？",qe:"What molecule carries genetic information?",opts:["タンパク質","RNA","DNA","細胞膜"],ans:2,exp:"DNA（デオキシリボ核酸）は細胞の核の中にある遺伝情報を持つ物質。二重らせん構造。",expe:"DNA (deoxyribonucleic acid) carries genetic information in the cell&#39;s nucleus. It has a double helix structure."},
+          {q:"エンドウで丸（優性）とシワ（劣性）を交配するとF1はどうなる？",qe:"When round (dominant) pea is crossed with wrinkled (recessive), what does F1 look like?",opts:["すべてシワ","すべて丸","半分ずつ","3:1の比"],ans:1,exp:"メンデルの法則：優性の形質（丸）が現れる。F2世代では丸:シワ＝3:1になる（分離の法則）。",expe:"Mendel's Law: The dominant trait (round) appears in F1. In F2, round:wrinkled = 3:1 (Law of Segregation)."},
+          {q:"有性生殖で親の形質が子に伝わる理由は？",qe:"Why do offspring inherit traits from parents in sexual reproduction?",opts:["食事から栄養を受け取るから","染色体（遺伝子）が受け継がれるから","環境が同じだから","体細胞が分裂するから"],ans:1,exp:"染色体の中のDNA（遺伝子）が受精卵に引き継がれる。人は46本の染色体を持ち、精子・卵子それぞれ23本。",expe:"DNA (genes) in chromosomes are passed through fertilization. Humans have 46 chromosomes — 23 from each parent."}
+        ],deep:{thinks:[
+          {q:"ゲノム編集（CRISPR）はDNAを書き換える技術。病気治療に使うことと「デザイナーベビー」問題の違いは？",qe:"CRISPR can rewrite DNA. What is the difference between using it to treat disease versus creating 'designer babies'?"},
+          {q:"遺伝子情報は究極の個人情報ともいえる。DNA情報の活用と倫理的問題を考えよう。",qe:"Genetic information is the ultimate personal data. Discuss the uses and ethical concerns of DNA information."}
+        ],world:"ゲノム編集（CRISPR）は病気の治療・農業革命が期待される一方、倫理的課題も大きい。SDG3（健康）とSDG10（平等）が交差する現代の重要問題。"}},
+        {name:"地球と宇宙", yt:[
+          {ch:"とある男が授業をしてみた",title:"太陽系・惑星の特徴",url:"https://www.youtube.com/results?search_query=葉一+太陽系+惑星+中学理科",desc:"8つの惑星の特徴と太陽系の構造"},
+          {ch:"さわにい【中高生学習チャンネル】",title:"地球の運動・季節の変化",url:"https://www.youtube.com/results?search_query=さわにい+地球+自転+公転",desc:"自転・公転と季節の関係をイラストで解説"}
+        ],quiz:[
+          {q:"地球が1年かけて太陽のまわりを一周する運動を何という？",qe:"What is Earth&#39;s yearly journey around the Sun called?",opts:["自転","公転","歳差運動","偏西風"],ans:1,exp:"公転（revolution）は地球が太陽のまわりを1年で一周する運動。自転（rotation）は地球が24時間で1回転する動き。",expe:"Revolution: Earth orbits the Sun once per year. Rotation: Earth spins on its axis once every 24 hours."},
+          {q:"日本で夏が暑い主な理由はどれか？",qe:"What is the main reason why Japan is hot in summer?",opts:["太陽に近くなるから","地軸が傾いているから","大気が濃くなるから","太陽が大きくなるから"],ans:1,exp:"地軸が約23.4度傾いているため、夏は太陽の高度が高く昼が長い。太陽との距離は実は冬の方が近い！",expe:"Earth&#39;s axis is tilted 23.4°. In summer, the Sun is higher and days are longer. Earth is actually closer to the Sun in winter!"},
+          {q:"太陽系で最も大きい惑星はどれか？",qe:"Which is the largest planet in our solar system?",opts:["土星","木星","天王星","海王星"],ans:1,exp:"木星（Jupiter）は太陽系最大の惑星。直径は地球の約11倍、質量は地球の約318倍。大赤斑（嵐）が有名。",expe:"Jupiter is the largest planet. Its diameter is 11 times Earth&#39;s. The Great Red Spot is a storm larger than Earth."}
+        ],deep:{thinks:[
+          {q:"もし地球の地軸が傾いていなかったら、季節はどうなる？日本の農業や文化にどんな影響が？",qe:"If Earth&#39;s axis were not tilted, what would happen to seasons? How would this affect Japanese agriculture and culture?"},
+          {q:"宇宙探査に多額の予算を使うことへの賛否を、地球上の課題（貧困・環境）と比べて考えよう。",qe:"Discuss pros and cons of spending large budgets on space exploration versus addressing Earth&#39;s problems like poverty and climate change."}
+        ],world:"JAXAの宇宙探査は国際協力の象徴。火星移住の研究は食料・水・エネルギーなど地球上の課題解決にもつながる技術を生む（SDG9：産業・技術革新）。"}
+        }
+      ]
+    },
+    soc: {
+      "中1": [
+        {name:"世界の地理・気候", yt:[
+          {ch:"とある男が授業をしてみた",title:"世界の気候帯・気候区分",url:"https://www.youtube.com/results?search_query=葉一+世界+気候+地理+中学社会",desc:"6つの気候帯の特徴と分布をわかりやすく"},
+          {ch:"Try IT 中学社会",title:"世界の地理まとめ",url:"https://www.youtube.com/results?search_query=TryIT+世界地理+中学社会",desc:"地形・気候・産業を体系的に解説"}
+        ],quiz:[
+          {q:"赤道付近に分布する、一年中高温多雨の気候帯は？",qe:"Which climate zone near the equator has high temperatures and rainfall all year?",opts:["乾燥帯","温帯","熱帯","亜寒帯"],ans:2,exp:"熱帯は赤道付近に分布。一年中気温が高く降水量が多い。アマゾン・コンゴ盆地・東南アジアに熱帯雨林が広がる。",expe:"Tropical climate is found near the equator — hot and rainy all year. Amazon, Congo, Southeast Asia have tropical rainforests."},
+          {q:"砂漠が多く、降水量がとても少ない気候帯は？",qe:"Which climate zone has very little rainfall and many deserts?",opts:["熱帯","温帯","乾燥帯","寒帯"],ans:2,exp:"乾燥帯はサハラ砂漠・アラビア半島・中央アジアなどに分布。年間降水量500mm以下が目安。",expe:"Dry climate covers the Sahara Desert, Arabian Peninsula, and Central Asia. Less than 500mm of rain per year."},
+          {q:"熊本が属する気候帯はどれか？",qe:"Which climate zone does Kumamoto belong to?",opts:["熱帯","乾燥帯","温帯","亜寒帯"],ans:2,exp:"熊本は温帯（温暖湿潤気候）に属する。四季があり、夏は高温多湿、冬は比較的温暖。農業に適した気候。",expe:"Kumamoto has a temperate climate (humid subtropical). Four seasons, hot humid summers, mild winters — great for farming."}
+        ],deep:{thinks:[
+          {q:"気候帯の違いが食文化や建物に与える影響を具体的に考えよう。日本と熱帯の国を比べてみよう。",qe:"How do differences in climate zones affect food culture and architecture? Compare Japan with a tropical country."},
+          {q:"熊本の近年の猛暑・大雨は世界の気候変動とどうつながっている？",qe:"How do Kumamoto&#39;s recent extreme heat and heavy rains connect to global climate change?"}
+        ],world:"気候帯は農業・文化・生活様式すべてに影響する。気候変動でその境界が変化しつつある。熊本の農産物（トマト・スイカ）も気候に依存しており、SDG13（気候変動対策）は身近な問題。"}},
+        {name:"日本の地理", yt:[
+          {ch:"とある男が授業をしてみた",title:"日本の地形・山地・川",url:"https://www.youtube.com/results?search_query=葉一+日本+地形+地理+中学",desc:"日本の主要な山・川・平野を整理"},
+          {ch:"Try IT 中学社会",title:"日本の気候と農業",url:"https://www.youtube.com/results?search_query=TryIT+日本+気候+農業+中学社会",desc:"地域別の気候特徴と農業を解説"}
+        ],quiz:[
+          {q:"日本最長の川はどれか？",qe:"Which is the longest river in Japan?",opts:["利根川","信濃川","石狩川","木曽川"],ans:1,exp:"信濃川は全長367kmで日本最長。利根川は流域面積が最大。熊本には球磨川・白川などがある。",expe:"Shinano River (367km) is Japan&#39;s longest. Tone River has the largest basin. Kumamoto has the Kuma and Shira rivers."},
+          {q:"熊本県はどの地方に属するか？",qe:"Which region of Japan does Kumamoto belong to?",opts:["中国地方","四国地方","九州地方","近畿地方"],ans:2,exp:"熊本は九州地方の中央に位置する県。農業（トマト・スイカ）と半導体産業（TSMC）で知られる。",expe:"Kumamoto is in Kyushu. Known for agriculture (tomatoes, watermelons) and semiconductors (TSMC)."},
+          {q:"日本の人口が最も集中している地域はどこか？",qe:"Which region of Japan has the highest population density?",opts:["東北地方","北海道","三大都市圏（東京・大阪・名古屋）","九州地方"],ans:2,exp:"三大都市圏に日本の人口の約50%が集中。地方では人口減少・高齢化が課題。",expe:"About 50% of Japan&#39;s population lives in three major metro areas. Rural areas face depopulation and aging."}
+        ],deep:{thinks:[
+          {q:"熊本の人口は増加傾向にある一方、日本全体では人口が減っている。なぜ熊本だけ違うのか？",qe:"Kumamoto&#39;s population is growing while Japan overall is declining. Why might Kumamoto be different?"},
+          {q:"TSMC進出で菊陽町の人口が急増している。急な人口増加は地域にどんな影響を与える？",qe:"TSMC&#39;s arrival caused rapid population growth in Kikuyo-cho. What are the effects of rapid population growth on a community?"}
+        ],world:"菊陽町（EHBの地元）はTSMCの半導体工場進出で人口増加・国際化が急速に進んでいる。世界の半導体サプライチェーンと地元がつながる具体的な例（SDG8・SDG10）。"}},
+        {name:"アジア・アフリカの地理", yt:[
+          {ch:"とある男が授業をしてみた",title:"アジア各地の特色",url:"https://www.youtube.com/results?search_query=葉一+アジア+地理+中学社会",desc:"東アジア・東南アジア・南アジアの特色"},
+          {ch:"Try IT 中学社会",title:"アフリカ州の地理と課題",url:"https://www.youtube.com/results?search_query=TryIT+アジア+アフリカ+地理+中学",desc:"アフリカの地理・課題を映像で解説"}
+        ],quiz:[
+          {q:"東南アジアの国々が加盟する地域機構はどれか？",qe:"What regional organization do Southeast Asian countries belong to?",opts:["EU","ASEAN","OPEC","G7"],ans:1,exp:"ASEAN（東南アジア諸国連合）は10か国が加盟。タイ・ベトナム・シンガポールなど。熊本のTSMCも台湾・東南アジアとつながる。",expe:"ASEAN has 10 members including Thailand, Vietnam, Singapore. Kumamoto&#39;s TSMC connects to this region."},
+          {q:"中国の人口は約何人か？",qe:"Approximately how many people live in China?",opts:["約5億人","約10億人","約14億人","約20億人"],ans:2,exp:"中国は2023年にインドに抜かれるまで世界最大の人口国。約14億人。高齢化が進む。",expe:"China had the world&#39;s largest population until India surpassed it in 2023. About 1.4 billion people. Aging is accelerating."},
+          {q:"アフリカ大陸の多くの国が独立したのは主にいつ頃か？",qe:"When did most African countries gain independence?",opts:["19世紀","20世紀前半","1960年代（アフリカの年）","21世紀"],ans:2,exp:"1960年は「アフリカの年」と呼ばれ、17か国が独立。それ以前はヨーロッパ諸国の植民地だった。",expe:"1960 is called 'The Year of Africa' — 17 countries gained independence. Before that, most were European colonies."}
+        ],deep:{thinks:[
+          {q:"アフリカは豊富な資源を持つのに貧しい国が多い。「資源の呪い」という言葉の意味を考えよう。",qe:"Africa is rich in resources yet many countries remain poor. Research and discuss the concept of the 'resource curse.'"},
+          {q:"熊本とASEAN諸国のつながりを、TSMCや農産物輸出の観点から考えよう。",qe:"How is Kumamoto connected to ASEAN countries? Consider TSMC and agricultural exports."}
+        ],world:"アフリカは若い人口（平均年齢19歳）を持ち2050年には世界人口の4分の1になる予測。日本企業のアフリカ進出も増加中。SDG1・2・4・8すべてがアフリカで交差する現代の最重要地域。"}
+        }
+      ],
+      "中2": [
+        {name:"歴史：古代〜中世", yt:[
+          {ch:"とある男が授業をしてみた",title:"縄文・弥生〜奈良・平安時代",url:"https://www.youtube.com/results?search_query=葉一+縄文+弥生+奈良+平安+中学歴史",desc:"日本古代史の流れを整理"},
+          {ch:"Try IT 中学歴史",title:"鎌倉幕府〜室町時代",url:"https://www.youtube.com/results?search_query=TryIT+鎌倉+室町+中学歴史",desc:"武家政治の始まりを映像で解説"}
+        ],quiz:[
+          {q:"聖徳太子が制定した十七条の憲法はいつ頃か？",qe:"When was Prince Shotoku's Seventeen-Article Constitution established?",opts:["604年","710年","794年","1192年"],ans:0,exp:"十七条の憲法（604年）は日本最初の成文法。「和をもって貴しとなす」など仏教・儒教の考えが基本。",expe:"The Seventeen-Article Constitution (604 AD) was Japan&#39;s first written law, based on Buddhism and Confucianism."},
+          {q:"鎌倉幕府を開いたのは誰か？",qe:"Who established the Kamakura Shogunate?",opts:["平清盛","源頼朝","足利尊氏","徳川家康"],ans:1,exp:"源頼朝（みなもとのよりとも）が1185年（または1192年）に鎌倉幕府を開いた。武士が政治の中心となる時代の始まり。",expe:"Minamoto no Yoritomo established the Kamakura Shogunate in 1185. This began the era of samurai-centered government."},
+          {q:"室町幕府の将軍で金閣を建てたのは誰か？",qe:"Which Muromachi Shogun built Kinkakuji (the Golden Pavilion)?",opts:["足利尊氏","足利義満","足利義政","足利義輝"],ans:1,exp:"足利義満（あしかがよしみつ）が1397年に建立。日明貿易（勘合貿易）を開き、文化と経済を発展させた。",expe:"Ashikaga Yoshimitsu built it in 1397. He also opened trade with Ming China, developing culture and economy."}
+        ],deep:{thinks:[
+          {q:"日本の古代は中国・朝鮮から仏教・漢字・制度を取り入れた「開かれた国」だった。現代の国際化と比べてみよう。",qe:"Ancient Japan actively adopted Buddhism, Chinese characters, and institutions from China and Korea. Compare this to modern globalization."},
+          {q:"武士（サムライ）の文化は現代の日本にどう残っているか？グローバルに見た「武士道」の影響を考えよう。",qe:"How does samurai culture remain in modern Japan? Consider the global influence of 'Bushido.'"}
+        ],world:"日本の古代・中世は中国・朝鮮半島から積極的に学んだ「開かれた国」だった。現代の「令和の開国」（TSMC進出など）と歴史的につながる。グローバル化は今始まったことではない。"}},
+        {name:"歴史：戦国〜安土桃山", yt:[
+          {ch:"とある男が授業をしてみた",title:"織田信長・豊臣秀吉の時代",url:"https://www.youtube.com/results?search_query=葉一+戦国時代+織田信長+豊臣秀吉+中学歴史",desc:"戦国〜安土桃山時代の流れを整理"},
+          {ch:"Try IT 中学歴史",title:"南蛮貿易・鉄砲伝来",url:"https://www.youtube.com/results?search_query=TryIT+戦国+安土桃山+中学歴史",desc:"外来技術が日本を変えた時代を解説"}
+        ],quiz:[
+          {q:"長篠の戦いで鉄砲を効果的に使い勝利したのは誰か？",qe:"Who effectively used firearms at the Battle of Nagashino?",opts:["武田信玄","徳川家康","織田信長","上杉謙信"],ans:2,exp:"織田信長は1575年の長篠の戦いで三段撃ちの鉄砲を使い、武田の騎馬隊を打ち破った。",expe:"Oda Nobunaga used rotating firearms volleys at Nagashino (1575), defeating the Takeda cavalry."},
+          {q:"豊臣秀吉が行った全国の土地調査を何という？",qe:"What was the name of Toyotomi Hideyoshi&#39;s nationwide land survey?",opts:["検地（太閤検地）","地租改正","班田収授法","墾田永年私財法"],ans:0,exp:"太閤検地（1582〜）は全国の土地を調査し石高を確定。兵農分離の基礎となった。",expe:"Taiko Kenchi (1582—) surveyed all land and established rice yields, leading to separation of farmers and warriors."},
+          {q:"鉄砲が日本に伝来したのはいつか？",qe:"When were firearms introduced to Japan?",opts:["1333年","1467年","1543年","1603年"],ans:2,exp:"1543年、種子島にポルトガル人が漂着し鉄砲を伝えた。これが戦国時代の戦い方を一変させた。",expe:"In 1543, Portuguese sailors drifted to Tanegashima and introduced firearms, completely changing warfare in the Sengoku period."}
+        ],deep:{thinks:[
+          {q:"外来技術（鉄砲）が日本の戦い方を一変させた。現代の外来技術（AI・半導体）と比べてみよう。",qe:"Imported technology (firearms) changed Japanese warfare. Compare this to modern imported technologies like AI and semiconductors."},
+          {q:"豊臣秀吉は農民の出身で天下を取った。現代の「実力主義」社会とどうつながるか考えよう。",qe:"Toyotomi Hideyoshi rose from a peasant to ruler. How does this connect to modern meritocracy?"}
+        ],world:"戦国時代は南蛮貿易（グローバル化）が社会を変えた。現代のTSMC進出も外からの技術・資本が熊本を変える点で歴史と重なる。"}},
+        {name:"歴史：江戸〜明治", yt:[
+          {ch:"とある男が授業をしてみた",title:"江戸幕府・鎖国と開国",url:"https://www.youtube.com/results?search_query=葉一+江戸幕府+鎖国+開国+中学歴史",desc:"江戸時代の政治・社会から明治維新まで"},
+          {ch:"Try IT 中学歴史",title:"明治維新と近代化",url:"https://www.youtube.com/results?search_query=TryIT+明治維新+近代化+中学歴史",desc:"近代日本の始まりを体系的に解説"}
+        ],quiz:[
+          {q:"江戸幕府が外国との交流を制限した政策を何という？",qe:"What was the Japanese isolation policy called?",opts:["開国","鎖国","廃藩置県","版籍奉還"],ans:1,exp:"鎖国（さこく）：江戸時代にオランダと中国のみとの交易を長崎に限定した政策（17世紀〜1854年）。",expe:"Sakoku (Isolation Policy): Japan limited trade to only Dutch and Chinese, only at Nagasaki (17th century to 1854)."},
+          {q:"1868年に始まった近代国家建設を何という？",qe:"What modernization process began in 1868?",opts:["大化の改新","明治維新","大正デモクラシー","昭和恐慌"],ans:1,exp:"明治維新（1868〜）：廃藩置県・四民平等・欧米の制度・技術の導入など急速な近代化。",expe:"Meiji Restoration (1868—): Rapid modernization including abolishing feudal domains and adopting Western systems."},
+          {q:"明治政府が欧米から積極的に取り入れたものはどれか？",qe:"What did the Meiji government actively adopt from Western countries?",opts:["封建制度","鎖国政策","近代的な法律・軍隊・教育制度","農奴制"],ans:2,exp:"殖産興業・富国強兵：欧米から憲法・軍隊・鉄道・工場・学校制度を取り入れ、急速に近代化を進めた。",expe:"Japan rapidly adopted Western constitutions, military, railways, factories, and school systems — 'Rich country, strong army.'"}
+        ],deep:{thinks:[
+          {q:"日本はなぜ他のアジアの国々より早く近代化できたのか？地理・政治・文化の面から考えよう。",qe:"Why was Japan able to modernize faster than most other Asian countries? Consider geography, politics, and culture."},
+          {q:"鎖国から開国への転換は、今の日本の「グローバル化」とどうつながっている？",qe:"How does Japan&#39;s shift from isolation to opening connect to today's globalization?"}
+        ],world:"明治維新は開発途上国の手本とされた。韓国・中国も近代化の過程で明治日本を参考にした。現代の菊陽町へのTSMC進出も「令和の開国」とも言える現象。"}
+        }
+      ],
+      "中3": [
+        {name:"歴史：大正〜昭和・戦争", yt:[
+          {ch:"とある男が授業をしてみた",title:"大正デモクラシー・太平洋戦争",url:"https://www.youtube.com/results?search_query=葉一+大正デモクラシー+太平洋戦争+中学歴史",desc:"20世紀の日本史を整理"},
+          {ch:"Try IT 中学歴史",title:"第二次世界大戦と日本",url:"https://www.youtube.com/results?search_query=TryIT+大正+昭和+戦争+中学歴史",desc:"戦争の原因と経過を映像で解説"}
+        ],quiz:[
+          {q:"第一次世界大戦が始まったのは何年か？",qe:"In what year did World War I begin?",opts:["1904年","1914年","1939年","1945年"],ans:1,exp:"第一次世界大戦（1914〜1918年）はサラエボ事件がきっかけ。日本はイギリスと同盟を結び連合国側として参戦。",expe:"WWI (1914-1918) was triggered by the assassination in Sarajevo. Japan joined the Allied side due to its alliance with Britain."},
+          {q:"日本が真珠湾を攻撃し太平洋戦争が始まったのは何年か？",qe:"In what year did Japan attack Pearl Harbor?",opts:["1937年","1939年","1941年","1945年"],ans:2,exp:"1941年12月8日に日本軍がハワイの真珠湾を攻撃。太平洋戦争が始まり1945年8月に終戦。",expe:"Japan attacked Pearl Harbor on December 8, 1941, beginning the Pacific War. It ended in August 1945."},
+          {q:"1945年8月6日と9日に何が起きたか？",qe:"What happened on August 6 and 9, 1945?",opts:["終戦記念日","広島・長崎への原爆投下","沖縄戦終結","玉音放送"],ans:1,exp:"8月6日広島、9日長崎に原子爆弾が投下。合わせて21万人以上が亡くなった。核兵器廃絶運動の原点。",expe:"Atomic bombs were dropped on Hiroshima (Aug 6) and Nagasaki (Aug 9). Over 210,000 died. The origin of the nuclear abolition movement."}
+        ],deep:{thinks:[
+          {q:"広島・長崎の原爆体験は世界の核廃絶運動につながっている。2017年の核兵器禁止条約に日本が署名しない理由を考えよう。",qe:"Hiroshima and Nagasaki connect to global nuclear abolition. Why hasn't Japan signed the 2017 Nuclear Ban Treaty?"},
+          {q:"戦争はなぜ起きるのか？第二次世界大戦の原因を、現代の国際紛争と比べて考えよう。",qe:"Why do wars happen? Compare the causes of WWII with modern international conflicts."}
+        ],world:"広島・長崎の原爆体験は世界の核廃絶運動（SDG16：平和と公正）の出発点。歴史を知ることが現代の平和を考える力になる。"}},
+        {name:"公民：民主主義と政治", yt:[
+          {ch:"とある男が授業をしてみた",title:"日本国憲法と三権分立",url:"https://www.youtube.com/results?search_query=葉一+日本国憲法+三権分立+公民",desc:"憲法の三原則・三権分立をわかりやすく"},
+          {ch:"Try IT 中学公民",title:"民主主義・選挙・国会",url:"https://www.youtube.com/results?search_query=TryIT+民主主義+選挙+国会+公民",desc:"政治の基本を体系的に解説"}
+        ],quiz:[
+          {q:"日本国憲法の三大原則はどれか？",qe:"What are the three core principles of the Japanese Constitution?",opts:["自由・平等・博愛","国民主権・基本的人権の尊重・平和主義","民主主義・資本主義・法治主義","独立・自由・正義"],ans:1,exp:"①国民主権（主権は国民にある）②基本的人権の尊重③平和主義（戦争放棄）。1947年施行。",expe:"Three principles: ① Popular sovereignty, ② Respect for human rights, ③ Pacifism. Enacted in 1947."},
+          {q:"三権のうち、法律を作るのはどこか？",qe:"Among the three branches, which one makes laws?",opts:["内閣（行政）","裁判所（司法）","国会（立法）","天皇"],ans:2,exp:"国会（立法府）が法律を制定する。内閣（行政）が法律を実行し、裁判所（司法）が法律の適用を判断する。",expe:"The National Diet (legislature) makes laws. The Cabinet implements them. Courts interpret and apply them."},
+          {q:"選挙権が18歳以上に引き下げられたのは何年の選挙から？",qe:"In which year did Japan lower the voting age to 18?",opts:["2010年","2013年","2016年","2019年"],ans:2,exp:"2016年の参院選から18歳以上に選挙権が拡大。若者の政治参加促進が目的。",expe:"Since the 2016 Upper House election, citizens 18 and older can vote. Aimed at increasing youth participation."}
+        ],deep:{thinks:[
+          {q:"18歳選挙権が導入されたが、若者の投票率は低い。なぜ若者は政治に参加しにくいのか？",qe:"The voting age was lowered to 18, but youth turnout remains low. Why do young people find it hard to engage in politics?"},
+          {q:"SNSが選挙に与える影響を、良い面と悪い面から考えよう。フェイクニュースはどう対処する？",qe:"What are the positive and negative effects of social media on elections? How should we deal with fake news?"}
+        ],world:"世界では16歳から選挙権のある国も（オーストリア・スコットランド）。若者の政治参加はSDG16（平和と公正）の重要テーマ。熊本でも菊陽町の急成長に住民がどう意思を示すかは現実の政治課題。"}},
+        {name:"公民：経済と私たちの生活", yt:[
+          {ch:"とある男が授業をしてみた",title:"需要・供給・市場経済",url:"https://www.youtube.com/results?search_query=葉一+経済+需要+供給+公民",desc:"市場経済の基本をわかりやすく解説"},
+          {ch:"Try IT 中学公民",title:"財政・税金・社会保障",url:"https://www.youtube.com/results?search_query=TryIT+経済+市場+公民+中学",desc:"税金と社会保障の仕組みを映像で解説"}
+        ],quiz:[
+          {q:"需要と供給で価格が決まる仕組みを何という？",qe:"What is the mechanism where prices are determined by supply and demand?",opts:["計画経済","市場経済","混合経済","統制経済"],ans:1,exp:"市場経済では需要と供給のバランスで価格が決まる。需要>供給→価格上昇、需要<供給→価格低下。",expe:"In a market economy, prices are set by supply and demand balance. More demand = higher prices, more supply = lower prices."},
+          {q:"消費税は何型の税か？",qe:"What type of tax is consumption tax?",opts:["直接税","間接税","累進課税","固定税"],ans:1,exp:"間接税は税を負担する人と納める人が違う税。消費税は消費者が負担し、事業者が国に納める。",expe:"Indirect taxes are paid by someone other than the bearer. Consumers bear consumption tax, but businesses pay it to the government."},
+          {q:"日本銀行の主な役割はどれか？",qe:"What is the main role of the Bank of Japan?",opts:["家庭にお金を貸す","通貨の発行・金融政策の決定","株式の売買","税金の徴収"],ans:1,exp:"日本銀行は「銀行の銀行・政府の銀行」。紙幣を発行し、金利政策で景気をコントロールする中央銀行。",expe:"The Bank of Japan issues currency and controls the economy through interest rate policy as the central bank."}
+        ],deep:{thinks:[
+          {q:"円安が進むと輸入品の価格が上がり生活に直結する。熊本の生活への影響を具体的に考えよう。",qe:"When the yen weakens, import prices rise, affecting daily life. How specifically does this affect life in Kumamoto?"},
+          {q:"TSMCの進出で熊本の地価・賃金・物価が上昇している。これは誰にとって良くて誰にとって困るのか？",qe:"TSMC&#39;s arrival raised land prices, wages, and prices in Kumamoto. Who benefits and who faces difficulties?"}
+        ],world:"経済は「遠い話」ではなく地元の生活と直結している。菊陽町へのTSMC進出は世界経済と地域経済のつながりを示す生きた教材（SDG8：働きがい・経済成長）。"}
+        }
+      ]
+    }
+    },
+    eng: {
+      "中1": [
+        {name:"be動詞・一般動詞", yt:[
+          {ch:"とある男が授業をしてみた",title:"be動詞の使い方（am/is/are）",url:"https://www.youtube.com/results?search_query=葉一+be動詞+中学英語",desc:"be動詞の肯定・否定・疑問文をわかりやすく"},
+          {ch:"Try IT 中学英語",title:"一般動詞の現在形と三単現",url:"https://www.youtube.com/results?search_query=TryIT+一般動詞+中学英語",desc:"一般動詞の使い方と三単現のsを解説"}
+        ],quiz:[
+          {q:"「彼女は学生です」を英語にすると？",qe:"How do you say '彼女は学生です' in English?",opts:["She student is.","She is a student.","She are a student.","Is she a student."],ans:1,exp:"be動詞は主語によって変わる。I→am、You/複数→are、He/She/It→is。「She is a student.」が正解。",expe:"Be verbs change with subject: I→am, You/plural→are, He/She/It→is. 'She is a student.' is correct."},
+          {q:"「私は犬を飼っていません」を英語にすると？",qe:"How do you say '私は犬を飼っていません'?",opts:["I don&#39;t have a dog.","I doesn&#39;t have a dog.","I not have a dog.","I am not have a dog."],ans:0,exp:"一般動詞の否定文はdo not（don&#39;t）を使う。三人称単数（He/She）の場合はdoes not（doesn&#39;t）。",expe:"To negate a regular verb, use 'do not' (don&#39;t). For He/She, use 'does not' (doesn&#39;t)."},
+          {q:"「あなたは音楽が好きですか？」を英語にすると？",qe:"How do you say 'あなたは音楽が好きですか？'?",opts:["You like music?","Do you like music?","Are you like music?","Does you like music?"],ans:1,exp:"一般動詞の疑問文はDoを文頭に置く。Do you like music? Yes, I do. / No, I don&#39;t. で答える。",expe:"For questions with regular verbs, put 'Do' at the start. Answer: Yes, I do. / No, I don&#39;t."}
+        ],deep:{thinks:[
+          {q:"英語にはなぜ「a / the」（冠詞）があるのに日本語にはないのか？言語の違いを考えよう。",qe:"Why does English have articles (a/the) but Japanese doesn&#39;t? Think about how languages differ."},
+          {q:"日本語と英語で語順が違う（SOVとSVO）。これは思考の違いに影響する？",qe:"Japanese (SOV) and English (SVO) have different word orders. Does this affect how speakers think?"}
+        ],world:"英語は世界で約15億人が使う言語（母語＋第二言語）。熊本の外国人労働者（TSMC関連）との対話にも直接役立つ。バイリンガルであることは異文化理解の入り口。"}},
+        {name:"現在進行形・過去形", yt:[
+          {ch:"とある男が授業をしてみた",title:"現在進行形と過去形",url:"https://www.youtube.com/results?search_query=葉一+現在進行形+過去形+中学英語",desc:"今まさに〜している表現と過去の出来事を学ぼう"},
+          {ch:"Try IT 中学英語",title:"規則動詞・不規則動詞の過去形",url:"https://www.youtube.com/results?search_query=TryIT+現在進行形+過去形+中学英語",desc:"過去形の作り方を丁寧に解説"}
+        ],quiz:[
+          {q:"「私は今音楽を聴いています」を英語にすると？",qe:"How do you say 'I am listening to music now'?",opts:["I listen music now.","I am listening to music now.","I listening to music now.","I was listen to music now."],ans:1,exp:"現在進行形：am/is/are + 動詞のing形。今まさに〜している状態を表す。",expe:"Present progressive: am/is/are + verb-ing. Describes an action happening right now."},
+          {q:"「昨日私は学校に行きました」を英語にすると？",qe:"How do you say 'I went to school yesterday'?",opts:["I go to school yesterday.","I goed to school yesterday.","I went to school yesterday.","I gone to school yesterday."],ans:2,exp:"過去形：不規則動詞は変化する（go→went）。yesterdayは過去の目印。",expe:"Past tense: irregular verbs change form (go→went). 'Yesterday' signals past tense."},
+          {q:"「彼女は昨日テレビを見ませんでした」を英語にすると？",qe:"How do you say 'She did not watch TV yesterday'?",opts:["She didn&#39;t watched TV yesterday.","She not watch TV yesterday.","She didn&#39;t watch TV yesterday.","She doesn&#39;t watched TV yesterday."],ans:2,exp:"過去の否定文：did not（didn&#39;t）+ 動詞の原形。didn&#39;tで過去を示すので原形でOK。",expe:"Past negative: did not (didn&#39;t) + base verb. Didn't already shows past tense, so use base form."}
+        ],deep:{thinks:[
+          {q:"現在進行形は「今この瞬間」を切り取る表現。SNSのライブ配信・速報ニュースでどう使われる？",qe:"Present progressive captures 'this exact moment.' How is it used in live streams and breaking news?"},
+          {q:"英語の不規則動詞（go→went, come→came）はなぜ存在するのか？歴史的背景を調べてみよう。",qe:"Why do English irregular verbs (go→went, come→came) exist? Research the historical reasons."}
+        ],world:"現在進行形は英語ニュース速報で頻用される（例：'Flooding is occurring in Kumamoto.'）。英語で「今」を伝える力はグローバルな発信力の基礎。"}
+        }
+      ],
+      "中2": [
+        {name:"不定詞・動名詞", yt:[
+          {ch:"とある男が授業をしてみた",title:"不定詞と動名詞の違い",url:"https://www.youtube.com/results?search_query=葉一+不定詞+動名詞+中学英語",desc:"to+動詞原形とing形の使い分けを解説"},
+          {ch:"Try IT 中学英語",title:"不定詞の3用法",url:"https://www.youtube.com/results?search_query=TryIT+不定詞+動名詞+中学英語",desc:"名詞的・形容詞的・副詞的用法を解説"}
+        ],quiz:[
+          {q:"「私は英語を勉強したい」を英語にすると？",qe:"How do you say 'I want to study English'?",opts:["I want study English.","I want studying English.","I want to study English.","I want to studying English."],ans:2,exp:"want to + 動詞の原形（不定詞）。want/like/hope/need/decide などは to+動詞原形が続く。",expe:"want to + base verb (infinitive). Verbs like want, hope, need, decide are followed by to + base verb."},
+          {q:"「読書は楽しい」を動名詞を使って英語にすると？",qe:"Using a gerund, how do you say 'Reading books is fun'?",opts:["To reading books is fun.","Read books is fun.","Reading books is fun.","Books reading is fun."],ans:2,exp:"動名詞（Gerund）：動詞にingをつけて名詞として使う。「Reading books（本を読むこと）」が主語。",expe:"Gerund: verb + ing used as a noun. 'Reading books' (= the act of reading books) is the subject."},
+          {q:"enjoyの後に来るのはどちらか？",qe:"Which form follows the verb 'enjoy'?",opts:["to+動詞原形","動名詞（ing形）","動詞の原形","過去形"],ans:1,exp:"enjoy/finish/stop/mindなどは動名詞（ing形）が続く。enjoy to swimは誤り。enjoy swimmingが正解。",expe:"Enjoy, finish, stop, mind are followed by gerunds (verb-ing). 'Enjoy swimming' is correct, not 'enjoy to swim.'"}
+        ],deep:{thinks:[
+          {q:"「I enjoy learning about global issues.」のように、学びたいことを英語で表現してみよう。",qe:"Try expressing what you enjoy learning about using English with gerunds and infinitives."},
+          {q:"不定詞は「目的」「感情の原因」「名詞を修飾」など多用途。英語の柔軟性と日本語の違いを考えよう。",qe:"Infinitives serve many purposes (purpose, emotion cause, noun modification). Compare English flexibility with Japanese."}
+        ],world:"I enjoy learning / I want to understand / I hope to contribute — 学習・志望・貢献を英語で表すとき不定詞と動名詞は必須。国際舞台でのプレゼンやエッセイに直結する表現力。"}},
+        {name:"比較・受動態", yt:[
+          {ch:"とある男が授業をしてみた",title:"比較級・最上級の作り方",url:"https://www.youtube.com/results?search_query=葉一+比較級+最上級+中学英語",desc:"比較表現をパターンで覚えよう"},
+          {ch:"Try IT 中学英語",title:"受動態（be動詞+過去分詞）",url:"https://www.youtube.com/results?search_query=TryIT+受動態+中学英語",desc:"受け身の文を作る方法を詳しく解説"}
+        ],quiz:[
+          {q:"「東京は大阪より大きい」を英語にすると？",qe:"How do you say '東京は大阪より大きい'?",opts:["Tokyo is big than Osaka.","Tokyo is bigger than Osaka.","Tokyo is the biggest than Osaka.","Tokyo bigger than Osaka."],ans:1,exp:"2つを比べるときは比較級（形容詞+er）を使う。big→bigger。「than」と一緒に使う。",expe:"To compare two things, use the comparative (adjective + er). big → bigger. Always use 'than' with comparatives."},
+          {q:"「この本は多くの生徒に読まれている」の受動態は？",qe:"What is the correct passive voice for 'Many students read this book'?",opts:["This book reads by many students.","This book is read by many students.","This book was read many students.","Many students is read this book."],ans:1,exp:"受動態：be動詞＋過去分詞（+by 行為者）。「is read」は現在形の受動態。",expe:"Passive voice: be verb + past participle (+ by agent). 'is read' = present passive."},
+          {q:"「富士山は日本で最も高い山です」を英語にすると？",qe:"How do you say '富士山は日本で最も高い山です'?",opts:["Mt. Fuji is higher mountain in Japan.","Mt. Fuji is the highest mountain in Japan.","Mt. Fuji is highest mountain in Japan.","Mt. Fuji is more high mountain in Japan."],ans:1,exp:"最上級は「the＋形容詞+est」。3つ以上を比べるときに使う。high→highest。",expe:"Superlative: 'the + adjective + est'. Used when comparing 3 or more. high → highest."}
+        ],deep:{thinks:[
+          {q:"受動態は「誰がやったか」を隠すときにも使われる。政治ニュースでどう使われるか例を探してみよう。",qe:"Passive voice can hide who did something. Find examples of how it&#39;s used in political news."},
+          {q:"比較表現は「より良い社会」を議論するときに必須。SDGsの目標を英語で比較してみよう。",qe:"Comparative expressions are essential for discussing 'a better society.' Try comparing SDG goals in English."}
+        ],world:"ニュース英語では受動態が多用される（例：'The policy was approved.'）。批判的メディアリテラシーには英語力が必要。NatGeoやBBCを英語で読む力はここから始まる。"}
+        }
+      ],
+      "中3": [
+        {name:"現在完了形", yt:[
+          {ch:"とある男が授業をしてみた",title:"現在完了形（完了・継続・経験）",url:"https://www.youtube.com/results?search_query=葉一+現在完了形+中学英語",desc:"3つの用法をわかりやすく整理"},
+          {ch:"Try IT 中学英語",title:"現在完了形とforとsince",url:"https://www.youtube.com/results?search_query=TryIT+現在完了形+中学英語",desc:"for・sinceの使い方を丁寧に解説"}
+        ],quiz:[
+          {q:"「私はすでに宿題を終えました」を英語にすると？",qe:"How do you say 'I have already finished my homework'?",opts:["I already finished my homework.","I have already finished my homework.","I had already finished my homework.","I finish my homework already."],ans:1,exp:"現在完了形（完了）：have/has + 過去分詞。already（すでに）と一緒によく使う。",expe:"Present perfect (completion): have/has + past participle. Often used with 'already.'"},
+          {q:"「私は3年間英語を勉強しています」を英語にすると？",qe:"How do you say 'I have studied English for three years'?",opts:["I study English for three years.","I studied English for three years.","I have studied English for three years.","I have been studying English since three years."],ans:2,exp:"現在完了形（継続）：have/has + 過去分詞 + for（期間）/since（起点）。",expe:"Present perfect (continuation): have/has + past participle + for/since. Shows an action continuing up to now."},
+          {q:"「あなたは東京に行ったことがありますか？」を英語にすると？",qe:"How do you say 'Have you ever been to Tokyo'?",opts:["Did you ever go to Tokyo?","Have you ever been to Tokyo?","Do you ever go to Tokyo?","Were you ever in Tokyo?"],ans:1,exp:"現在完了形（経験）：have/has + 過去分詞 + ever/never/before。been to〜で「〜に行ったことがある」。",expe:"Present perfect (experience): have/has + past participle + ever/never. 'Have been to' = have visited."}
+        ],deep:{thinks:[
+          {q:"現在完了形は「過去と現在のつながり」を表す。日本語でこの概念をどう表現するか比べてみよう。",qe:"Present perfect expresses the 'connection between past and present.' How does Japanese express this concept?"},
+          {q:"'I have never been outside Japan, but I want to change that.' この文に込められた思いを英語で膨らませよう。",qe:"Expand on this sentence: 'I have never been outside Japan, but I want to change that.' Write 3-4 sentences."}
+        ],world:"現在完了形は「過去の経験が今につながる」ことを表す。国連・TEDのスピーチでも頻繁に使われる。英語で自分の経験と未来の目標を語るのに不可欠な表現。"}},
+        {name:"仮定法・関係代名詞", yt:[
+          {ch:"とある男が授業をしてみた",title:"関係代名詞who/which/that",url:"https://www.youtube.com/results?search_query=葉一+関係代名詞+中学英語",desc:"関係代名詞の使い方をわかりやすく解説"},
+          {ch:"Try IT 中学英語",title:"仮定法過去（I wish / If I were）",url:"https://www.youtube.com/results?search_query=TryIT+仮定法+中学英語",desc:"仮定法の文を作る方法を丁寧に解説"}
+        ],quiz:[
+          {q:"「これは私が昨日読んだ本です」を関係代名詞を使って英語にすると？",qe:"Using a relative clause, how do you say 'This is the book I read yesterday'?",opts:["This is the book which I read yesterday.","This is the book I reading yesterday.","This is a book that I reads yesterday.","This is the book who I read yesterday."],ans:0,exp:"関係代名詞：先行詞が物→which/that。「the book which I read yesterday」で「昨日読んだ本」を表す。",expe:"Relative pronoun: 'which' or 'that' for things. 'The book which I read yesterday' modifies 'book.'"},
+          {q:"「もし私が鳥だったら空を飛べるのに」を英語にすると？",qe:"How do you say 'If I were a bird, I could fly'?",opts:["If I am a bird, I can fly.","If I were a bird, I could fly.","If I was a bird, I will fly.","If I were a bird, I can fly."],ans:1,exp:"仮定法過去：現実と異なる仮定。If+過去形〜, would/could/might+動詞の原形。be動詞はwerを使う。",expe:"Subjunctive: for unreal situations. If + past tense, would/could + base verb. Use 'were' for all subjects."},
+          {q:"「私には英語を話せる友達がいます」を関係代名詞を使って英語にすると？",qe:"Using a relative clause, say 'I have a friend who can speak English.'",opts:["I have a friend which can speak English.","I have a friend who can speak English.","I have a friend whom can speak English.","I have a friend whose can speak English."],ans:1,exp:"関係代名詞：先行詞が人→who（主格）。「a friend who can speak English」で「英語が話せる友達」。",expe:"Relative pronoun 'who' is used for people (as subject). 'A friend who can speak English' describes which friend."}
+        ],deep:{thinks:[
+          {q:"仮定法は「もし〜なら」という想像の力を言語化したもの。創造的思考と仮定法のつながりを考えよう。",qe:"The subjunctive puts imagination into language. How does 'if thinking' connect to creative problem-solving?"},
+          {q:"「If every country used renewable energy, climate change would slow down.」この文を使って世界への提言を書いてみよう。",qe:"Expand this sentence into a short proposal: 'If every country used renewable energy, climate change would slow down.'"}
+        ],world:"「If every country used renewable energy, climate change would slow down.」仮定法は政策提言・ディベートに欠かせない表現。国連・TEDスピーチでも頻繁に使われる。英語で世界の問題を語る力の土台。"}
+        }
+      ]
+    },
+    math: {
+      "中1": [
+        {name:"正負の数・文字式", yt:[
+          {ch:"とある男が授業をしてみた",title:"正の数・負の数の計算",url:"https://www.youtube.com/results?search_query=葉一+正の数+負の数+中学数学",desc:"プラスマイナスの計算をわかりやすく解説"},
+          {ch:"Try IT 中学数学",title:"文字式の計算",url:"https://www.youtube.com/results?search_query=TryIT+文字式+中学数学",desc:"文字を使った式の計算方法を解説"}
+        ],quiz:[
+          {q:"（-3）×（-4）の答えは？",qe:"What is (-3) × (-4)?",opts:["-12","12","-7","7"],ans:1,exp:"負×負＝正。（-3）×（-4）＝＋12。符号のルール：同符号の積→正、異符号の積→負。",expe:"Negative × Negative = Positive. (-3) × (-4) = +12. Same signs → positive, different signs → negative."},
+          {q:"3a + 2b - a + 5b を整理すると？",qe:"Simplify 3a + 2b - a + 5b.",opts:["2a + 7b","4a + 3b","3a + 7b","2a + 3b"],ans:0,exp:"同類項をまとめる。3a - a = 2a、2b + 5b = 7b。答え：2a + 7b。",expe:"Combine like terms. 3a - a = 2a, 2b + 5b = 7b. Answer: 2a + 7b."},
+          {q:"x = 3 のとき、4x - 5 の値は？",qe:"When x = 3, what is the value of 4x - 5?",opts:["7","17","9","2"],ans:0,exp:"代入：x に 3 を代入する。4×3 - 5 = 12 - 5 = 7。",expe:"Substitute x = 3: 4(3) - 5 = 12 - 5 = 7."}
+        ],deep:{thinks:[
+          {q:"マイナスの数は最初「存在しない」と思われていた。数学の歴史で「負の数」が認められた経緯を調べてみよう。",qe:"Negative numbers were once thought impossible. Research how negative numbers came to be accepted in mathematics."},
+          {q:"文字式はプログラミングの変数と同じ概念。コードを書くとき「x = 3」と書くのは数学の代入と同じ？",qe:"Letter expressions use the same concept as programming variables. Is writing x = 3 in code the same as math substitution?"}
+        ],world:"数学の「文字式」はプログラミングの変数と同じ概念。TSMCの半導体業界でも数学は基礎技術。数学は「学校の勉強」ではなく「世界を動かす道具」。"}},
+        {name:"方程式", yt:[
+          {ch:"とある男が授業をしてみた",title:"一次方程式の解き方",url:"https://www.youtube.com/results?search_query=葉一+一次方程式+移項+中学数学",desc:"移項・等式の性質をわかりやすく解説"},
+          {ch:"Try IT 中学数学",title:"方程式の文章題",url:"https://www.youtube.com/results?search_query=TryIT+方程式+文章題+中学数学",desc:"文章を式に変換する方法を解説"}
+        ],quiz:[
+          {q:"3x + 5 = 14 を解くと？",qe:"Solve 3x + 5 = 14.",opts:["x=2","x=3","x=4","x=6"],ans:1,exp:"3x = 14 - 5 = 9。x = 9 ÷ 3 = 3。方程式は「移項」して文字だけを一方に集める。",expe:"3x = 14 - 5 = 9. x = 9 ÷ 3 = 3. Solve by moving terms to isolate the variable."},
+          {q:"「ある数の3倍から5を引くと13」を方程式で表すと？",qe:"Write the equation for '3 times a number minus 5 equals 13'.",opts:["3x + 5 = 13","3(x-5) = 13","3x - 5 = 13","x - 5 = 13"],ans:2,exp:"「ある数」をxとおく。3倍から5を引くと → 3x - 5 = 13。文章を式に変換！",expe:"Let x = the number. 3 times x minus 5 equals 13 → 3x - 5 = 13."},
+          {q:"比例式 x:4 = 3:6 を解くと？",qe:"Solve the proportion x:4 = 3:6.",opts:["x=1","x=2","x=3","x=4"],ans:1,exp:"比例式：内項の積＝外項の積。6x = 4×3 = 12。x = 2。",expe:"Proportion: product of means = product of extremes. 6x = 12. x = 2."}
+        ],deep:{thinks:[
+          {q:"方程式はプログラミングの「変数」と全く同じ発想。AIやアプリ開発でどう使われているか調べよう。",qe:"Equations use the same idea as programming variables. Research how they are used in AI and app development."},
+          {q:"方程式を使って「お得な買い物」を計算してみよう。2つの店のどちらが安いか方程式で判断できる？",qe:"Use equations to find the best deal. Can you set up an equation to compare prices between two stores?"}
+        ],world:"方程式はプログラミング・データサイエンス・AIの基礎。TSMCの半導体設計エンジニアも日々方程式を解いている。数学は「使える学問」として現代社会を動かしている。"}
+        }
+      ],
+      "中2": [
+        {name:"一次関数", yt:[
+          {ch:"とある男が授業をしてみた",title:"一次関数y=ax+bのグラフ",url:"https://www.youtube.com/results?search_query=葉一+一次関数+中学数学",desc:"傾きと切片の意味・グラフの書き方を丁寧に"},
+          {ch:"Try IT 中学数学",title:"一次関数の式の求め方",url:"https://www.youtube.com/results?search_query=TryIT+一次関数+式+中学数学",desc:"2点から式を求める方法を解説"}
+        ],quiz:[
+          {q:"y = 2x + 3 のグラフの傾きは？",qe:"What is the slope of y = 2x + 3?",opts:["3","2","-2","1"],ans:1,exp:"y = ax + b の a が傾き、b が y 切片。y = 2x + 3 の傾きは 2。xが1増えるとyが2増える。",expe:"In y = ax + b, 'a' is slope and 'b' is y-intercept. Slope = 2 means y increases by 2 when x increases by 1."},
+          {q:"(1, 5) と (3, 9) を通る一次関数の傾きは？",qe:"What is the slope passing through (1,5) and (3,9)?",opts:["1","3","2","4"],ans:2,exp:"傾き＝（yの増加量）÷（xの増加量）＝（9-5）÷（3-1）＝4÷2＝2。",expe:"Slope = (change in y) ÷ (change in x) = (9-5) ÷ (3-1) = 4 ÷ 2 = 2."},
+          {q:"y = -x + 4 のグラフはどのような傾きか？",qe:"How does the graph of y = -x + 4 slope?",opts:["右上がり","右下がり","水平","垂直"],ans:1,exp:"傾きが負（-1）のとき、グラフは右下がりになる。傾きが正のとき右上がり。",expe:"When slope is negative (-1), graph goes downward left to right. Positive slope = upward."}
+        ],deep:{thinks:[
+          {q:"一次関数はビジネスの「売上＝単価×個数」とどう関係する？身近な例で考えよう。",qe:"How does linear function relate to 'sales = price × quantity'? Think of everyday business examples."},
+          {q:"気候変動の気温上昇グラフも一次関数に近い形をしている。データを読む力と数学のつながりを考えよう。",qe:"Global warming trends look like linear functions. How does math help us read and understand climate data?"}
+        ],world:"一次関数はグラフで「変化の傾向」を見せる。SDGsの目標達成度を追跡する国連のデータも、こうした数学で分析されている。データサイエンスの入り口。"}},
+        {name:"連立方程式", yt:[
+          {ch:"とある男が授業をしてみた",title:"連立方程式（加減法・代入法）",url:"https://www.youtube.com/results?search_query=葉一+連立方程式+加減法+代入法+中学数学",desc:"2つの解き方をわかりやすく解説"},
+          {ch:"Try IT 中学数学",title:"連立方程式の文章題",url:"https://www.youtube.com/results?search_query=TryIT+連立方程式+中学数学",desc:"文章題の立式から解答まで解説"}
+        ],quiz:[
+          {q:"連立方程式の解き方として正しいのはどれか？",qe:"Which is a valid method for solving simultaneous equations?",opts:["グラフ法のみ","加減法と代入法","割り算法","掛け算法"],ans:1,exp:"連立方程式の解き方：①加減法（2式を足し引きして1つの文字を消去）②代入法（1式を他の式に代入）。",expe:"Simultaneous equations: ① Elimination (add/subtract to eliminate a variable) ② Substitution (substitute one into another)."},
+          {q:"x+y=5, x-y=1 を解くと？",qe:"Solve: x+y=5, x-y=1.",opts:["x=3, y=2","x=2, y=3","x=4, y=1","x=1, y=4"],ans:0,exp:"加減法：2式を足すと2x=6、x=3。x=3を代入するとy=2。答えx=3, y=2。",expe:"Add equations: 2x=6, x=3. Substitute: 3+y=5, y=2. Answer: x=3, y=2."},
+          {q:"連立方程式の解はグラフで何を表すか？",qe:"What does the solution of simultaneous equations represent on a graph?",opts:["2つの直線の傾き","2つの直線の交点","2つの直線の切片","2つの点の中点"],ans:1,exp:"連立方程式の解は、2つの一次方程式のグラフ（直線）の交点の座標。グラフと代数が一致する！",expe:"The solution is the intersection point of two linear graphs. Algebra and geometry meet at the same point!"}
+        ],deep:{thinks:[
+          {q:"連立方程式は「2つの条件を同時に満たす」。ビジネスで「コストと利益を最適化する」場合とどう同じ？",qe:"Simultaneous equations satisfy two conditions at once. How is this similar to optimizing cost and profit in business?"},
+          {q:"AIの機械学習には大量の連立方程式が使われている。なぜ？",qe:"Machine learning uses massive systems of simultaneous equations. Why?"}
+        ],world:"連立方程式はAIの機械学習アルゴリズムの基礎。ビジネスの線形計画法（コスト最小化・利益最大化）にも使われる。「学校数学」が現代技術の根幹にある。"}
+        }
+      ],
+      "中3": [
+        {name:"二次方程式・関数", yt:[
+          {ch:"とある男が授業をしてみた",title:"二次方程式（因数分解・解の公式）",url:"https://www.youtube.com/results?search_query=葉一+二次方程式+因数分解+解の公式",desc:"二次方程式の3つの解き方を完全解説"},
+          {ch:"Try IT 中学数学",title:"y=ax²の関数とグラフ",url:"https://www.youtube.com/results?search_query=TryIT+二次関数+中学数学",desc:"放物線のグラフと変化の割合を解説"}
+        ],quiz:[
+          {q:"x² - 5x + 6 = 0 を解くと？",qe:"Solve x² - 5x + 6 = 0.",opts:["x=2, x=3","x=-2, x=-3","x=1, x=6","x=2, x=-3"],ans:0,exp:"因数分解：x²-5x+6＝(x-2)(x-3)=0。x=2またはx=3。",expe:"Factor: x²-5x+6 = (x-2)(x-3) = 0. Therefore x=2 or x=3."},
+          {q:"y = 2x² のグラフの形は？",qe:"What shape is the graph of y = 2x²?",opts:["直線","放物線（上向き）","放物線（下向き）","円"],ans:1,exp:"y=ax²のグラフは放物線（パラボラ）。a>0のとき上向き。a=2なのでy=x²より急な上向き放物線。",expe:"y=ax² is a parabola. When a>0, opens upward. Since a=2, it&#39;s steeper than y=x²."},
+          {q:"x²+6x+9 を因数分解すると？",qe:"Factor x²+6x+9.",opts:["(x+3)(x-3)","(x+3)²","(x+9)(x+1)","(x+6)(x+3)"],ans:1,exp:"完全平方式：x²+6x+9＝x²+2×3×x+3²＝(x+3)²。",expe:"Perfect square: x²+6x+9 = x²+2(3)x+3² = (x+3)²."}
+        ],deep:{thinks:[
+          {q:"放物線は橋・ロケットの軌跡・衛星の軌道にも使われる。数学が物理学とどうつながっているか考えよう。",qe:"Parabolas appear in bridges, rocket trajectories, and satellite orbits. How does math connect to physics here?"},
+          {q:"二次方程式の解が「存在しない」場合もある。数学で「答えがない」ことの意味を考えよう。",qe:"Sometimes a quadratic equation has no real solutions. What does it mean when 'there is no answer' in mathematics?"}
+        ],world:"放物線は自動車のヘッドライト・衛星アンテナ・橋の設計に使われる。テクノロジーの中に数学がある。数学は「使える学問」として現代社会を支えている。"}},
+        {name:"三平方の定理", yt:[
+          {ch:"とある男が授業をしてみた",title:"三平方の定理・ピタゴラスの定理",url:"https://www.youtube.com/results?search_query=葉一+三平方の定理+ピタゴラス+中学数学",desc:"三平方の定理の証明と応用を解説"},
+          {ch:"Try IT 中学数学",title:"三平方の定理の応用問題",url:"https://www.youtube.com/results?search_query=TryIT+三平方の定理+中学数学",desc:"応用問題・空間図形への活用を解説"}
+        ],quiz:[
+          {q:"直角三角形で斜辺の長さがcのとき、三平方の定理は？",qe:"For a right triangle with hypotenuse c, what is the Pythagorean theorem?",opts:["a²+b²=c","a+b=c²","a²+b²=c²","a²=b²+c²"],ans:2,exp:"三平方の定理：a²+b²=c²（cが斜辺）。約2500年前にピタゴラスが証明した基本定理。",expe:"Pythagorean theorem: a²+b²=c² (c is hypotenuse). Proven by Pythagoras ~2500 years ago."},
+          {q:"直角三角形で2辺が3と4のとき、斜辺は？",qe:"If two sides of a right triangle are 3 and 4, what is the hypotenuse?",opts:["5","6","7","8"],ans:0,exp:"3²+4²=9+16=25=5²。斜辺は5。3-4-5は最も有名なピタゴラス数。",expe:"3²+4²=9+16=25=5². Hypotenuse=5. The 3-4-5 right triangle is the most famous Pythagorean triple."},
+          {q:"三平方の定理を使う場面はどれか？",qe:"When would you use the Pythagorean theorem?",opts:["円の面積を求める","2点間の距離を求める","平行四辺形の面積を求める","円周の長さを求める"],ans:1,exp:"2点間の距離の公式はまさに三平方の定理の応用。GPS・地図・建築・3DCGに使われる。",expe:"The distance formula between two points directly uses the Pythagorean theorem. Used in GPS, maps, architecture, and 3D graphics."}
+        ],deep:{thinks:[
+          {q:"三平方の定理はGPS（位置情報）に使われている。スマホがどうやって自分の位置を計算するか調べよう。",qe:"The Pythagorean theorem is used in GPS. Research how your smartphone calculates its position."},
+          {q:"三平方の定理は世界中で独立に発見された。古代エジプト・バビロニア・中国・インドでも使われていた理由を考えよう。",qe:"The Pythagorean theorem was discovered independently worldwide. Why was it discovered in ancient Egypt, Babylon, China, and India?"}
+        ],world:"三平方の定理はGPS・建築設計・3DCG・ゲームの衝突判定など現代技術の基礎。スマートフォンが毎秒数千回計算している定理。「古い数学」が現代社会を動かしている。"}
+        }
+      ]
+    },
+    jpn: {
+      "中1": [
+        {name:"文法：品詞・文節", yt:[
+          {ch:"とある男が授業をしてみた",title:"品詞の種類と見分け方",url:"https://www.youtube.com/results?search_query=葉一+品詞+国語+中学",desc:"名詞・動詞・形容詞・副詞など品詞を整理"},
+          {ch:"Try IT 中学国語",title:"文節・単語の区切り方",url:"https://www.youtube.com/results?search_query=TryIT+文節+国語+中学",desc:"文節と単語の区切り方をわかりやすく"}
+        ],quiz:[
+          {q:"「美しい花が咲いた」の「美しい」は何品詞か？",qe:"In the sentence '美しい花が咲いた', what part of speech is '美しい'?",opts:["名詞","形容詞","副詞","動詞"],ans:1,exp:"形容詞は物事の性質・状態を表す語。「〜い」で終わるものが多い（美しい・大きい・楽しい）。",expe:"Adjectives describe the nature or state of things. Many end in 'i' in Japanese (utsukushii, ookii, tanoshii)."},
+          {q:"「ゆっくり歩く」の「ゆっくり」は何品詞か？",qe:"What part of speech is 'ゆっくり' in '彼はゆっくり歩く'?",opts:["形容詞","動詞","副詞","接続詞"],ans:2,exp:"副詞は主に動詞・形容詞・形容動詞を修飾する語。「どのように」「どのくらい」を表す。",expe:"Adverbs modify verbs, adjectives, or other adverbs. They express 'how', 'when', or 'to what extent'."},
+          {q:"「しかし」「そして」「だから」などは何品詞か？",qe:"What part of speech are 'しかし', 'そして', 'だから'?",opts:["動詞","副詞","接続詞","感動詞"],ans:2,exp:"接続詞は文と文、節と節をつなぐ語。「しかし（逆接）」「そして（順接）」「だから（因果）」。",expe:"Conjunctions connect sentences or clauses: しかし=however, そして=and, だから=therefore."}
+        ],deep:{thinks:[
+          {q:"品詞の分類は言語によって異なる。英語と日本語の品詞の違いを探してみよう。",qe:"Parts of speech differ between languages. What differences can you find between Japanese and English grammar?"},
+          {q:"「だから」「しかし」「なぜなら」などの接続詞を使いこなすと、なぜ文章が上手くなるのか？",qe:"Why does skillful use of conjunctions like 'therefore', 'however', 'because' improve writing quality?"}
+        ],world:"言語の文法構造は文化的思考パターンを反映するとも言われる。英語（SVO）と日本語（SOV）の語順の違いは思考の順序とも関係する。グローバルに発信するには両方の文法を使いこなすことが力になる."}},
+        {name:"古典入門：竹取物語・枕草子", yt:[
+          {ch:"とある男が授業をしてみた",title:"竹取物語の読み方",url:"https://www.youtube.com/results?search_query=葉一+竹取物語+古典+中学国語",desc:"日本最古の物語を現代語と比較して読む"},
+          {ch:"Try IT 中学国語",title:"枕草子・徒然草の基礎",url:"https://www.youtube.com/results?search_query=TryIT+竹取物語+古典+中学国語",desc:"古典の読み方と背景を映像で解説"}
+        ],quiz:[
+          {q:"竹取物語は何時代に書かれたか？",qe:"In which period was The Tale of the Bamboo Cutter written?",opts:["奈良時代","平安時代","江戸時代","鎌倉時代"],ans:1,exp:"竹取物語は平安時代（9〜10世紀）に書かれた日本最古の物語文学。作者不詳。「かぐや姫」の物語。",expe:"Written in the Heian period (9th-10th century), Japan&#39;s oldest narrative literature. Author unknown. The story of Princess Kaguya."},
+          {q:"「今は昔」は何を意味するか？",qe:"What does 'ima wa mukashi' mean at the start of Japanese tales?",opts:["現代の話","昔話の始まりを告げる定型句","将来の話","外国の話"],ans:1,exp:"「今は昔」は「昔々のことですが」という意味の古文の定型句。英語の「Once upon a time」に相当。",expe:"'Ima wa mukashi' is a conventional phrase meaning 'Long ago' — the Japanese equivalent of 'Once upon a time.'"},
+          {q:"枕草子を書いたのは誰か？",qe:"Who wrote the Pillow Book (Makura no Soshi)?",opts:["紫式部","清少納言","小野小町","与謝野晶子"],ans:1,exp:"清少納言（せいしょうなごん）が平安時代中期に書いた随筆。「春はあけぼの」で始まる日本最古の随筆文学。",expe:"Sei Shonagon wrote this essay collection in the mid-Heian period. 'In spring, it is the dawn' is its famous opening."}
+        ],deep:{thinks:[
+          {q:"竹取物語は現代のSF・ファンタジーの原型とも言える。月から来た存在・不老不死の薬など現代的テーマがある。",qe:"The Tale of the Bamboo Cutter is a prototype of modern sci-fi and fantasy. What modern themes does it contain?"},
+          {q:"枕草子「春はあけぼの」と現代人の「好きな季節」投稿を比べると、感性はどう変わったか？",qe:"Compare Sei Shonagon&#39;s 'In spring, the dawn' with modern social media posts about seasons. How has sensibility changed?"}
+        ],world:"竹取物語は英語に翻訳され世界中で読まれている。「かぐや姫」はジブリ映画にもなった。日本文学が世界文化に与える影響（ソフトパワー）を考えよう。"}
+        }
+      ],
+      "中2": [
+        {name:"説明文の読み方・論理構造", yt:[
+          {ch:"とある男が授業をしてみた",title:"説明文・論説文の読み方",url:"https://www.youtube.com/results?search_query=葉一+説明文+論説文+読解+中学国語",desc:"筆者の主張と根拠の見つけ方を解説"},
+          {ch:"Try IT 中学国語",title:"接続詞と文章の論理構造",url:"https://www.youtube.com/results?search_query=TryIT+説明文+読解+中学国語",desc:"文章の論理構造を映像で解説"}
+        ],quiz:[
+          {q:"説明文で筆者の主張を見つけるには？",qe:"How do you identify the author&#39;s main argument in an expository text?",opts:["最初の段落だけ読む","接続詞・まとめの言葉に注目する","難しい言葉を調べる","段落数を数える"],ans:1,exp:"「つまり」「要するに」「このように」「したがって」などまとめの接続詞の後に主張が来ることが多い。",expe:"Summary words like 'in conclusion,' 'therefore,' 'in other words' often signal the main argument."},
+          {q:"説明文で対比が使われる効果は？",qe:"What is the effect of using contrast/comparison in an expository text?",opts:["読者を楽しませる","筆者の主張を際立たせる","文章を短くする","難しく見せる"],ans:1,exp:"A（従来の考え）対B（筆者の主張）を比較することで、Bの優位性・新しさが明確になる。対比は説得の基本技術。",expe:"Contrasting A (conventional view) with B (author&#39;s view) makes B's advantages clear. Contrast is fundamental to persuasion."},
+          {q:"「具体例」の段落はなぜ必要か？",qe:"Why are paragraphs with specific examples necessary in an argument?",opts:["文章を長くするため","抽象的な主張を理解しやすくするため","読者を驚かせるため","接続詞を使うため"],ans:1,exp:"具体例は抽象的な主張を「実感」できる形にする。主張→理由→具体例の3段構造が説得力ある文章の基本。",expe:"Examples make abstract claims concrete and relatable. Claim → Reason → Example is the foundation of persuasive writing."}
+        ],deep:{thinks:[
+          {q:"ニュース記事も説明文と同じ構造を持つ。普段読むニュースで「主張→根拠→具体例」を探してみよう。",qe:"News articles share the same structure as expository texts. Find 'claim → evidence → example' in a news article."},
+          {q:"英語の説明文（Expository writing）も同じ構造。日本語と英語の論理展開の違いと共通点を比べよう。",qe:"English expository writing uses the same structure. Compare how Japanese and English texts organize arguments."}
+        ],world:"説明文の読解力はニュース・論文・ビジネス文書を読む力の基礎。英語の説明文も同じ構造（Claim→Evidence→Example）。批判的思考（クリティカルシンキング）は国語の読解から始まる。"}
+        }
+      ],
+      "中3": [
+        {name:"意見文・作文の書き方", yt:[
+          {ch:"とある男が授業をしてみた",title:"意見文の書き方（構成・根拠）",url:"https://www.youtube.com/results?search_query=葉一+意見文+作文+書き方+中学国語",desc:"説得力ある意見文の書き方を解説"},
+          {ch:"Try IT 中学国語",title:"小論文・作文の構成",url:"https://www.youtube.com/results?search_query=TryIT+作文+意見文+中学国語",desc:"序論・本論・結論の書き方を解説"}
+        ],quiz:[
+          {q:"意見文の基本構成はどれか？",qe:"What is the basic structure of an opinion essay?",opts:["起承転結","序論・本論・結論","頭括型のみ","尾括型のみ"],ans:1,exp:"序論（主張）→本論（理由・根拠・具体例）→結論（まとめ・主張の繰り返し）が意見文の基本。",expe:"Introduction (claim) → Body (reasons, evidence, examples) → Conclusion (summary) is the basic structure."},
+          {q:"根拠として最も説得力があるのはどれか？",qe:"Which type of evidence is most persuasive in an essay?",opts:["自分の感想","友達の意見","統計データや専門家の意見","流行している考え方"],ans:2,exp:"客観的なデータ・統計・専門家の見解は主観的意見より説得力が高い。EBPM（証拠に基づく政策立案）の考え方にも通じる。",expe:"Objective data, statistics, and expert opinions are more persuasive than personal feelings. This connects to evidence-based policy making."},
+          {q:"反論を取り上げることの効果はどれか？",qe:"What is the effect of addressing counterarguments in your writing?",opts:["自分の意見が弱く見える","主張の信頼性・説得力が増す","文章が長くなる","読者を混乱させる"],ans:1,exp:"反論を先に提示し「しかし〜」と反駁することで、主張がより強固になる。ディベートでも同じ技術。",expe:"Acknowledging counterarguments and then refuting them ('However...') strengthens your argument."}
+        ],deep:{thinks:[
+          {q:"日本語の意見文とPREP法（英語エッセイ）の構造を比べてみよう。どこが同じでどこが違う？",qe:"Compare Japanese opinion essays with the PREP method in English essays. What is the same? What is different?"},
+          {q:"「根拠のある意見」と「ただの感想」の違いは何か？SNSの投稿に当てはめて考えよう。",qe:"What is the difference between 'evidence-based opinion' and 'just a personal feeling'? Apply this to social media posts."}
+        ],world:"意見文の構成は英語エッセイ（PREP法）と同じ原理。日本語で意見を構造的に書く力が英語での発信力に直結する。国連でのプレゼンも、この基本構造で行われている。"}
+        }
+      ]
+    }
+};
+
+var curSubj = null, curGrade = null, curUnit = null;
+var quizIdx = 0, quizScore = 0, quizAnswered = false;
+
+// Build subject grid
+var sg = document.getElementById('subj-grid');
+DB.subjects.forEach(function(s) {
+  var btn = document.createElement('div');
+  btn.className = 'subj-btn';
+  btn.style.setProperty('--sc', s.color);
+  btn.style.setProperty('--sb', s.bg);
+  btn.innerHTML = '<div class="subj-icon">' + s.icon + '</div><div class="subj-name">' + s.name + '</div>';
+  btn.onclick = function() { selectSubj(s, btn); };
+  sg.appendChild(btn);
+});
+
+function selectSubj(s, btn) {
+  curSubj = s;
+  document.querySelectorAll('.subj-btn').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+  document.getElementById('subj-label').innerHTML = s.icon + ' ' + s.name;
+  document.getElementById('unit-card').style.display = 'block';
+  document.getElementById('learn-area').classList.remove('on');
+  buildGrades(s);
+}
+
+function resetSubj() {
+  curSubj = null; curGrade = null; curUnit = null;
+  document.querySelectorAll('.subj-btn').forEach(function(b) { b.classList.remove('on'); });
+  document.getElementById('unit-card').style.display = 'none';
+  document.getElementById('learn-area').classList.remove('on');
+}
+
+function buildGrades(s) {
+  var grades = Object.keys(DB.units[s.key]);
+  var gt = document.getElementById('grade-tabs');
+  gt.innerHTML = '';
+  grades.forEach(function(g, i) {
+    var btn = document.createElement('button');
+    btn.className = 'gtab' + (i === 0 ? ' on' : '');
+    btn.textContent = g;
+    btn.style.setProperty('background', i === 0 ? s.color : '');
+    btn.style.setProperty('color', i === 0 ? '#fff' : '');
+    btn.style.setProperty('border-color', i === 0 ? s.color : '');
+    btn.onclick = function() {
+      document.querySelectorAll('.gtab').forEach(function(b) {
+        b.classList.remove('on');
+        b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
+      });
+      btn.classList.add('on');
+      btn.style.background = s.color; btn.style.color = '#fff'; btn.style.borderColor = s.color;
+      buildUnits(s, g);
+    };
+    gt.appendChild(btn);
+  });
+  buildUnits(s, grades[0]);
+}
+
+function buildUnits(s, grade) {
+  curGrade = grade;
+  var units = DB.units[s.key][grade];
+  var ug = document.getElementById('unit-grid');
+  ug.innerHTML = '';
+  units.forEach(function(u) {
+    var btn = document.createElement('button');
+    btn.className = 'unit-btn';
+    btn.textContent = u.name;
+    btn.onclick = function() {
+      document.querySelectorAll('.unit-btn').forEach(function(b) {
+        b.classList.remove('on');
+        b.style.background = ''; b.style.color = '';
+      });
+      btn.classList.add('on');
+      btn.style.background = s.color; btn.style.color = '#fff';
+      selectUnit(u);
+    };
+    ug.appendChild(btn);
+  });
+}
+
+function selectUnit(u) {
+  curUnit = u;
+  document.getElementById('unit-label').textContent = curSubj.icon + ' ' + curGrade + ' — ' + u.name;
+  document.getElementById('learn-area').classList.add('on');
+  switchLearn('video', document.querySelectorAll('.ltab')[0]);
+  document.getElementById('learn-area').scrollIntoView({behavior:'smooth'});
+}
+
+function resetUnit() {
+  document.getElementById('learn-area').classList.remove('on');
+  document.querySelectorAll('.unit-btn').forEach(function(b) { b.classList.remove('on'); b.style.background=''; b.style.color=''; });
+}
+
+function switchLearn(step, btn) {
+  document.querySelectorAll('.learn-step').forEach(function(s) { s.classList.remove('on'); });
+  document.querySelectorAll('.ltab').forEach(function(t) { t.classList.remove('on'); });
+  document.getElementById('ls-' + step).classList.add('on');
+  if (btn) btn.classList.add('on');
+  if (step === 'video') renderVideos();
+  if (step === 'quiz') { quizIdx = 0; quizScore = 0; renderQuiz(); }
+  if (step === 'deep') renderDeep();
+}
+
+function renderVideos() {
+  var vl = document.getElementById('video-list');
+  vl.innerHTML = '';
+  curUnit.yt.forEach(function(v) {
+    var card = document.createElement('div');
+    card.className = 'yt-card';
+    card.innerHTML = '<div class="yt-thumb">&#9654;</div>' +
+      '<div class="yt-info">' +
+        '<div class="yt-ch">' + v.ch + '</div>' +
+        '<div class="yt-title">' + v.title + '</div>' +
+        '<div class="yt-desc">' + v.desc + '</div>' +
+        '<a href="' + v.url + '" target="_blank" class="yt-btn">&#9654; YouTubeで見る</a>' +
+      '</div>';
+    vl.appendChild(card);
+  });
+}
+
+function renderQuiz() {
+  var qa = document.getElementById('quiz-area');
+  var qs = curUnit.quiz;
+  if (quizIdx >= qs.length) {
+    var pct = Math.round(quizScore / qs.length * 100);
+    qa.innerHTML = '<div style="text-align:center;padding:20px 0;">' +
+      '<div style="font-size:36px;margin-bottom:10px;">' + (pct>=80?'&#127881;':pct>=60?'&#128077;':'&#128170;') + '</div>' +
+      '<div style="font-size:22px;font-weight:700;color:#3C3489;margin-bottom:6px;">' + quizScore + ' / ' + qs.length + ' 正解</div>' +
+      '<div style="font-size:13px;color:#666;margin-bottom:16px;">' + pct + '% — ' + (pct>=80?'Great! 深掘りタブで考えを広げよう！':pct>=60?'Good! もう一度動画を確認しよう。':'動画を見直してもう一度チャレンジ！') + '</div>' +
+      '<button class="restart-btn" onclick="switchLearn(\'video\',document.querySelectorAll(\'.ltab\')[0])">動画をもう一度見る</button>' +
+      '<button class="next-btn" onclick="quizIdx=0;quizScore=0;renderQuiz()">もう一度クイズ</button></div>';
+    return;
+  }
+  updateScoreBar(qs.length);
+  var q = qs[quizIdx];
+  var optsHTML = q.opts.map(function(o, i) {
+    return '<button class="opt-btn" onclick="answerQ(' + i + ')">' + o + '</button>';
+  }).join('');
+  qa.innerHTML = '<div class="q-box">' +
+    '<div class="q-en">&#127468;&#127463; ' + q.qe + '</div>' +
+    '<div class="q-ja">&#127471;&#127477; ' + q.q + '</div>' +
+    '<div class="opts">' + optsHTML + '</div>' +
+    '<div class="exp-box" id="exp-box"><strong>&#128218; 解説</strong><br>' + q.exp + '<div class="exp-en">&#127468;&#127463; ' + q.expe + '</div></div>' +
+    '</div>' +
+    '<button class="next-btn" id="nxt-btn" style="display:none;" onclick="nextQ()">次の問題 &#8594;</button>';
+  quizAnswered = false;
+}
+
+function answerQ(i) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  var q = curUnit.quiz[quizIdx];
+  var btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(function(b, idx) {
+    b.disabled = true;
+    if (idx === q.ans) b.classList.add('correct');
+    else if (idx === i && i !== q.ans) b.classList.add('wrong');
+  });
+  if (i === q.ans) quizScore++;
+  document.getElementById('exp-box').style.display = 'block';
+  document.getElementById('nxt-btn').style.display = 'inline-block';
+  updateScoreBar(curUnit.quiz.length);
+}
+
+function nextQ() { quizIdx++; renderQuiz(); }
+
+function updateScoreBar(total) {
+  document.getElementById('score-disp').textContent = quizScore + ' / ' + total;
+  document.getElementById('prog-fill').style.width = Math.round(quizScore / total * 100) + '%';
+}
+
+function renderDeep() {
+  var da = document.getElementById('deep-area');
+  var d = curUnit.deep;
+  var html = '';
+  d.thinks.forEach(function(t) {
+    html += '<div class="think-q">&#129504; ' + t.q + '<div class="think-en">&#127468;&#127463; ' + t.qe + '</div></div>';
+  });
+  html += '<textarea placeholder="考えたことを書こう / Write your thoughts (English or Japanese OK)..." style="min-height:80px;"></textarea>';
+  html += '<div class="world-box"><div class="world-title">&#127758; 世界・熊本とのつながり</div>' + d.world + '</div>';
+  html += '<div style="margin-top:12px;"><a href="tool1_inquiry_launcher.html" style="display:inline-block;padding:8px 16px;border-radius:8px;background:#1D9E75;color:#fff;font-size:13px;font-weight:600;text-decoration:none;">&#127757; 探究ランチャーで深める &#8594;</a></div>';
+  da.innerHTML = html;
+}
+</script>
+</body></html>
